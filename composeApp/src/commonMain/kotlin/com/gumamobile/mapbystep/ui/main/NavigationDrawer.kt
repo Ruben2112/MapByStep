@@ -26,7 +26,10 @@ import mapbystep.composeapp.generated.resources.logo_svg
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun NavigationDrawer(modifier: Modifier = Modifier) {
+fun NavigationDrawer(
+    modifier: Modifier = Modifier,
+    onDrawerItemClicked: (NavigationDrawerRoute) -> Unit,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth(0.666F)
@@ -57,7 +60,9 @@ fun NavigationDrawer(modifier: Modifier = Modifier) {
             NavigationDrawerRoute.entries.forEach { route ->
                 NavigationDrawerItem(
                     route = route,
-                    onClick = {},
+                    onClick = {
+                        onDrawerItemClicked(route)
+                    },
                 )
             }
         }

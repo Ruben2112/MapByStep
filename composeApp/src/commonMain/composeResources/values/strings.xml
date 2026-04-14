@@ -1,5 +1,9 @@
 <resources>
+    <!-- Global -->
     <string name="app_name">Map By Step</string>
+    <string name="unknown_value">--</string>
+
+    <!-- Routes -->
     <string name="route_profile">Profile</string>
     <string name="route_maps">Maps</string>
     <string name="route_map_progress">Map Progress</string>
@@ -7,4 +11,11 @@
     <string name="route_destinations">Destinations</string>
     <string name="route_destination_details">Destination Details</string>
     <string name="route_settings">Settings</string>
+
+    <!-- Step data -->
+    <string name="step_data_title">Step data</string>
+    <string name="step_data_total_steps">Total steps:</string>
+    <string name="step_data_twenty_four_hour_record">24 hour record:</string>
+    <string name="step_data_one_week_record">One week record:</string>
+    <string name="step_data_one_month_record">One month record:</string>
 </resources>

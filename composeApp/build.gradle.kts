@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.koin.compose.navigation)
+            implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.jetbrains.lifecycle.viewmodel.nav3)

@@ -1,5 +1,6 @@
 package com.gumamobile.mapbystep.ui.main
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
@@ -50,6 +51,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
                         Route.Profile::class,
                         Route.Profile.serializer(),
                     )
+                    subclass(
+                        Route.Maps::class,
+                        Route.Maps.serializer(),
+                    )
                 }
             }
         },
@@ -61,7 +66,22 @@ fun MainScreen(modifier: Modifier = Modifier) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            NavigationDrawer()
+            NavigationDrawer(
+                onDrawerItemClicked = { route ->
+                    scope.launch {
+                        drawerState.close()
+                    }
+                    when (route) {
+                        NavigationDrawerRoute.Profile -> backStack.add(Route.Profile)
+                        NavigationDrawerRoute.Maps -> backStack.add(Route.Maps)
+                        NavigationDrawerRoute.MapProgress -> TODO()
+                        NavigationDrawerRoute.Directions -> TODO()
+                        NavigationDrawerRoute.Destinations -> TODO()
+                        NavigationDrawerRoute.DestinationDetails -> TODO()
+                        NavigationDrawerRoute.Settings -> TODO()
+                    }
+                },
+            )
         },
         scrimColor = Color.Transparent,
     ) {
@@ -91,20 +111,23 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             )
                         }
                     },
-                    actions = {
-                    },
+                    actions = {},
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = SurfaceContainerHigh,
                     ),
                 )
             },
-        ) {
+        ) { paddingValues ->
             NavDisplay(
+                modifier = Modifier.padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
                 backStack = backStack,
+                entryProvider = entryProvider,
                 onBack = {
                     backStack.removeLastOrNull()
                 },
-                entryProvider = entryProvider,
             )
         }
     }

@@ -26,7 +26,7 @@ fun NavigationDrawerItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-
+                onClick()
             }
             .padding(
                 horizontal = MaterialTheme.spacing.medium,
