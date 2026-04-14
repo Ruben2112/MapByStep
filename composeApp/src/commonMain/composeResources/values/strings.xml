@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Map By Step</string>
+    <string name="route_profile">Profile</string>
+    <string name="route_maps">Maps</string>
+    <string name="route_map_progress">Map Progress</string>
+    <string name="route_directions">Directions</string>
+    <string name="route_destinations">Destinations</string>
+    <string name="route_destination_details">Destination Details</string>
+    <string name="route_settings">Settings</string>
+</resources>

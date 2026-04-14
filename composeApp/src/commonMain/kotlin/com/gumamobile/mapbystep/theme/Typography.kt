@@ -23,18 +23,22 @@ val Typography: Typography
         titleMedium = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 24.sp,
+            color = OnSurface,
         ),
         bodySmall = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 12.sp,
+            color = OnSurface,
         ),
         bodyMedium = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 14.sp,
             lineHeight = 16.sp,
+            color = OnSurface,
         ),
         bodyLarge = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 20.sp,
+            color = OnSurface,
         ),
     )
