@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -51,10 +53,19 @@ kotlin {
             implementation(libs.jetbrains.lifecycle.viewmodel.nav3)
             implementation(libs.jetbrains.lifecycle.viewmodel)
             implementation(libs.jetbrains.material.icons)
+
+            implementation(libs.androidx.health.connect)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+    }
+
+    sourceSets.all {
+        languageSettings.optIn("kotlin.time.ExperimentalTime")
     }
 }
 
@@ -87,6 +98,19 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+
+    add(
+        "kspAndroid",
+        libs.androidx.room.compiler,
+    )
+    add(
+        "kspIosSimulatorArm64",
+        libs.androidx.room.compiler,
+    )
+    add(
+        "kspIosArm64",
+        libs.androidx.room.compiler,
+    )
 }
 
 compose.desktop {
@@ -99,4 +123,8 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

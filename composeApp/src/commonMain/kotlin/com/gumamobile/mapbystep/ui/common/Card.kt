@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,24 @@ fun Card(
                 mainContent.invoke()
             }
             if (bottomContent != null) {
-                TODO("Bottom content is not implemented yet for Card composable")
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .background(Outline),
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = MaterialTheme.spacing.small,
+                            horizontal = MaterialTheme.spacing.medium,
+                        ),
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    bottomContent.invoke()
+                }
             }
         }
     }
