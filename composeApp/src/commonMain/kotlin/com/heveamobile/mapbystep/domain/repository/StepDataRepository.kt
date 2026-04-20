@@ -16,4 +16,8 @@ interface StepDataRepository {
         startTime: Instant,
         endTime: Instant,
     ): List<StepData>
+
+    suspend fun deleteOutdatedData(
+        before: Instant,
+    )
 }

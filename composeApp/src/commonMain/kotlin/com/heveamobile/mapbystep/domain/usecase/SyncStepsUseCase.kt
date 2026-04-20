@@ -3,6 +3,7 @@ package com.heveamobile.mapbystep.domain.usecase
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
 
 class SyncStepsUseCase(
     private val stepDataRepository: StepDataRepository,
@@ -36,6 +37,10 @@ class SyncStepsUseCase(
             )
 
             updateUserRecordsUseCase()
+
+            stepDataRepository.deleteOutdatedData(
+                before = currentTime - 60.days,
+            )
         } else {
             userRepository.updateUser(
                 user.copy(lastSyncTime = currentTime),

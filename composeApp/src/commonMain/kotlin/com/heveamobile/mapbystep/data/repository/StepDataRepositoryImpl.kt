@@ -19,7 +19,7 @@ class StepDataRepositoryImpl(
 
     override fun getStepsFlow(): Flow<List<StepData>> {
         return stepDao
-            .getSteps()
+            .getStepsFlow()
             .map { it.map { it.toDomain() } }
     }
 
@@ -39,5 +39,9 @@ class StepDataRepositoryImpl(
             startTime = startTime,
             endTime = endTime,
         )
+    }
+
+    override suspend fun deleteOutdatedData(before: Instant) {
+        stepDao.deleteOutdatedSteps(before = before)
     }
 }
