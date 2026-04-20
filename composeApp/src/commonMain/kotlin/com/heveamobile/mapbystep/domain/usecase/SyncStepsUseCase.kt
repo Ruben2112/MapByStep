@@ -1,0 +1,50 @@
+package com.heveamobile.mapbystep.domain.usecase
+
+import com.heveamobile.mapbystep.domain.repository.StepDataRepository
+import com.heveamobile.mapbystep.domain.repository.UserRepository
+import kotlin.time.Clock
+import kotlin.time.Instant
+
+class SyncStepsUseCase(
+    private val stepDataRepository: StepDataRepository,
+    private val userRepository: UserRepository,
+    private val getUserUseCase: GetUserUseCase,
+    private val updateUserRecordsUseCase: UpdateUserRecordsUseCase,
+) {
+    suspend operator fun invoke(): Result<Unit> = runCatching {
+        println("Starting sync")
+        val startDuration: Instant = Clock.System.now()
+
+        val user = getUserUseCase.getOneShotUser()
+        val currentTime = Clock.System.now()
+        val startTime = user.lastSyncTime
+            ?: user.startTime
+
+        val newStepData = stepDataRepository.fetchRemoteSteps(
+            startTime,
+            currentTime,
+        )
+
+        if (newStepData.isNotEmpty()) {
+            stepDataRepository.saveStepData(
+                userId = user.id,
+                stepData = newStepData,
+            )
+
+            userRepository.updateUser(
+                user.copy(
+                    lastSyncTime = currentTime,
+                    availableSteps = user.availableSteps + newStepData.sumOf { it.count },
+                    totalSteps = user.totalSteps + newStepData.sumOf { it.count },
+                ),
+            )
+
+            updateUserRecordsUseCase()
+        } else {
+            userRepository.updateUser(
+                user.copy(lastSyncTime = currentTime),
+            )
+        }
+        println("Done sync, took ${Clock.System.now() - startDuration}")
+    }
+}

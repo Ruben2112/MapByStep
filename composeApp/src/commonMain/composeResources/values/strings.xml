@@ -16,6 +16,6 @@
     <string name="step_data_title">Step data</string>
     <string name="step_data_total_steps">Total steps:</string>
     <string name="step_data_twenty_four_hour_record">24 hour record:</string>
-    <string name="step_data_one_week_record">One week record:</string>
-    <string name="step_data_one_month_record">One month record:</string>
+    <string name="step_data_one_week_record">Seven day record:</string>
+    <string name="step_data_one_month_record">Thirty day record:</string>
 </resources>

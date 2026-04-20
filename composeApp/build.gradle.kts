@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.koin.compose.navigation)
             implementation(libs.koin.compose.viewmodel)
@@ -70,11 +71,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.gumamobile.mapbystep"
+    namespace = "com.heveamobile.mapbystep"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.gumamobile.mapbystep"
+        applicationId = "com.heveamobile.mapbystep"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -115,11 +116,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.gumamobile.mapbystep.MainKt"
+        mainClass = "com.heveamobile.mapbystep.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.gumamobile.mapbystep"
+            packageName = "com.heveamobile.mapbystep"
             packageVersion = "1.0.0"
         }
     }
