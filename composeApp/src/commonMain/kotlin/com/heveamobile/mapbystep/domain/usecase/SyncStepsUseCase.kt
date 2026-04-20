@@ -3,7 +3,6 @@ package com.heveamobile.mapbystep.domain.usecase
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import kotlin.time.Clock
-import kotlin.time.Instant
 
 class SyncStepsUseCase(
     private val stepDataRepository: StepDataRepository,
@@ -12,9 +11,6 @@ class SyncStepsUseCase(
     private val updateUserRecordsUseCase: UpdateUserRecordsUseCase,
 ) {
     suspend operator fun invoke(): Result<Unit> = runCatching {
-        println("Starting sync")
-        val startDuration: Instant = Clock.System.now()
-
         val user = getUserUseCase.getOneShotUser()
         val currentTime = Clock.System.now()
         val startTime = user.lastSyncTime
@@ -45,6 +41,5 @@ class SyncStepsUseCase(
                 user.copy(lastSyncTime = currentTime),
             )
         }
-        println("Done sync, took ${Clock.System.now() - startDuration}")
     }
 }

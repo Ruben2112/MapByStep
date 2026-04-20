@@ -13,7 +13,7 @@ import com.heveamobile.mapbystep.data.entity.UserEntity
         StepDataEntity::class,
         UserEntity::class,
     ],
-    version = 2,
+    version = 3,
 )
 @TypeConverters(DateTimeConverters::class)
 abstract class AppDatabase : RoomDatabase() {

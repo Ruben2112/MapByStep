@@ -6,15 +6,11 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Instant
 
 class UpdateUserRecordsUseCase(
     private val userRepository: UserRepository,
 ) {
     suspend operator fun invoke() {
-        println("Starting update user records")
-        val startDuration: Instant = Clock.System.now()
-
         val user = userRepository.getUserWithStepData()
         val stepData = user?.stepData
             ?: return
@@ -23,6 +19,23 @@ class UpdateUserRecordsUseCase(
 
         // Sort by time to ensure the sliding window moves correctly
         val sortedSteps = stepData.sortedBy { it.startTime }
+
+        userRepository.updateUser(
+            user = user.copy(
+                previousTwentyFourHours = calculateCurrentWindowSum(
+                    steps = sortedSteps,
+                    windowDuration = 24.hours,
+                ),
+                previousSevenDays = calculateCurrentWindowSum(
+                    steps = sortedSteps,
+                    windowDuration = 7.days,
+                ),
+                previousThirtyDays = calculateCurrentWindowSum(
+                    steps = sortedSteps,
+                    windowDuration = 30.days,
+                ),
+            ),
+        )
 
         // Calculate all records using sliding windows
         val new24h = calculateSlidingWindowMax(
@@ -57,7 +70,6 @@ class UpdateUserRecordsUseCase(
                 ),
             )
         }
-        println("Done updating user records, took ${Clock.System.now() - startDuration}")
     }
 
     /**
@@ -91,5 +103,17 @@ class UpdateUserRecordsUseCase(
         }
 
         return maxSteps
+    }
+
+    private fun calculateCurrentWindowSum(
+        steps: List<StepData>,
+        windowDuration: Duration,
+    ): Long {
+        val now = Clock.System.now()
+        val windowStart = now - windowDuration
+
+        return steps
+            .filter { it.startTime in windowStart..now }
+            .sumOf { it.count }
     }
 }

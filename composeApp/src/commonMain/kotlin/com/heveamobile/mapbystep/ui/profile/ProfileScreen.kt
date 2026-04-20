@@ -29,8 +29,11 @@ import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.ErrorCard
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
 import mapbystep.composeapp.generated.resources.Res
-import mapbystep.composeapp.generated.resources.step_data_one_month_record
-import mapbystep.composeapp.generated.resources.step_data_one_week_record
+import mapbystep.composeapp.generated.resources.step_data_previous_seven_days
+import mapbystep.composeapp.generated.resources.step_data_previous_thirty_days
+import mapbystep.composeapp.generated.resources.step_data_previous_twenty_four_hours
+import mapbystep.composeapp.generated.resources.step_data_seven_day_record
+import mapbystep.composeapp.generated.resources.step_data_thirty_day_record
 import mapbystep.composeapp.generated.resources.step_data_title
 import mapbystep.composeapp.generated.resources.step_data_total_steps
 import mapbystep.composeapp.generated.resources.step_data_twenty_four_hour_record
@@ -130,6 +133,23 @@ fun ProfileContent(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
+                        stringResource(Res.string.step_data_previous_twenty_four_hours),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Text(
+                        modifier = Modifier.weight(1F),
+                        text = formatStepAmount(
+                            state.previousTwentyFourHours,
+                            FormatMode.Long,
+                        ),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
                         stringResource(Res.string.step_data_twenty_four_hour_record),
                         style = MaterialTheme.typography.bodyMedium,
                     )
@@ -147,7 +167,24 @@ fun ProfileContent(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        stringResource(Res.string.step_data_one_week_record),
+                        stringResource(Res.string.step_data_previous_seven_days),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Text(
+                        modifier = Modifier.weight(1F),
+                        text = formatStepAmount(
+                            state.previousSevenDays,
+                            FormatMode.Long,
+                        ),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        stringResource(Res.string.step_data_seven_day_record),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -164,7 +201,24 @@ fun ProfileContent(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        stringResource(Res.string.step_data_one_month_record),
+                        stringResource(Res.string.step_data_previous_thirty_days),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Text(
+                        modifier = Modifier.weight(1F),
+                        text = formatStepAmount(
+                            state.previousThirtyDays,
+                            FormatMode.Long,
+                        ),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        stringResource(Res.string.step_data_thirty_day_record),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
