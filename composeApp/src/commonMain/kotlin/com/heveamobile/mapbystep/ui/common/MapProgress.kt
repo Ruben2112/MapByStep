@@ -18,6 +18,14 @@ import com.heveamobile.mapbystep.theme.RarityLegendary
 import com.heveamobile.mapbystep.theme.RarityRare
 import com.heveamobile.mapbystep.theme.RarityUncommon
 import com.heveamobile.mapbystep.theme.spacing
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.map_progress_destinations_discovered
+import mapbystep.composeapp.generated.resources.rarity_common
+import mapbystep.composeapp.generated.resources.rarity_epic
+import mapbystep.composeapp.generated.resources.rarity_legendary
+import mapbystep.composeapp.generated.resources.rarity_rare
+import mapbystep.composeapp.generated.resources.rarity_uncommon
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MapProgress(
@@ -31,7 +39,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Destinations discovered:",
+                text = stringResource(Res.string.map_progress_destinations_discovered),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
@@ -49,7 +57,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Common:",
+                text = "${stringResource(Res.string.rarity_common)}:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityCommon),
             )
             Text(
@@ -67,7 +75,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Uncommon:",
+                text = "${stringResource(Res.string.rarity_uncommon)}:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityUncommon),
             )
             Text(
@@ -85,7 +93,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Rare:",
+                text = "${stringResource(Res.string.rarity_rare)}:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityRare),
             )
             Text(
@@ -103,7 +111,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Epic:",
+                text = "${stringResource(Res.string.rarity_epic)}:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityEpic),
             )
             Text(
@@ -121,7 +129,7 @@ fun MapProgress(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Legendary:",
+                text = "${stringResource(Res.string.rarity_legendary)}:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityLegendary),
             )
             Text(

@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.theme.OnSurface
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_footstep
+import mapbystep.composeapp.generated.resources.steps_divider_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 enum class StepPosition {
     Top,
@@ -109,7 +111,7 @@ fun Step(
                 .rotate(90F)
                 .size(iconSize),
             painter = painterResource(Res.drawable.ic_footstep),
-            contentDescription = "Footstep icon",
+            contentDescription = stringResource(Res.string.steps_divider_icon_description),
             tint = OnSurface.copy(alpha = if (stepPosition == StepPosition.Top) 1F else 0F),
         )
         Icon(
@@ -117,7 +119,7 @@ fun Step(
                 .rotate(90F)
                 .size(iconSize),
             painter = painterResource(Res.drawable.ic_footstep),
-            contentDescription = "Footstep icon",
+            contentDescription = stringResource(Res.string.steps_divider_icon_description),
             tint = OnSurface.copy(alpha = if (stepPosition == StepPosition.Bottom) 1F else 0F),
         )
     }

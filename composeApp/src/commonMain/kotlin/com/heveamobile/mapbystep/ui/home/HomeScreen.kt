@@ -32,6 +32,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.app_name
+import mapbystep.composeapp.generated.resources.home_navigation_icon_description
+import mapbystep.composeapp.generated.resources.home_sync_icon_description
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.compose.viewmodel.koinViewModel
@@ -118,8 +120,8 @@ fun HomeContent(
         },
         scrimColor = Color.Transparent,
     ) {
-
         Scaffold(
+            modifier = modifier,
             topBar = {
                 TopAppBar(
                     title = {
@@ -136,7 +138,7 @@ fun HomeContent(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
-                                contentDescription = "Navigation drawer icon",
+                                contentDescription = stringResource(Res.string.home_navigation_icon_description),
                                 tint = OnSurface,
                             )
                         }
@@ -150,7 +152,7 @@ fun HomeContent(
                         IconButton(onClick = { onAction(HomeAction.SyncSteps) }) {
                             Icon(
                                 imageVector = Icons.Filled.Sync,
-                                contentDescription = "Sync icon",
+                                contentDescription = stringResource(Res.string.home_sync_icon_description),
                                 tint = OnSurface,
                             )
                         }

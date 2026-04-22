@@ -2,8 +2,22 @@
     <!-- Global -->
     <string name="app_name">Map By Step</string>
     <string name="unknown_value">--</string>
+    <string name="rarity_common">Common</string>
+    <string name="rarity_uncommon">Uncommon</string>
+    <string name="rarity_rare">Rare</string>
+    <string name="rarity_epic">Epic</string>
+    <string name="rarity_legendary">Legendary</string>
 
-    <!-- Routes -->
+    <!-- Common composables -->
+    <string name="error_card_icon_description">Error icon</string>
+    <string name="map_progress_destinations_discovered">Destinations discovered:</string>
+    <string name="steps_divider_icon_description">Footstep icon</string>
+
+    <!-- Home screen -->
+    <string name="home_navigation_icon_description">Navigation drawer icon</string>
+    <string name="home_sync_icon_description">Sync icon</string>
+    <string name="navigation_drawer_map_by_step_logo_description">Map By Step logo</string>
+    <string name="step_progress_pill_step_progress_icon_description">Step progress icon</string>
     <string name="route_profile">Profile</string>
     <string name="route_maps">Maps</string>
     <string name="route_map_progress">Map Progress</string>
@@ -12,15 +26,22 @@
     <string name="route_destination_details">Destination Details</string>
     <string name="route_settings">Settings</string>
 
-    <!-- Historic step data -->
+    <!-- Profile screen -->
+    <string name="profile_loading_step_data">Loading step data...</string>
+    <string name="profile_error_permissions_not_granted">Missing required permissions</string>
+    <string name="profile_error_action_request_permissions">Grant permissions</string>
+    <string name="profile_error_health_connect_not_installed">Health Connect application not installed</string>
     <string name="historic_step_data_title">Historic Step Data</string>
     <string name="historic_step_data_total_steps">Total steps:</string>
     <string name="historic_step_data_start_time">Start time:</string>
-
-    <!-- Personal records -->
     <string name="personal_records_title">Personal Records</string>
     <string name="personal_records_subtitle">Current vs. Personal Best</string>
     <string name="personal_records_twenty_four_hours">24 hours:</string>
     <string name="personal_records_seven_days">Seven days:</string>
     <string name="personal_records_thirty_days">Thirty days:</string>
+
+    <!-- Maps screen -->
+    <string name="maps_active_map">Active Map</string>
+    <string name="maps_step_progress_icon_description">Step progress icon</string>
+    <string name="maps_expand_progress_icon_description">Expand progress icon</string>
 </resources>

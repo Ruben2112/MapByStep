@@ -23,7 +23,9 @@ import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.StepsDivider
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.logo_svg
+import mapbystep.composeapp.generated.resources.navigation_drawer_map_by_step_logo_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NavigationDrawer(
@@ -53,7 +55,7 @@ fun NavigationDrawer(
                     )
                     .padding(bottom = MaterialTheme.spacing.extraLarge),
                 painter = painterResource(Res.drawable.logo_svg),
-                contentDescription = "Map By Step logo",
+                contentDescription = stringResource(Res.string.navigation_drawer_map_by_step_logo_description),
             )
             StepsDivider(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))

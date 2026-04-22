@@ -15,6 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.theme.spacing
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.error_card_icon_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ErrorCard(
@@ -24,6 +27,7 @@ fun ErrorCard(
     onAction: (() -> Unit)? = null,
 ) {
     Card(
+        modifier = modifier,
         bottomContent = {
             if (actionLabel != null && onAction != null) {
                 PrimaryButton(
@@ -39,7 +43,7 @@ fun ErrorCard(
         ) {
             Icon(
                 Icons.Filled.Warning,
-                contentDescription = "Error icon",
+                contentDescription = stringResource(Res.string.error_card_icon_description),
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.error,
             )

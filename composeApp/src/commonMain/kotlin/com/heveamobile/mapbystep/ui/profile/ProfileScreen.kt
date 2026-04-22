@@ -39,6 +39,10 @@ import mapbystep.composeapp.generated.resources.personal_records_subtitle
 import mapbystep.composeapp.generated.resources.personal_records_thirty_days
 import mapbystep.composeapp.generated.resources.personal_records_title
 import mapbystep.composeapp.generated.resources.personal_records_twenty_four_hours
+import mapbystep.composeapp.generated.resources.profile_error_action_request_permissions
+import mapbystep.composeapp.generated.resources.profile_error_health_connect_not_installed
+import mapbystep.composeapp.generated.resources.profile_error_permissions_not_granted
+import mapbystep.composeapp.generated.resources.profile_loading_step_data
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -91,7 +95,7 @@ fun ProfileContent(
                         )
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                         Text(
-                            text = "Loading step data...",
+                            text = stringResource(Res.string.profile_loading_step_data),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
@@ -105,15 +109,15 @@ fun ProfileContent(
                 HealthPermissionStatus.Granted -> {}
                 HealthPermissionStatus.NotGranted -> Column(modifier = Modifier.fillMaxWidth()) {
                     ErrorCard(
-                        errorMessage = "Permissions not granted",
-                        actionLabel = "Request permissions",
+                        errorMessage = stringResource(Res.string.profile_error_permissions_not_granted),
+                        actionLabel = stringResource(Res.string.profile_error_action_request_permissions),
                         onAction = onPermissionRequest,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
 
                 HealthPermissionStatus.NotInstalled -> Column(modifier = Modifier.fillMaxWidth()) {
-                    ErrorCard(errorMessage = "Required Health Connect app not installed")
+                    ErrorCard(errorMessage = stringResource(Res.string.profile_error_health_connect_not_installed))
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
             }

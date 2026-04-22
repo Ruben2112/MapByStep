@@ -28,7 +28,11 @@ import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.MapProgress
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_steps
+import mapbystep.composeapp.generated.resources.maps_active_map
+import mapbystep.composeapp.generated.resources.maps_expand_progress_icon_description
+import mapbystep.composeapp.generated.resources.maps_step_progress_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -55,7 +59,7 @@ fun MapsContent(
             .padding(MaterialTheme.spacing.medium),
     ) {
         if (state.activeMap != null) {
-            Card(title = "Active Map") {
+            Card(title = stringResource(Res.string.maps_active_map)) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,7 +87,7 @@ fun MapsContent(
                             Icon(
                                 modifier = Modifier.size(16.dp),
                                 painter = painterResource(Res.drawable.ic_steps),
-                                contentDescription = "Footsteps icon",
+                                contentDescription = stringResource(Res.string.maps_step_progress_icon_description),
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                             Text(
@@ -95,7 +99,7 @@ fun MapsContent(
                         Icon(
                             modifier = Modifier.size(24.dp),
                             imageVector = if (state.expandedMapId == state.activeMap?.id) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
-                            contentDescription = "Dropdown icon",
+                            contentDescription = stringResource(Res.string.maps_expand_progress_icon_description),
                         )
                     }
                     AnimatedVisibility(visible = state.expandedMapId == state.activeMap?.id) {

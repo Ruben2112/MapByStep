@@ -23,7 +23,9 @@ import com.heveamobile.mapbystep.theme.SecondaryContainer
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_steps
+import mapbystep.composeapp.generated.resources.step_progress_pill_step_progress_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun StepProgressPill(
@@ -53,7 +55,7 @@ fun StepProgressPill(
                 Icon(
                     modifier = Modifier.size(16.dp),
                     painter = painterResource(Res.drawable.ic_steps),
-                    contentDescription = "Steps icon",
+                    contentDescription = stringResource(Res.string.step_progress_pill_step_progress_icon_description),
                     tint = OnSurface,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
