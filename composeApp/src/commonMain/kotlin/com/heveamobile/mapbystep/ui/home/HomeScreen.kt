@@ -143,6 +143,7 @@ fun HomeContent(
                     },
                     actions = {
                         StepProgressPill(
+                            isLoading = state.isLoadingSteps,
                             availableSteps = state.availableSteps,
                             requiredSteps = state.requiredSteps,
                         )

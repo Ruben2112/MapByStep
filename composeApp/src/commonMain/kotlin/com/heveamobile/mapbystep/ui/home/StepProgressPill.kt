@@ -1,11 +1,13 @@
 package com.heveamobile.mapbystep.ui.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,39 +28,50 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun StepProgressPill(
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     availableSteps: Long,
     requiredSteps: Long,
 ) {
-    Row(
-        modifier = modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(SecondaryContainer)
-            .padding(
-                MaterialTheme.spacing.small,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            modifier = Modifier.size(16.dp),
-            painter = painterResource(Res.drawable.ic_steps),
-            contentDescription = "Steps icon",
-            tint = OnSurface,
-        )
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-        Text(
-            text = "${
-                formatStepAmount(
-                    availableSteps,
-                    FormatMode.Medium,
+    AnimatedContent(targetState = isLoading) {
+        Row(
+            modifier = modifier
+                .padding(horizontal = MaterialTheme.spacing.small)
+                .clip(shape = MaterialTheme.shapes.medium)
+                .background(SecondaryContainer)
+                .padding(
+                    MaterialTheme.spacing.small,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    strokeWidth = 2.dp,
                 )
-            } / ${
-                formatStepAmount(
-                    requiredSteps,
-                    FormatMode.Medium,
+            } else {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    painter = painterResource(Res.drawable.ic_steps),
+                    contentDescription = "Steps icon",
+                    tint = OnSurface,
                 )
-            }",
-            style = MaterialTheme.typography.bodyMedium,
-        )
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                Text(
+                    text = "${
+                        formatStepAmount(
+                            availableSteps,
+                            FormatMode.Medium,
+                        )
+                    } / ${
+                        formatStepAmount(
+                            requiredSteps,
+                            FormatMode.Medium,
+                        )
+                    }",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
     }
 }

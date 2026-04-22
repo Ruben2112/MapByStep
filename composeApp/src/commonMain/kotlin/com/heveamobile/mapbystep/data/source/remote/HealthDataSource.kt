@@ -1,4 +1,4 @@
-package com.heveamobile.mapbystep.data.source
+package com.heveamobile.mapbystep.data.source.remote
 
 import com.heveamobile.mapbystep.domain.model.StepData
 import kotlin.time.Instant

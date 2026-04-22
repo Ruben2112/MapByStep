@@ -12,15 +12,15 @@
     <string name="route_destination_details">Destination Details</string>
     <string name="route_settings">Settings</string>
 
-    <!-- Step data -->
-    <string name="step_data_title">Step data</string>
-    <string name="step_data_total_steps">Total steps:</string>
-    <string name="step_data_twenty_four_hour_record">24 hour record:</string>
-    <string name="step_data_seven_day_record">Seven day record:</string>
-    <string name="step_data_thirty_day_record">Thirty day record:</string>
-    <string name="step_data_previous_twenty_four_hours">Previous 24 hours:</string>
-    <string name="step_data_previous_seven_days">Previous seven days:</string>
-    <string name="step_data_previous_thirty_days">Previous thirty days:</string>
+    <!-- Historic step data -->
+    <string name="historic_step_data_title">Historic Step Data</string>
+    <string name="historic_step_data_total_steps">Total steps:</string>
+    <string name="historic_step_data_start_time">Start time:</string>
 
-
+    <!-- Personal records -->
+    <string name="personal_records_title">Personal Records</string>
+    <string name="personal_records_subtitle">Current vs. Personal Best</string>
+    <string name="personal_records_twenty_four_hours">24 hours:</string>
+    <string name="personal_records_seven_days">Seven days:</string>
+    <string name="personal_records_thirty_days">Thirty days:</string>
 </resources>

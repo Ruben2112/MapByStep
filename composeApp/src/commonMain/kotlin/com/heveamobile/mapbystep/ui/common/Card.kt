@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import com.heveamobile.mapbystep.theme.spacing
 fun Card(
     modifier: Modifier = Modifier,
     title: String? = null,
+    subtitle: String? = null,
     bottomContent: (@Composable () -> Unit)? = null,
     mainContent: @Composable () -> Unit,
 ) {
@@ -38,14 +40,24 @@ fun Card(
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             if (title != null) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = MaterialTheme.spacing.medium),
+                        .fillMaxWidth(),
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 )
+                if (subtitle != null) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = subtitle,
+                        style = MaterialTheme.typography.titleSmall,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    )
+                }
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -54,9 +66,7 @@ fun Card(
                         .background(Outline),
                 )
             }
-            Box(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
-                mainContent.invoke()
-            }
+            mainContent.invoke()
             if (bottomContent != null) {
                 Box(
                     modifier = Modifier

@@ -1,15 +1,20 @@
 package com.heveamobile.mapbystep.di
 
+import com.heveamobile.mapbystep.data.repository.MapRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.StepDataRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.UserRepositoryImpl
+import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
+import com.heveamobile.mapbystep.domain.usecase.GetActiveMapUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpdateUserRecordsUseCase
+import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
 import com.heveamobile.mapbystep.navigation.Route
 import com.heveamobile.mapbystep.ui.home.HomeViewModel
 import com.heveamobile.mapbystep.ui.maps.MapsScreen
+import com.heveamobile.mapbystep.ui.maps.MapsViewModel
 import com.heveamobile.mapbystep.ui.profile.ProfileScreen
 import com.heveamobile.mapbystep.ui.profile.ProfileViewModel
 import org.koin.core.KoinApplication
@@ -19,7 +24,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
@@ -30,31 +35,23 @@ val navigationModule = module {
 }
 
 val viewModelModule = module {
-    viewModel {
-        HomeViewModel(
-            get(),
-            get(),
-            get(),
-        )
-    }
-    viewModel {
-        ProfileViewModel(
-            get(),
-            get(),
-            get(),
-        )
-    }
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::ProfileViewModel)
+    viewModelOf(::MapsViewModel)
 }
 
 val useCaseModule = module {
     factoryOf(::GetUserUseCase)
     factoryOf(::SyncStepsUseCase)
     factoryOf(::UpdateUserRecordsUseCase)
+    factoryOf(::UpsertInitialMapDataUseCase)
+    factoryOf(::GetActiveMapUseCase)
 }
 
 val repositoryModule = module {
     singleOf(::StepDataRepositoryImpl) { bind<StepDataRepository>() }
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+    singleOf(::MapRepositoryImpl) { bind<MapRepository>() }
 }
 
 expect val targetModule: Module

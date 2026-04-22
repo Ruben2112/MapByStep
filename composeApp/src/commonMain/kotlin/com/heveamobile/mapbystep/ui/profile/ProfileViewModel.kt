@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 class ProfileViewModel(
     val healthPermissionManager: HealthPermissionManager,
@@ -31,9 +32,17 @@ class ProfileViewModel(
                     it.copy(
                         totalSteps = user?.totalSteps
                             ?: 0,
+                        startTime = user?.startTime
+                            ?: Clock.System.now(),
+                        previousTwentyFourHours = user?.previousTwentyFourHours
+                            ?: 0,
                         twentyFourHourRecord = user?.twentyFourHourRecord
                             ?: 0,
+                        previousSevenDays = user?.previousSevenDays
+                            ?: 0,
                         sevenDayRecord = user?.sevenDayRecord
+                            ?: 0,
+                        previousThirtyDays = user?.previousThirtyDays
                             ?: 0,
                         thirtyDayRecord = user?.thirtyDayRecord
                             ?: 0,

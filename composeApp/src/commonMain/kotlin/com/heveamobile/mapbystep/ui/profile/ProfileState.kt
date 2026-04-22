@@ -1,9 +1,12 @@
 package com.heveamobile.mapbystep.ui.profile
 
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class ProfileState(
     val totalSteps: Long = 0L,
+    val startTime: Instant = Clock.System.now(),
     val previousTwentyFourHours: Long = 0L,
     val twentyFourHourRecord: Long = 0L,
     val previousSevenDays: Long = 0L,

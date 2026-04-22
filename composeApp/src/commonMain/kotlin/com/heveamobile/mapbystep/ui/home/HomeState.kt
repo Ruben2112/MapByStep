@@ -4,6 +4,8 @@ data class HomeState(
     val isDrawerOpen: Boolean = false,
     val availableSteps: Long = 0L,
     val requiredSteps: Long = 1000L,
+
+    val isLoadingSteps: Boolean = false,
 )
 
 sealed interface HomeAction {

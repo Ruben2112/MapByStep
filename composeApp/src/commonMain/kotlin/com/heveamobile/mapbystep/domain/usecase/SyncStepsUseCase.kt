@@ -36,7 +36,6 @@ class SyncStepsUseCase(
                 ),
             )
 
-            updateUserRecordsUseCase()
 
             stepDataRepository.deleteOutdatedData(
                 before = currentTime - 60.days,
@@ -46,5 +45,6 @@ class SyncStepsUseCase(
                 user.copy(lastSyncTime = currentTime),
             )
         }
+        updateUserRecordsUseCase()
     }
 }

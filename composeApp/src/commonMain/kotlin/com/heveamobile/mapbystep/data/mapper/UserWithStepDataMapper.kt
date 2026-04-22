@@ -10,8 +10,11 @@ fun UserWithStepDataEntity.toDomain(): User {
         lastSyncTime = this.user.lastSyncTime,
         availableSteps = this.user.availableSteps,
         totalSteps = this.user.totalSteps,
+        previousTwentyFourHours = this.user.previousTwentyFourHours,
         twentyFourHourRecord = this.user.twentyFourHourRecord,
+        previousSevenDays = this.user.previousSevenDays,
         sevenDayRecord = this.user.sevenDayRecord,
+        previousThirtyDays = this.user.previousThirtyDays,
         thirtyDayRecord = this.user.thirtyDayRecord,
         stepData = this.stepData.map { it.toDomain() },
     )

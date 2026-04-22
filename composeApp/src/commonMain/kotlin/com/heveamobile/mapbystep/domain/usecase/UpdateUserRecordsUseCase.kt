@@ -15,26 +15,23 @@ class UpdateUserRecordsUseCase(
         val stepData = user?.stepData
             ?: return
 
-        if (stepData.isEmpty()) return
+//        if (stepData.isEmpty()) return
 
         // Sort by time to ensure the sliding window moves correctly
         val sortedSteps = stepData.sortedBy { it.startTime }
 
-        userRepository.updateUser(
-            user = user.copy(
-                previousTwentyFourHours = calculateCurrentWindowSum(
-                    steps = sortedSteps,
-                    windowDuration = 24.hours,
-                ),
-                previousSevenDays = calculateCurrentWindowSum(
-                    steps = sortedSteps,
-                    windowDuration = 7.days,
-                ),
-                previousThirtyDays = calculateCurrentWindowSum(
-                    steps = sortedSteps,
-                    windowDuration = 30.days,
-                ),
-            ),
+        // Calculate all current stats using current window
+        val current24h = calculateCurrentWindowSum(
+            steps = sortedSteps,
+            windowDuration = 24.hours,
+        )
+        val current7d = calculateCurrentWindowSum(
+            steps = sortedSteps,
+            windowDuration = 7.days,
+        )
+        val current30d = calculateCurrentWindowSum(
+            steps = sortedSteps,
+            windowDuration = 30.days,
         )
 
         // Calculate all records using sliding windows
@@ -51,25 +48,25 @@ class UpdateUserRecordsUseCase(
             windowDuration = 30.days,
         )
 
-        // Only update if a record is actually broken
-        if (new24h > user.twentyFourHourRecord || new7d > user.sevenDayRecord || new30d > user.thirtyDayRecord) {
-            userRepository.updateUser(
-                user.copy(
-                    twentyFourHourRecord = maxOf(
-                        user.twentyFourHourRecord,
-                        new24h,
-                    ),
-                    sevenDayRecord = maxOf(
-                        user.sevenDayRecord,
-                        new7d,
-                    ),
-                    thirtyDayRecord = maxOf(
-                        user.thirtyDayRecord,
-                        new30d,
-                    ),
+        userRepository.updateUser(
+            user.copy(
+                previousTwentyFourHours = current24h,
+                twentyFourHourRecord = maxOf(
+                    user.twentyFourHourRecord,
+                    new24h,
                 ),
-            )
-        }
+                previousSevenDays = current7d,
+                sevenDayRecord = maxOf(
+                    user.sevenDayRecord,
+                    new7d,
+                ),
+                previousThirtyDays = current30d,
+                thirtyDayRecord = maxOf(
+                    user.thirtyDayRecord,
+                    new30d,
+                ),
+            ),
+        )
     }
 
     /**

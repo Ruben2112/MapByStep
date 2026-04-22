@@ -25,6 +25,11 @@ val Typography: Typography
             fontSize = 24.sp,
             color = OnSurface,
         ),
+        titleSmall = TextStyle(
+            fontFamily = Tomorrow,
+            fontSize = 14.sp,
+            color = OnSurface,
+        ),
         bodySmall = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 12.sp,

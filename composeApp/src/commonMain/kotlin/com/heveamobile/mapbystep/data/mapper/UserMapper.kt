@@ -10,8 +10,11 @@ fun UserEntity.toDomain(): User {
         lastSyncTime = this.lastSyncTime,
         availableSteps = this.availableSteps,
         totalSteps = this.totalSteps,
+        previousTwentyFourHours = this.previousTwentyFourHours,
         twentyFourHourRecord = this.twentyFourHourRecord,
+        previousSevenDays = this.previousSevenDays,
         sevenDayRecord = this.sevenDayRecord,
+        previousThirtyDays = this.previousThirtyDays,
         thirtyDayRecord = this.thirtyDayRecord,
     )
 }
@@ -23,8 +26,11 @@ fun User.toEntity(): UserEntity {
         lastSyncTime = this.lastSyncTime,
         availableSteps = this.availableSteps,
         totalSteps = this.totalSteps,
+        previousTwentyFourHours = this.previousTwentyFourHours,
         twentyFourHourRecord = this.twentyFourHourRecord,
+        previousSevenDays = this.previousSevenDays,
         sevenDayRecord = this.sevenDayRecord,
+        previousThirtyDays = this.previousThirtyDays,
         thirtyDayRecord = this.thirtyDayRecord,
 
     )
