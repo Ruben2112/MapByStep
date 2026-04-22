@@ -1,8 +1,10 @@
 package com.heveamobile.mapbystep.di
 
+import com.heveamobile.mapbystep.data.repository.DestinationRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.MapRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.StepDataRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.UserRepositoryImpl
+import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
@@ -52,6 +54,7 @@ val repositoryModule = module {
     singleOf(::StepDataRepositoryImpl) { bind<StepDataRepository>() }
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::MapRepositoryImpl) { bind<MapRepository>() }
+    singleOf(::DestinationRepositoryImpl) { bind<DestinationRepository>() }
 }
 
 expect val targetModule: Module

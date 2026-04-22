@@ -15,6 +15,7 @@ actual val targetModule = module {
     single { get<AppDatabase>().getUserDao() }
     single { get<AppDatabase>().getStepDataDao() }
     single { get<AppDatabase>().getMapDao() }
+    single { get<AppDatabase>().getDestinationDao() }
 
     singleOf(::AndroidHealthPermissionManager).bind(HealthPermissionManager::class)
     singleOf(::HealthConnectManager).bind(HealthDataSource::class)

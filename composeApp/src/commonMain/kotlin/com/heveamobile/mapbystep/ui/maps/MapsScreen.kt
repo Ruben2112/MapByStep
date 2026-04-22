@@ -23,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.heveamobile.mapbystep.FormatMode
+import com.heveamobile.mapbystep.formatStepAmount
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.MapProgress
@@ -91,18 +93,28 @@ fun MapsContent(
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                             Text(
-                                text = "432 / 1000",
+                                text = "${
+                                    formatStepAmount(
+                                        state.availableSteps,
+                                        FormatMode.Long,
+                                    )
+                                } / ${
+                                    formatStepAmount(
+                                        state.activeMap.calculatedDistance,
+                                        formatMode = FormatMode.Medium,
+                                    )
+                                }",
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            imageVector = if (state.expandedMapId == state.activeMap?.id) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
+                            imageVector = if (state.expandedMapId == state.activeMap.id) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
                             contentDescription = stringResource(Res.string.maps_expand_progress_icon_description),
                         )
                     }
-                    AnimatedVisibility(visible = state.expandedMapId == state.activeMap?.id) {
+                    AnimatedVisibility(visible = state.expandedMapId == state.activeMap.id) {
                         Column {
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                             MapProgress(map = state.activeMap)

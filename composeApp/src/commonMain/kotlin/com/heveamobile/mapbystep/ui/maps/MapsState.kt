@@ -7,6 +7,8 @@ data class MapsState(
     val availableMaps: List<Map> = emptyList(),
     val expandedMapId: String? = null,
 
+    val availableSteps: Long = 0L,
+
     val isLoading: Boolean = false,
 )
 
