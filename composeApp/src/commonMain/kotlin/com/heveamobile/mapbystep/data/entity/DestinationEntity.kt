@@ -4,6 +4,14 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+enum class Rarity(val intValue: Int) {
+    Common(1),
+    Uncommon(2),
+    Rare(3),
+    Epic(4),
+    Legendary(5),
+}
+
 @Entity(
     foreignKeys = [
         ForeignKey(
@@ -19,6 +27,7 @@ data class DestinationEntity(
     val id: String,
     val mapId: String,
     val name: String,
-    val rarity: String,
-    val visits: Int = 0,
+    val rarity: Int,
+    val isDiscovered: Boolean = false,
+    val totalVisits: Int = 0,
 )

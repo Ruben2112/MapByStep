@@ -4,8 +4,8 @@ import com.heveamobile.mapbystep.domain.model.Map
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetActiveMapUseCase(val mapRepository: MapRepository) {
-    operator fun invoke(): Flow<Map?> {
-        return mapRepository.getActiveMapFlow()
+class GetMapsWithProgressUseCase(val mapRepository: MapRepository) {
+    operator fun invoke(): Flow<List<Map>> {
+        return mapRepository.getAllWithProgressFlow()
     }
 }

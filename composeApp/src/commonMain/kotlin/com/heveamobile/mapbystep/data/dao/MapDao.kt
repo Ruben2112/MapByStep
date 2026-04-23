@@ -2,22 +2,32 @@ package com.heveamobile.mapbystep.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.heveamobile.mapbystep.data.entity.MapEntity
+import com.heveamobile.mapbystep.data.entity.MapProgress
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MapDao {
 
+    @Transaction
     @Query("SELECT * FROM MapEntity")
-    fun getMapsFlow(): Flow<List<MapEntity>>
+    fun getMapsWithProgressFlow(): Flow<List<MapProgress>>
+
+    @Transaction
+    @Query("SELECT * FROM MapEntity")
+    fun getMapsWithProgress(): List<MapProgress>
 
     @Upsert
     suspend fun upsertMap(map: MapEntity)
 
-    @Query("SELECT * FROM MapEntity WHERE id = :id LIMIT 1")
-    fun getMapById(id: String): MapEntity?
 
+    @Transaction
+    @Query("SELECT * FROM MapEntity WHERE id = :id LIMIT 1")
+    fun getMapWithProgressById(id: String): MapProgress?
+
+    @Transaction
     @Query("SELECT * FROM MapEntity WHERE isActive = TRUE LIMIT 1")
-    fun getActiveMapFlow(): Flow<MapEntity?>
+    fun getActiveMapWithProgressFlow(): Flow<MapProgress?>
 }

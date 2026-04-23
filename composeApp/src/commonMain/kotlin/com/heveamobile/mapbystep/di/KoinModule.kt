@@ -8,7 +8,7 @@ import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
-import com.heveamobile.mapbystep.domain.usecase.GetActiveMapUseCase
+import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpdateUserRecordsUseCase
@@ -47,7 +47,7 @@ val useCaseModule = module {
     factoryOf(::SyncStepsUseCase)
     factoryOf(::UpdateUserRecordsUseCase)
     factoryOf(::UpsertInitialMapDataUseCase)
-    factoryOf(::GetActiveMapUseCase)
+    factoryOf(::GetMapsWithProgressUseCase)
 }
 
 val repositoryModule = module {

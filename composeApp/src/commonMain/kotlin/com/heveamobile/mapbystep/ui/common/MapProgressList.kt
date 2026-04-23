@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.heveamobile.mapbystep.data.entity.Rarity
 import com.heveamobile.mapbystep.domain.model.Map
 import com.heveamobile.mapbystep.theme.RarityCommon
 import com.heveamobile.mapbystep.theme.RarityEpic
@@ -43,7 +44,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
-                text = "113 / 226 (50%)",
+                text = map.formatProgress(null),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(
@@ -61,7 +62,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityCommon),
             )
             Text(
-                text = "54 / 109 (50%)",
+                text = map.formatProgress(Rarity.Common),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(
@@ -79,7 +80,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityUncommon),
             )
             Text(
-                text = "31 / 61 (50%)",
+                text = map.formatProgress(Rarity.Uncommon),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(
@@ -97,7 +98,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityRare),
             )
             Text(
-                text = "17 / 34 (50%)",
+                text = map.formatProgress(Rarity.Rare),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(
@@ -115,7 +116,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityEpic),
             )
             Text(
-                text = "9 / 17 (50%)",
+                text = map.formatProgress(Rarity.Epic),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(
@@ -133,7 +134,7 @@ fun MapProgress(
                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityLegendary),
             )
             Text(
-                text = "2 / 5 (50%)",
+                text = map.formatProgress(Rarity.Legendary),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(

@@ -11,5 +11,6 @@ interface MapRepository {
 
     suspend fun importMap(map: Map)
     fun getMapById(id: String): Map?
+    fun getAllWithProgressFlow(): Flow<List<Map>>
     fun getActiveMapFlow(): Flow<Map?>
 }

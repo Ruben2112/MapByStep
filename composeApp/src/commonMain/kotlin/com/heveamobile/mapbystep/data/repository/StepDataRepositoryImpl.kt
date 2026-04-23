@@ -18,7 +18,7 @@ class StepDataRepositoryImpl(
     override fun getStepsFlow(): Flow<List<StepData>> {
         return stepDao
             .getStepsFlow()
-            .map { it.map { it.toDomain() } }
+            .map { it.map { stepData -> stepData.toDomain() } }
     }
 
     override suspend fun saveStepData(

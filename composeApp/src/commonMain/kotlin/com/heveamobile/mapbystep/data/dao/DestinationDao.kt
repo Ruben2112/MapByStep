@@ -21,7 +21,7 @@ interface DestinationDao {
     @Upsert
     suspend fun upsertDestinations(destinations: List<DestinationEntity>)
 
-    @Query("UPDATE DestinationEntity SET visits = :visits WHERE id = :id")
+    @Query("UPDATE DestinationEntity SET totalVisits = :visits WHERE id = :id")
     suspend fun updateVisitCountForDestinationById(
         id: String,
         visits: Int,

@@ -2,8 +2,10 @@ package com.heveamobile.mapbystep.ui.maps
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heveamobile.mapbystep.domain.usecase.GetActiveMapUseCase
+import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class MapsViewModel(
     val getUserUseCase: GetUserUseCase,
-    val getActiveMapUseCase: GetActiveMapUseCase,
+    val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MapsState())
@@ -35,26 +37,27 @@ class MapsViewModel(
             }
         }
 
-        viewModelScope.launch {
-            getActiveMapUseCase()
+        viewModelScope.launch(Dispatchers.IO) {
+            getMapsWithProgressUseCase()
                 .onStart {
                     _state.update { it.copy(isLoading = true) }
                 }
-                .collectLatest { map ->
+                .collectLatest { maps ->
                     _state.update { state ->
                         state.copy(
-                            activeMap = map,
+                            maps = maps,
+                            activeMap = maps.firstOrNull { it.isActive },
                             expandedMapId = state.expandedMapId
-                                ?: map?.id,
+                                ?: maps.first { it.isActive }.id,
                             isLoading = false,
                         )
                     }
                 }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getUserUseCase().first()
-            getActiveMapUseCase().first()
+            getMapsWithProgressUseCase().first()
 
             _state.update { it.copy(isLoading = false) }
         }

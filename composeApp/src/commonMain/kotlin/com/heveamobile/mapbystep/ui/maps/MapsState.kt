@@ -3,8 +3,8 @@ package com.heveamobile.mapbystep.ui.maps
 import com.heveamobile.mapbystep.domain.model.Map
 
 data class MapsState(
+    val maps: List<Map> = emptyList(),
     val activeMap: Map? = null,
-    val availableMaps: List<Map> = emptyList(),
     val expandedMapId: String? = null,
 
     val availableSteps: Long = 0L,

@@ -28,12 +28,12 @@ class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : De
             .drop(1)
             .mapNotNull { line ->
                 if (line.isBlank()) return@mapNotNull null
-                val columns = line.split(",")
+                val columns = line.split(";")
                 Destination(
                     id = columns[0],
                     mapId = columns[1],
                     name = columns[3],
-                    rarity = columns[4],
+                    rarity = columns[4].toInt(),
                 )
             }
 

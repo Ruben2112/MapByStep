@@ -19,11 +19,12 @@ import com.heveamobile.mapbystep.data.entity.UserEntity
         MapEntity::class,
         DestinationEntity::class,
     ],
-    version = 5,
+    version = 6,
 )
 @TypeConverters(
     DateTimeConverters::class,
     InfoTypeConverters::class,
+    RarityConverters::class,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getStepDataDao(): StepDataDao

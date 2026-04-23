@@ -3,7 +3,7 @@ package com.heveamobile.mapbystep.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
-import com.heveamobile.mapbystep.domain.usecase.GetActiveMapUseCase
+import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
@@ -24,7 +24,7 @@ class HomeViewModel(
     private val getUserUseCase: GetUserUseCase,
     private val syncStepsUseCase: SyncStepsUseCase,
     private val upsertInitialMapDataUseCase: UpsertInitialMapDataUseCase,
-    private val getActiveMapUseCase: GetActiveMapUseCase,
+    private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
@@ -43,25 +43,25 @@ class HomeViewModel(
             }
         }
 
-        viewModelScope.launch {
-            getActiveMapUseCase().collectLatest { map ->
-                _state.update {
-                    it.copy(
-                        requiredSteps = map?.calculatedDistance
+        viewModelScope.launch(Dispatchers.IO) {
+            getMapsWithProgressUseCase().collectLatest { maps ->
+                _state.update { state ->
+                    state.copy(
+                        requiredSteps = maps.firstOrNull { it.isActive }?.calculatedDistance
                             ?: 0L,
                     )
                 }
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val syncStepsJob = launch {
                 if (healthPermissionManager.checkPermissionState() == HealthPermissionStatus.Granted) {
                     syncStepsUseCase()
                 }
             }
 
-            val upsertInitialMapDataJob = launch(Dispatchers.IO) {
+            val upsertInitialMapDataJob = launch {
                 upsertInitialMapDataUseCase()
             }
 
@@ -71,7 +71,7 @@ class HomeViewModel(
             )
 
             getUserUseCase().first()
-            getActiveMapUseCase().first()
+            getMapsWithProgressUseCase().first()
 
             _state.update { it.copy(isLoadingSteps = false) }
         }
