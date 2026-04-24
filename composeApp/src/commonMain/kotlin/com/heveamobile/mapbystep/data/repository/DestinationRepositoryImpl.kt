@@ -5,15 +5,10 @@ import com.heveamobile.mapbystep.data.mapper.toDomain
 import com.heveamobile.mapbystep.data.mapper.toEntity
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
-import kotlinx.coroutines.flow.Flow
 
 class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : DestinationRepository {
     override suspend fun upsertDestination(destination: Destination) {
         destinationDao.upsertDestination(destination.toEntity())
-    }
-
-    override fun getDestinationsByMapIdFlow(mapId: String): Flow<List<Destination>> {
-        TODO("Not yet implemented")
     }
 
     override fun getDestinationsByMapId(mapId: String): List<Destination> {
@@ -37,6 +32,14 @@ class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : De
                 )
             }
 
+        destinationDao.upsertDestinations(destinations.map { it.toEntity() })
+    }
+
+    override fun resetDiscovered(mapId: String) {
+        destinationDao.resetDiscovered(mapId = mapId)
+    }
+
+    override suspend fun upsertDestinations(destinations: List<Destination>) {
         destinationDao.upsertDestinations(destinations.map { it.toEntity() })
     }
 

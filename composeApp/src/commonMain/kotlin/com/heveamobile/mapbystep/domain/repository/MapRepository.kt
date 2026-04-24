@@ -9,8 +9,9 @@ interface MapRepository {
         isActive: Boolean = false,
     )
 
-    suspend fun importMap(map: Map)
+    suspend fun updateMap(map: Map)
     fun getMapById(id: String): Map?
     fun getAllWithProgressFlow(): Flow<List<Map>>
+    suspend fun getActiveMap(): Map?
     fun getActiveMapFlow(): Flow<Map?>
 }

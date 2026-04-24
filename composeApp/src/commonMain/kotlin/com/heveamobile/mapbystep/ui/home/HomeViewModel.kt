@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
+import com.heveamobile.mapbystep.domain.usecase.SpendStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
@@ -25,6 +26,7 @@ class HomeViewModel(
     private val syncStepsUseCase: SyncStepsUseCase,
     private val upsertInitialMapDataUseCase: UpsertInitialMapDataUseCase,
     private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
+    private val spendStepsUseCase: SpendStepsUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
@@ -92,6 +94,12 @@ class HomeViewModel(
             HomeAction.SyncSteps -> {
                 viewModelScope.launch {
                     syncStepsUseCase()
+                }
+            }
+
+            HomeAction.SpendSteps -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    spendStepsUseCase()
                 }
             }
         }

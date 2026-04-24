@@ -41,7 +41,7 @@ class MapRepositoryImpl(
         mapDao.upsertMap(map.toEntity())
     }
 
-    override suspend fun importMap(map: Map) {
+    override suspend fun updateMap(map: Map) {
         mapDao.upsertMap(map.toEntity())
     }
 
@@ -56,6 +56,12 @@ class MapRepositoryImpl(
         return mapDao
             .getMapsWithProgressFlow()
             .map { it.map { mapProgress -> mapProgress.toDomain() } }
+    }
+
+    override suspend fun getActiveMap(): Map? {
+        return mapDao
+            .getActiveMap()
+            ?.toDomain()
     }
 
     override fun getActiveMapFlow(): Flow<Map?> {

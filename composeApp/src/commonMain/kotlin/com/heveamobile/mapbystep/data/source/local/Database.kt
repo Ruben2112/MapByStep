@@ -19,7 +19,7 @@ import com.heveamobile.mapbystep.data.entity.UserEntity
         MapEntity::class,
         DestinationEntity::class,
     ],
-    version = 6,
+    version = 7,
 )
 @TypeConverters(
     DateTimeConverters::class,

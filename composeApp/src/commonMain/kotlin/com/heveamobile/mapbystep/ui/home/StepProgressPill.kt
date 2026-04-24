@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.ui.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,7 @@ fun StepProgressPill(
     isLoading: Boolean = false,
     availableSteps: Long,
     requiredSteps: Long,
+    onTap: () -> Unit,
 ) {
     AnimatedContent(targetState = isLoading) {
         Row(
@@ -40,6 +42,9 @@ fun StepProgressPill(
                 .padding(horizontal = MaterialTheme.spacing.small)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .background(SecondaryContainer)
+                .clickable {
+                    onTap()
+                }
                 .padding(
                     MaterialTheme.spacing.small,
                 ),

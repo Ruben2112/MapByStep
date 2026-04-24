@@ -12,4 +12,5 @@ sealed interface HomeAction {
     data object OpenNavigationDrawer : HomeAction
     data object CloseNavigationDrawer : HomeAction
     data object SyncSteps : HomeAction
+    data object SpendSteps : HomeAction
 }

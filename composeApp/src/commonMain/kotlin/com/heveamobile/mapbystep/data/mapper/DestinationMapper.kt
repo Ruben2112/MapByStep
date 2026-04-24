@@ -9,6 +9,7 @@ fun DestinationEntity.toDomain(): Destination {
         mapId = this.mapId,
         name = this.name,
         rarity = this.rarity,
+        isDiscovered = this.isDiscovered,
         visits = this.totalVisits,
     )
 }
@@ -19,6 +20,7 @@ fun Destination.toEntity(): DestinationEntity {
         mapId = this.mapId,
         name = this.name,
         rarity = this.rarity,
+        isDiscovered = this.isDiscovered,
         totalVisits = this.visits,
     )
 }

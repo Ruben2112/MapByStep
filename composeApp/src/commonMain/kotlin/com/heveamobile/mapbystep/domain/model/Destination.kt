@@ -5,5 +5,6 @@ data class Destination(
     val mapId: String,
     val name: String,
     val rarity: Int,
-    val visits: Int = 0,
+    var isDiscovered: Boolean = false,
+    var visits: Int = 0,
 )

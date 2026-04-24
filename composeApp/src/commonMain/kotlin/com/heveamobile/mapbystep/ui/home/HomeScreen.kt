@@ -148,6 +148,9 @@ fun HomeContent(
                             isLoading = state.isLoadingSteps,
                             availableSteps = state.availableSteps,
                             requiredSteps = state.requiredSteps,
+                            onTap = {
+                                onAction(HomeAction.SpendSteps)
+                            },
                         )
                         IconButton(onClick = { onAction(HomeAction.SyncSteps) }) {
                             Icon(

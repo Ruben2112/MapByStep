@@ -3,7 +3,7 @@ package com.heveamobile.mapbystep.data.entity
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class MapProgress(
+data class MapWithDestinations(
     @Embedded
     val map: MapEntity,
 

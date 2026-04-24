@@ -1,9 +1,9 @@
 package com.heveamobile.mapbystep.data.mapper
 
-import com.heveamobile.mapbystep.data.entity.MapProgress
+import com.heveamobile.mapbystep.data.entity.MapWithDestinations
 import com.heveamobile.mapbystep.domain.model.Map
 
-fun MapProgress.toDomain(): Map {
+fun MapWithDestinations.toDomain(): Map {
     return Map(
         id = this.map.id,
         version = this.map.version,
@@ -32,5 +32,6 @@ fun MapProgress.toDomain(): Map {
         price = this.map.price,
         isOwned = this.map.isOwned,
         isActive = this.map.isActive,
+        destinations = this.destinations.map { it.toDomain() },
     )
 }

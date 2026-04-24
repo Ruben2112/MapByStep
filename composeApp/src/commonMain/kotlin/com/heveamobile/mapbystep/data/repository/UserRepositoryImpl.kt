@@ -13,6 +13,12 @@ import kotlin.time.Clock
 class UserRepositoryImpl(
     private val userDao: UserDao,
 ) : UserRepository {
+    override suspend fun getUser(): User? {
+        return userDao
+            .getUser()
+            ?.toDomain()
+    }
+
     override fun getUserFlow(): Flow<User?> {
         return userDao
             .getUserFlow()

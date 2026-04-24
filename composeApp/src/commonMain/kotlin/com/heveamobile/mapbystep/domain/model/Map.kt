@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.domain.model
 
 import com.heveamobile.mapbystep.data.entity.InfoType
 import com.heveamobile.mapbystep.data.entity.Rarity
+import kotlin.math.pow
 
 data class Map(
     val id: String,
@@ -22,7 +23,7 @@ data class Map(
     val epicDestinationsVisited: Int = 0,
     val legendaryDestinationCount: Int = 0,
     val legendaryDestinationsVisited: Int = 0,
-    val calculatedDistance: Long = baseDistance * currentLevel,
+    val calculatedDistance: Long = (baseDistance * (1.25.pow(currentLevel - 1))).toLong(),
     val currentMapPoints: Long = 0,
     val commonValue: Int,
     val uncommonValue: Int,
@@ -32,6 +33,7 @@ data class Map(
     val price: Double? = null,
     val isOwned: Boolean = false,
     val isActive: Boolean = false,
+    val destinations: List<Destination> = emptyList(),
 ) {
     fun formatProgress(rarity: Rarity?): String {
         val visited: Int
@@ -69,7 +71,7 @@ data class Map(
             }
         }
 
-        val progressPercentage = if (total == 0) 0 else visited.floorDiv(total) * 100
+        val progressPercentage = if (total == 0) 0 else ((visited * 100) / total)
         return "$visited / $total ($progressPercentage%)"
     }
 }

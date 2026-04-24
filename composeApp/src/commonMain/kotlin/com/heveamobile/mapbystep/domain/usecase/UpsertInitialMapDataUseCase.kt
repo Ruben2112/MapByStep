@@ -8,7 +8,7 @@ class UpsertInitialMapDataUseCase(
     val mapRepository: MapRepository,
     val destinationRepository: DestinationRepository,
 ) {
-    val currentMapVersion = 1
+    val currentMapVersion = 2
     val initialMapId = "4d08314f-2224-4eff-a3bd-8d141d981fad"
 
     suspend operator fun invoke() {
