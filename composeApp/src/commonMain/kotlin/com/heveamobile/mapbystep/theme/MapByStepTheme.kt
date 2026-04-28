@@ -16,6 +16,8 @@ val LightColorTheme = lightColorScheme(
     outlineVariant = OutlineVariant, // Outline for PrimaryContainer
     secondaryContainer = SecondaryContainer, // Secondary buttons like in Nav bar
     onSecondaryContainer = OnSecondaryContainer, // Text and icons on SecondaryContainer
+    tertiaryContainer = TertiaryContainer,
+    onTertiaryContainer = OnTertiaryContainer,
 )
 
 @Composable
