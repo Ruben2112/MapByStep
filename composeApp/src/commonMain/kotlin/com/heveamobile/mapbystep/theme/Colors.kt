@@ -1,6 +1,7 @@
 package com.heveamobile.mapbystep.theme
 
 import androidx.compose.ui.graphics.Color
+import com.heveamobile.mapbystep.domain.model.Rarity
 
 private val Brown50 = Color(color = 0xFFFBFAF8)
 private val Brown400 = Color(color = 0xFFAF9797)
@@ -40,3 +41,12 @@ val RarityUncommon = Color(0xFF2AA120)
 val RarityRare = Color(0xFF2A22A0)
 val RarityEpic = Color(0xFFA922A0)
 val RarityLegendary = Color(0xFFA96120)
+
+val Rarity.color: Color
+    get() = when (this) {
+        Rarity.Common -> RarityCommon
+        Rarity.Uncommon -> RarityUncommon
+        Rarity.Rare -> RarityRare
+        Rarity.Epic -> RarityEpic
+        Rarity.Legendary -> RarityLegendary
+    }

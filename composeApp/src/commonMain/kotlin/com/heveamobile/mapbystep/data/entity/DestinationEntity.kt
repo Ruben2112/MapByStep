@@ -4,14 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-enum class Rarity(val intValue: Int) {
-    Common(1),
-    Uncommon(2),
-    Rare(3),
-    Epic(4),
-    Legendary(5),
-}
-
 @Entity(
     foreignKeys = [
         ForeignKey(

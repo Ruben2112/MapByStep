@@ -1,7 +1,6 @@
 package com.heveamobile.mapbystep.domain.model
 
 import com.heveamobile.mapbystep.data.entity.InfoType
-import com.heveamobile.mapbystep.data.entity.Rarity
 import kotlin.math.pow
 
 data class Map(

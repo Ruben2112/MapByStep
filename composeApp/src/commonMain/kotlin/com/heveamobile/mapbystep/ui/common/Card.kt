@@ -66,7 +66,7 @@ fun Card(
                         .background(Outline),
                 )
             }
-            mainContent.invoke()
+            mainContent()
             if (bottomContent != null) {
                 Box(
                     modifier = Modifier
@@ -84,7 +84,7 @@ fun Card(
                         ),
                     contentAlignment = Alignment.CenterEnd,
                 ) {
-                    bottomContent.invoke()
+                    bottomContent()
                 }
             }
         }

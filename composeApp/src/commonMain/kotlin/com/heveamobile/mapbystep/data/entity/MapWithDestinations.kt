@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.data.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.heveamobile.mapbystep.domain.model.Rarity
 
 data class MapWithDestinations(
     @Embedded

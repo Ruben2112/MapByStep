@@ -1,7 +1,7 @@
 package com.heveamobile.mapbystep.domain.usecase
 
-import com.heveamobile.mapbystep.data.entity.Rarity
 import com.heveamobile.mapbystep.domain.model.Destination
+import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
@@ -11,26 +11,27 @@ class SpendStepsUseCase(
     private val mapRepository: MapRepository,
     private val destinationRepository: DestinationRepository,
 ) {
-    suspend operator fun invoke() {
+    suspend operator fun invoke(): List<Destination> {
         val user = userRepository.getUser()
-            ?: return
+            ?: return emptyList()
         val activeMap = mapRepository.getActiveMap()
-            ?: return
+            ?: return emptyList()
 
         val costPerVisit = activeMap.calculatedDistance
         val totalPossibleVisits = user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
-        if (totalPossibleVisits <= 0) return
+//        val totalPossibleVisits = 20
+        if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations
-        val visitedDestinations = mutableSetOf<Destination>()
+        val visitedDestinations = mutableListOf<Destination>()
         var levelUpOccurred = false
 
         run loop@{
             repeat(totalPossibleVisits) {
                 val random = (1..10000).random()
-                val rarityToTarget = when (random) {
+                val targetRarity = when (random) {
                     in 1..8109 -> Rarity.Common
                     in 8110..9609 -> Rarity.Uncommon
                     in 9610..9909 -> Rarity.Rare
@@ -39,12 +40,20 @@ class SpendStepsUseCase(
                 }
 
                 val destination = destinations
-                    .filter { it.rarity == rarityToTarget.intValue }
+                    .filter { it.rarity == targetRarity }
                     .random()
+
+                // We make a copy so we can mark only the first occurrence of the destination as new
+                val destinationCopy = destination.copy(
+                    isNew = !destination.isDiscovered,
+                    isDiscovered = true,
+                    visits = destination.visits + 1,
+                )
 
                 destination.isDiscovered = true
                 destination.visits++
-                visitedDestinations.add(destination)
+
+                visitedDestinations.add(destinationCopy)
 
                 if (destinations.all { it.isDiscovered }) {
                     levelUpOccurred = true
@@ -64,12 +73,18 @@ class SpendStepsUseCase(
             }
         }
 
+        // Mark only first destination in the list as new
+        val newlyDiscoveredIds = visitedDestinations
+            .filter { it.isNew }
+            .map { it.id }
+            .toSet()
+
         // Update destinations
         if (visitedDestinations.isNotEmpty()) {
             val finalToSave = visitedDestinations.map { destination ->
                 destination.copy(
                     // If level up happened, they are no longer "discovered" for the new level
-                    isDiscovered = if (levelUpOccurred) false else destination.isDiscovered,
+                    isDiscovered = !levelUpOccurred,
                 )
             }
             destinationRepository.upsertDestinations(finalToSave)
@@ -78,5 +93,17 @@ class SpendStepsUseCase(
         userRepository.updateUser(
             user.copy(availableSteps = user.availableSteps - (visitedDestinations.size * costPerVisit)),
         )
+
+        // Mark only the first occurrence of the destination as new
+        newlyDiscoveredIds.forEach { id ->
+            val matchingDestinations = visitedDestinations.filter { it.id == id }
+            if (matchingDestinations.size > 1) {
+                matchingDestinations.forEachIndexed { index, destination ->
+                    destination.isNew = index == 0
+                }
+            }
+        }
+
+        return visitedDestinations.toList()
     }
 }

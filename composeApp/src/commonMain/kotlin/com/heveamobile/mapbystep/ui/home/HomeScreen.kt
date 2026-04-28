@@ -1,5 +1,9 @@
 package com.heveamobile.mapbystep.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -19,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -99,8 +105,10 @@ fun HomeContent(
             Route.Profile,
         ),
     )
-
     ModalNavigationDrawer(
+        modifier = Modifier.blur(
+            if (state.visitedDestinationsState.destinations.isEmpty()) 0.dp else 8.dp,
+        ),
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawer(
@@ -178,5 +186,16 @@ fun HomeContent(
                 },
             )
         }
+    }
+
+    AnimatedVisibility(
+        visible = state.visitedDestinationsState.destinations.isNotEmpty(),
+        enter = fadeIn(tween(300)),
+        exit = fadeOut(tween(300)),
+    ) {
+        VisitedDestinationsOverlay(
+            state = state.visitedDestinationsState,
+            onAction = onAction,
+        )
     }
 }

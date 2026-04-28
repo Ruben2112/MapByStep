@@ -11,8 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.heveamobile.mapbystep.data.entity.Rarity
 import com.heveamobile.mapbystep.domain.model.Map
+import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.theme.RarityCommon
 import com.heveamobile.mapbystep.theme.RarityEpic
 import com.heveamobile.mapbystep.theme.RarityLegendary

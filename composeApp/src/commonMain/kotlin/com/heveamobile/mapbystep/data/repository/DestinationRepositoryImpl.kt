@@ -4,6 +4,7 @@ import com.heveamobile.mapbystep.data.dao.DestinationDao
 import com.heveamobile.mapbystep.data.mapper.toDomain
 import com.heveamobile.mapbystep.data.mapper.toEntity
 import com.heveamobile.mapbystep.domain.model.Destination
+import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 
 class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : DestinationRepository {
@@ -28,7 +29,7 @@ class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : De
                     id = columns[0],
                     mapId = columns[1],
                     name = columns[3],
-                    rarity = columns[4].toInt(),
+                    rarity = Rarity.fromInt(columns[4].toInt()),
                 )
             }
 
