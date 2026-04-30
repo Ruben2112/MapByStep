@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,10 +21,14 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -39,7 +42,6 @@ import kotlinx.serialization.modules.polymorphic
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.app_name
 import mapbystep.composeapp.generated.resources.home_navigation_icon_description
-import mapbystep.composeapp.generated.resources.home_sync_icon_description
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.compose.viewmodel.koinViewModel
@@ -68,6 +70,14 @@ fun HomeContent(
     onAction: (HomeAction) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val observer = remember {
+        LifecycleEventObserver { source, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                onAction(HomeAction.SyncSteps)
+            }
+        }
+    }
+    LocalLifecycleOwner.current.lifecycle.addObserver(observer)
 
     LaunchedEffect(state.isDrawerOpen) {
         if (state.isDrawerOpen) {
@@ -164,13 +174,6 @@ fun HomeContent(
                                 onAction(HomeAction.SpendSteps)
                             },
                         )
-                        IconButton(onClick = { onAction(HomeAction.SyncSteps) }) {
-                            Icon(
-                                imageVector = Icons.Filled.Sync,
-                                contentDescription = stringResource(Res.string.home_sync_icon_description),
-                                tint = OnSurface,
-                            )
-                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = SurfaceContainerHigh,

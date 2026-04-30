@@ -12,27 +12,6 @@ data class HomeState(
 )
 
 data class VisitedDestinationsState(
-    // TODO: Prepopulated for testing purposes
-//    val destinations: List<Destination> = listOf(
-//        Destination(
-//            id = "1",
-//            mapId = "1",
-//            name = "Common destination 1",
-//            rarity = Rarity.Common,
-//        ),
-//        Destination(
-//            id = "2",
-//            mapId = "1",
-//            name = "Rare destination 2",
-//            rarity = Rarity.Rare,
-//        ),
-//        Destination(
-//            id = "3",
-//            mapId = "1",
-//            name = "Legendary destination 2",
-//            rarity = Rarity.Legendary,
-//        ),
-//    ),
     val destinations: List<Destination> = emptyList(),
     val isSingleCardLayout: Boolean = true,
     val revealingAll: Boolean = false,
