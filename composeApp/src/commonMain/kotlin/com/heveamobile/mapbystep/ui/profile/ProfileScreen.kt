@@ -216,7 +216,7 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                             state.twentyFourHourRecord,
                             FormatMode.Long,
                         )
-                    }",
+                    } steps",
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -240,7 +240,7 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                             state.sevenDayRecord,
                             FormatMode.Long,
                         )
-                    }",
+                    } steps",
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -264,7 +264,7 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                             state.thirtyDayRecord,
                             FormatMode.Long,
                         )
-                    }",
+                    } steps",
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )

@@ -68,6 +68,7 @@ fun MapStatisticsList(
                     modifier = Modifier.size(24.dp),
                     imageVector = if (isExpanded) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
                     contentDescription = stringResource(Res.string.maps_expand_progress_icon_description),
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }

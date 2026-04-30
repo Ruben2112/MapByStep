@@ -167,7 +167,7 @@ private fun DestinationsContent(
             ) { destination ->
                 DestinationCard(
                     destination = destination,
-                    isRevealed = destination.isRevealed,
+                    isRevealed = destination.isDiscovered,
                     raritySpoiler = true,
                     onClick = {
                         // TODO: Show destination details

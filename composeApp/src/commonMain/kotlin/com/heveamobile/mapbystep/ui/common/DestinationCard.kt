@@ -36,6 +36,7 @@ import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_question_mark
+import mapbystep.composeapp.generated.resources.ic_steps
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -121,12 +122,13 @@ private fun CardFront(
                     .fillMaxWidth()
                     .aspectRatio(1F),
             ) {
-                Icon(
-                    modifier = Modifier.fillMaxSize(),
-                    painter = painterResource(resource = Res.drawable.ic_question_mark),
-                    contentDescription = "Placeholder card art",
-                    tint = destination.rarity.color,
-                )
+                //TODO: Add image of country
+//                Icon(
+//                    modifier = Modifier.fillMaxSize(),
+//                    painter = painterResource(resource = Res.drawable.ic_question_mark),
+//                    contentDescription = "Placeholder card art",
+//                    tint = destination.rarity.color,
+//                )
             }
             Box(
                 modifier = Modifier
@@ -150,6 +152,19 @@ private fun CardFront(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(if (isLarge) MaterialTheme.spacing.large else MaterialTheme.spacing.medium),
+            contentAlignment = Alignment.TopStart,
+        ) {
+            Icon(
+                modifier = Modifier.size(if (isLarge) 32.dp else 24.dp),
+                painter = painterResource(Res.drawable.ic_steps),
+                contentDescription = "Rarity ${destination.rarity.name} icon",
+                tint = destination.rarity.color,
+            )
         }
         if (isNew) {
             Box(
