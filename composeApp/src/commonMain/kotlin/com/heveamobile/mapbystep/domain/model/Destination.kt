@@ -25,4 +25,5 @@ data class Destination(
     var isDiscovered: Boolean = false,
     var isNew: Boolean = false,
     var visits: Int = 0,
+    var isRevealed: Boolean = false,
 )

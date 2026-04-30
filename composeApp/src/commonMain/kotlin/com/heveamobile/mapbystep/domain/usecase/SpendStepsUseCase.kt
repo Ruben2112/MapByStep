@@ -18,10 +18,10 @@ class SpendStepsUseCase(
             ?: return emptyList()
 
         val costPerVisit = activeMap.calculatedDistance
-//        val totalPossibleVisits = user.availableSteps
-//            .floorDiv(costPerVisit)
-//            .toInt()
-        val totalPossibleVisits = 5
+        val totalPossibleVisits = user.availableSteps
+            .floorDiv(costPerVisit)
+            .toInt()
+//        val totalPossibleVisits = 20
         if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations

@@ -34,7 +34,6 @@ data class VisitedDestinationsState(
 //        ),
 //    ),
     val destinations: List<Destination> = emptyList(),
-    val revealedDestinations: List<Destination> = emptyList(),
     val isSingleCardLayout: Boolean = true,
     val revealingAll: Boolean = false,
 )

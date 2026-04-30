@@ -123,7 +123,7 @@ fun ProfileContent(
             }
         }
         HistoricDataCard(state = state)
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         PersonalRecordsDataCard(state = state)
     }
 }

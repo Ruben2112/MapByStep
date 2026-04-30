@@ -15,6 +15,8 @@ import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpdateUserRecordsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
 import com.heveamobile.mapbystep.navigation.Route
+import com.heveamobile.mapbystep.ui.destinations.DestinationsScreen
+import com.heveamobile.mapbystep.ui.destinations.DestinationsViewModel
 import com.heveamobile.mapbystep.ui.home.HomeViewModel
 import com.heveamobile.mapbystep.ui.maps.MapsScreen
 import com.heveamobile.mapbystep.ui.maps.MapsViewModel
@@ -35,12 +37,14 @@ import org.koin.dsl.navigation3.navigation
 val navigationModule = module {
     navigation<Route.Profile> { ProfileScreen() }
     navigation<Route.Maps> { MapsScreen() }
+    navigation<Route.Destinations> { DestinationsScreen() }
 }
 
 val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::MapsViewModel)
+    viewModelOf(::DestinationsViewModel)
 }
 
 val useCaseModule = module {

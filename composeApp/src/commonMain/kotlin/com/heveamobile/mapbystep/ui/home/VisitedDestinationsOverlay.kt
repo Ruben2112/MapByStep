@@ -56,7 +56,7 @@ fun VisitedDestinationsOverlay(
     onAction: (HomeAction) -> Unit,
 ) {
     val destinations = state.destinations
-    val revealedDestinations = state.revealedDestinations
+    val revealedDestinations = state.destinations.filter { it.isRevealed }
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -64,7 +64,7 @@ fun VisitedDestinationsOverlay(
     )
     val currentDestination = destinations.getOrNull(pagerState.currentPage)
     val currentRarityColor =
-        if (state.isSingleCardLayout && currentDestination?.isRevealed(revealedDestinations) == true) {
+        if (state.isSingleCardLayout && currentDestination?.isRevealed == true) {
             currentDestination.rarity.color.copy(alpha = 0.25F)
         } else {
             MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.75F)
@@ -101,14 +101,12 @@ fun VisitedDestinationsOverlay(
                 SingleCardLayout(
                     pagerState = pagerState,
                     destinations = destinations,
-                    revealedDestinations = revealedDestinations,
                     onAction = onAction,
                 )
             } else {
                 GridLayout(
                     pagerState = pagerState,
                     destinations = destinations,
-                    revealedDestinations = revealedDestinations,
                     onAction = onAction,
                 )
             }
@@ -125,7 +123,7 @@ fun VisitedDestinationsOverlay(
                     onClick = { onAction(HomeAction.CloseSingleCardLayout) },
                 )
             } else {
-                if (destinations.size != revealedDestinations.size) {
+                if (destinations.any { !it.isRevealed }) {
                     PrimaryButton(
                         modifier = Modifier.padding(MaterialTheme.spacing.large),
                         label = "Reveal all",
@@ -147,7 +145,6 @@ fun VisitedDestinationsOverlay(
 private fun SingleCardLayout(
     pagerState: PagerState,
     destinations: List<Destination>,
-    revealedDestinations: List<Destination>,
     onAction: (HomeAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -165,7 +162,6 @@ private fun SingleCardLayout(
                 beyondViewportPageCount = 1,
             ) { index ->
                 val destination = destinations[index]
-                val isRevealed = destination.isRevealed(revealedDestinations)
 
                 DestinationCard(
                     modifier = Modifier
@@ -174,7 +170,7 @@ private fun SingleCardLayout(
                             horizontal = MaterialTheme.spacing.extraLarge,
                         ),
                     destination = destination,
-                    isRevealed = isRevealed,
+                    isRevealed = destination.isRevealed,
                     isNew = destination.isNew,
                     onClick = {
                         onAction(HomeAction.RevealDestination(destination))
@@ -245,7 +241,7 @@ private fun SingleCardLayout(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         Text(
             modifier = Modifier.alpha(
-                if (destinations[pagerState.currentPage].isRevealed(revealedDestinations)) 0F else 1F,
+                if (destinations[pagerState.currentPage].isRevealed) 0F else 1F,
             ),
             text = "Tap card to reveal",
             style = MaterialTheme.typography.bodyMedium.copy(
@@ -259,7 +255,6 @@ private fun SingleCardLayout(
 private fun GridLayout(
     pagerState: PagerState,
     destinations: List<Destination>,
-    revealedDestinations: List<Destination>,
     onAction: (HomeAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -271,8 +266,8 @@ private fun GridLayout(
                 horizontal = MaterialTheme.spacing.medium,
             ),
         columns = GridCells.Fixed(count = 3),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(
@@ -284,10 +279,10 @@ private fun GridLayout(
         items(destinations) { destination ->
             DestinationCard(
                 destination = destination,
-                isRevealed = revealedDestinations.contains(destination),
+                isRevealed = destination.isRevealed,
                 isNew = destination.isNew,
                 onClick = {
-                    if (revealedDestinations.contains(destination)) {
+                    if (destination.isRevealed) {
                         scope.launch {
                             pagerState.scrollToPage(destinations.indexOf(destination))
                         }
@@ -313,8 +308,4 @@ private fun GridLayout(
             )
         }
     }
-}
-
-private fun Destination.isRevealed(revealedDestinations: List<Destination>): Boolean {
-    return revealedDestinations.contains(this)
 }

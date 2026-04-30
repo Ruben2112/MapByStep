@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.theme.Outline
@@ -44,6 +45,7 @@ fun DestinationCard(
     destination: Destination,
     isRevealed: Boolean,
     isNew: Boolean = false,
+    raritySpoiler: Boolean = false,
     onClick: () -> Unit,
     isLarge: Boolean = false,
 ) {
@@ -81,6 +83,7 @@ fun DestinationCard(
             ) {
                 CardBack(
                     isLarge = isLarge,
+                    raritySpoiler = raritySpoiler,
                     destination = destination,
                 )
             }
@@ -144,6 +147,7 @@ private fun CardFront(
                     text = destination.name,
                     textAlign = TextAlign.Center,
                     style = if (isLarge) MaterialTheme.typography.bodyLarge else MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -181,6 +185,7 @@ private fun CardFront(
 private fun CardBack(
     modifier: Modifier = Modifier,
     isLarge: Boolean,
+    raritySpoiler: Boolean = false,
     destination: Destination,
 ) {
     Column(
@@ -206,7 +211,7 @@ private fun CardBack(
                 modifier = Modifier.fillMaxSize(),
                 painter = painterResource(resource = Res.drawable.ic_question_mark),
                 contentDescription = "Hidden card icon",
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = if (raritySpoiler) destination.rarity.color else MaterialTheme.colorScheme.onSurface,
             )
         }
         Box(

@@ -98,6 +98,10 @@ fun HomeContent(
                         Route.Maps::class,
                         Route.Maps.serializer(),
                     )
+                    subclass(
+                        Route.Destinations::class,
+                        Route.Destinations.serializer(),
+                    )
                 }
             }
         },
@@ -119,7 +123,7 @@ fun HomeContent(
                         NavigationDrawerRoute.Maps -> backStack.add(Route.Maps)
                         NavigationDrawerRoute.MapProgress -> TODO()
                         NavigationDrawerRoute.Directions -> TODO()
-                        NavigationDrawerRoute.Destinations -> TODO()
+                        NavigationDrawerRoute.Destinations -> backStack.add(Route.Destinations)
                         NavigationDrawerRoute.DestinationDetails -> TODO()
                         NavigationDrawerRoute.Settings -> TODO()
                     }
