@@ -63,7 +63,7 @@ private fun DestinationsContent(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
-        if (state.maps.isNotEmpty()) {
+        if (state.maps.size > 1) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 DropDownMenu(
                     items = state.maps,
@@ -104,6 +104,7 @@ private fun DestinationsContent(
                         .clickable {
                             onAction(DestinationsAction.ToggleProgressDisplay)
                         },
+                    title = if (state.maps.size > 1) null else state.selectedMap.name,
                     bottomContent = {
                         Row(
                             modifier = Modifier
