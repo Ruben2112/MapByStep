@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -117,6 +118,18 @@ fun HomeContent(
                         Route.Destinations::class,
                         Route.Destinations.serializer(),
                     )
+                    subclass(
+                        Route.DestinationDetails::class,
+                        Route.DestinationDetails.serializer(),
+                    )
+                    subclass(
+                        Route.Directions::class,
+                        Route.Directions.serializer(),
+                    )
+                    subclass(
+                        Route.Settings::class,
+                        Route.Settings.serializer(),
+                    )
                 }
             }
         },
@@ -136,11 +149,13 @@ fun HomeContent(
                     when (route) {
                         NavigationDrawerRoute.Profile -> backStack.add(Route.Profile)
                         NavigationDrawerRoute.Maps -> backStack.add(Route.Maps)
-                        NavigationDrawerRoute.MapProgress -> TODO()
-                        NavigationDrawerRoute.Directions -> TODO()
                         NavigationDrawerRoute.Destinations -> backStack.add(Route.Destinations)
-                        NavigationDrawerRoute.DestinationDetails -> TODO()
-                        NavigationDrawerRoute.Settings -> TODO()
+                        NavigationDrawerRoute.DestinationDetails -> backStack.add(
+                            Route.DestinationDetails(destinationId = null),
+                        )
+
+                        NavigationDrawerRoute.Directions -> backStack.add(Route.Directions)
+                        NavigationDrawerRoute.Settings -> backStack.add(Route.Settings)
                     }
                 },
             )
@@ -276,6 +291,9 @@ fun HomeContent(
                 entryProvider = entryProvider,
                 onBack = {
                     backStack.removeLastOrNull()
+                },
+                transitionSpec = {
+                    fadeIn(tween(400)) togetherWith fadeOut(tween(400))
                 },
             )
         }

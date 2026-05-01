@@ -13,18 +13,15 @@ sealed interface Route : NavKey {
     data object Maps : Route, NavKey
 
     @Serializable
-    data object MapProgress : Route, NavKey
-
-    @Serializable
-    data object Directions : Route, NavKey
-
-    @Serializable
     data object Destinations : Route, NavKey
 
     @Serializable
     data class DestinationDetails(
         val destinationId: String?,
     ) : Route, NavKey
+
+    @Serializable
+    data object Directions : Route, NavKey
 
     @Serializable
     data object Settings : Route, NavKey

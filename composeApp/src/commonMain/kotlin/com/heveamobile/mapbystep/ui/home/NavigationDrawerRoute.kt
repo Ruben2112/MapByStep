@@ -7,11 +7,9 @@ import mapbystep.composeapp.generated.resources.ic_directions
 import mapbystep.composeapp.generated.resources.ic_maps
 import mapbystep.composeapp.generated.resources.ic_profile
 import mapbystep.composeapp.generated.resources.ic_settings
-import mapbystep.composeapp.generated.resources.ic_steps
 import mapbystep.composeapp.generated.resources.route_destination_details
 import mapbystep.composeapp.generated.resources.route_destinations
 import mapbystep.composeapp.generated.resources.route_directions
-import mapbystep.composeapp.generated.resources.route_map_progress
 import mapbystep.composeapp.generated.resources.route_maps
 import mapbystep.composeapp.generated.resources.route_profile
 import mapbystep.composeapp.generated.resources.route_settings
@@ -30,14 +28,6 @@ enum class NavigationDrawerRoute(
         Res.string.route_maps,
         Res.drawable.ic_maps,
     ),
-    MapProgress(
-        Res.string.route_map_progress,
-        Res.drawable.ic_steps,
-    ),
-    Directions(
-        Res.string.route_directions,
-        Res.drawable.ic_directions,
-    ),
     Destinations(
         Res.string.route_destinations,
         Res.drawable.ic_destinations,
@@ -45,6 +35,10 @@ enum class NavigationDrawerRoute(
     DestinationDetails(
         Res.string.route_destination_details,
         Res.drawable.ic_destination_details,
+    ),
+    Directions(
+        Res.string.route_directions,
+        Res.drawable.ic_directions,
     ),
     Settings(
         Res.string.route_settings,

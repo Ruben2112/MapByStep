@@ -17,13 +17,16 @@ import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpdateUserRecordsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
 import com.heveamobile.mapbystep.navigation.Route
+import com.heveamobile.mapbystep.ui.destinationdetails.DestinationDetails
 import com.heveamobile.mapbystep.ui.destinations.DestinationsScreen
 import com.heveamobile.mapbystep.ui.destinations.DestinationsViewModel
+import com.heveamobile.mapbystep.ui.directions.DirectionsScreen
 import com.heveamobile.mapbystep.ui.home.HomeViewModel
 import com.heveamobile.mapbystep.ui.maps.MapsScreen
 import com.heveamobile.mapbystep.ui.maps.MapsViewModel
 import com.heveamobile.mapbystep.ui.profile.ProfileScreen
 import com.heveamobile.mapbystep.ui.profile.ProfileViewModel
+import com.heveamobile.mapbystep.ui.settings.SettingsScreen
 import org.koin.core.KoinApplication
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.context.startKoin
@@ -40,6 +43,9 @@ val navigationModule = module {
     navigation<Route.Profile> { ProfileScreen() }
     navigation<Route.Maps> { MapsScreen() }
     navigation<Route.Destinations> { DestinationsScreen() }
+    navigation<Route.DestinationDetails> { DestinationDetails() }
+    navigation<Route.Directions> { DirectionsScreen() }
+    navigation<Route.Settings> { SettingsScreen() }
 }
 
 val viewModelModule = module {
