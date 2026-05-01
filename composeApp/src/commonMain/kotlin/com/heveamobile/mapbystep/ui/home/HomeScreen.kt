@@ -6,9 +6,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -71,7 +76,7 @@ fun HomeContent(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val observer = remember {
-        LifecycleEventObserver { source, event ->
+        LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 onAction(HomeAction.SyncSteps)
             }
@@ -174,6 +179,87 @@ fun HomeContent(
                                 onAction(HomeAction.SpendSteps)
                             },
                         )
+                        val currentBackStackEntry = backStack.lastOrNull()
+                        if (currentBackStackEntry is Route.Destinations) {
+                            IconButton(onClick = { onAction(HomeAction.ToggleDropdownMenu) }) {
+                                Icon(
+                                    Icons.Default.MoreVert,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    contentDescription = "Show actions button",
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = state.sharedDestinationsState.showDropdownMenu,
+                                onDismissRequest = {
+                                    onAction(HomeAction.ToggleDropdownMenu)
+                                },
+                            ) {
+                                DropdownMenuItem(
+                                    leadingIcon = {
+                                        if (state.sharedDestinationsState.hideUndiscovered) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Checkmark icon",
+                                                tint = MaterialTheme.colorScheme.onSurface,
+                                            )
+                                        }
+                                    },
+                                    text = {
+                                        Text(
+                                            "Hide undiscovered",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
+                                    },
+                                    onClick = {
+                                        onAction(HomeAction.ToggleDropdownMenu)
+                                        onAction(HomeAction.ToggleHideUndiscovered)
+                                    },
+                                )
+                                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                                DropdownMenuItem(
+                                    leadingIcon = {
+                                        if (state.sharedDestinationsState.sortingOrder == SortingOrder.Rarity) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Checkmark icon",
+                                                tint = MaterialTheme.colorScheme.onSurface,
+                                            )
+                                        }
+                                    },
+                                    text = {
+                                        Text(
+                                            "Sort by rarity",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
+                                    },
+                                    onClick = {
+                                        onAction(HomeAction.ToggleDropdownMenu)
+                                        onAction(HomeAction.UpdateSortOrder(SortingOrder.Rarity))
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    leadingIcon = {
+                                        if (state.sharedDestinationsState.sortingOrder == SortingOrder.Alphabetical) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Checkmark icon",
+                                                tint = MaterialTheme.colorScheme.onSurface,
+                                            )
+                                        }
+                                    },
+                                    text = {
+                                        Text(
+                                            "Sort alphabetically",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
+                                    },
+                                    onClick = {
+                                        onAction(HomeAction.ToggleDropdownMenu)
+                                        onAction(HomeAction.UpdateSortOrder(SortingOrder.Alphabetical))
+                                    },
+                                )
+                            }
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = SurfaceContainerHigh,

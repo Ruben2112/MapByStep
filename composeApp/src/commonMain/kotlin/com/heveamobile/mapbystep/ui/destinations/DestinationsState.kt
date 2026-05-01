@@ -6,6 +6,7 @@ import com.heveamobile.mapbystep.domain.model.Map
 data class DestinationsState(
     val maps: List<Map> = emptyList(),
     val selectedMap: Map? = null,
+    val destinations: List<Destination> = emptyList(),
     val isProgressExpanded: Boolean = false,
 
     val isLoading: Boolean = false,

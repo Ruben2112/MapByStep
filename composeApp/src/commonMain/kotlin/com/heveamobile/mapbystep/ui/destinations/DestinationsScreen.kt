@@ -39,7 +39,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun DestinationsScreen(modifier: Modifier = Modifier) {
+fun DestinationsScreen(
+    modifier: Modifier = Modifier,
+) {
     val viewModel = koinViewModel<DestinationsViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -157,12 +159,7 @@ private fun DestinationsContent(
             }
 
             items(
-                state.selectedMap.destinations.sortedWith(
-                    compareBy(
-                        { it.rarity.intValue },
-                        { it.name },
-                    ),
-                ),
+                state.selectedMap.destinations,
                 key = { it.id },
             ) { destination ->
                 DestinationCard(

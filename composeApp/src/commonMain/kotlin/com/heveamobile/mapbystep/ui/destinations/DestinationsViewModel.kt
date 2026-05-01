@@ -2,18 +2,24 @@ package com.heveamobile.mapbystep.ui.destinations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heveamobile.mapbystep.data.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DestinationsViewModel(
-    getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
+    private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DestinationsState())
@@ -23,17 +29,32 @@ class DestinationsViewModel(
         _state.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(Dispatchers.IO) {
-            getMapsWithProgressUseCase().collectLatest { maps ->
-                _state.update { state ->
-                    state.copy(
-                        selectedMap = maps.first { map -> map.isActive },
-                        maps = maps,
-                        isLoading = false,
+            combine(
+                userPreferencesRepository.gridSortingOrder,
+                userPreferencesRepository.hideUndiscovered,
+            ) { order, hide -> order to hide }
+                .flatMapLatest { (order, hide) ->
+                    getMapsWithProgressUseCase(
+                        order,
+                        hide,
                     )
                 }
-            }
-        }
+                .collectLatest { maps ->
+                    _state.update { state ->
+                        val currentSelectedId = state.selectedMap?.id
+                        val selectedMap = maps.find { it.id == currentSelectedId }
+                            ?: maps.firstOrNull { it.isActive }
 
+                        state.copy(
+                            selectedMap = selectedMap,
+                            maps = maps,
+                            destinations = selectedMap?.destinations
+                                ?: emptyList(),
+                            isLoading = false,
+                        )
+                    }
+                }
+        }
     }
 
     fun onAction(action: DestinationsAction) {

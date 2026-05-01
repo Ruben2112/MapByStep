@@ -24,6 +24,7 @@ room = "2.8.4"
 sqlite = "2.6.2"
 ksp = "2.2.21-2.0.5" # Should match the kotlin version (https://github.com/google/ksp/releases)
 datetime = "0.7.1"
+datastore = "1.2.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -66,6 +67,9 @@ androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.r
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-sqlite-wrapper = { module = "androidx.room:room-sqlite-wrapper", version.ref = "room" }
+
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

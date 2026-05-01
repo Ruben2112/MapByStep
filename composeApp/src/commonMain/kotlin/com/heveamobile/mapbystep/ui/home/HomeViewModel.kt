@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heveamobile.mapbystep.data.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
@@ -10,17 +11,20 @@ import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val healthPermissionManager: HealthPermissionManager,
     private val getUserUseCase: GetUserUseCase,
@@ -28,6 +32,7 @@ class HomeViewModel(
     private val upsertInitialMapDataUseCase: UpsertInitialMapDataUseCase,
     private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
     private val spendStepsUseCase: SpendStepsUseCase,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
@@ -57,6 +62,22 @@ class HomeViewModel(
             }
         }
 
+        viewModelScope.launch {
+            combine(
+                userPreferencesRepository.hideUndiscovered,
+                userPreferencesRepository.gridSortingOrder,
+            ) { hide, order -> hide to order }.collectLatest { (hide, order) ->
+                _state.update { state ->
+                    state.copy(
+                        sharedDestinationsState = state.sharedDestinationsState.copy(
+                            hideUndiscovered = hide,
+                            sortingOrder = order,
+                        ),
+                    )
+                }
+            }
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val syncStepsJob = launch {
                 if (healthPermissionManager.checkPermissionState() == HealthPermissionStatus.Granted) {
@@ -73,13 +94,22 @@ class HomeViewModel(
                 upsertInitialMapDataJob,
             )
 
+            val hideUndiscovered = userPreferencesRepository.hideUndiscovered.first()
+            val sortingOrder = userPreferencesRepository.gridSortingOrder.first()
+
             getUserUseCase().first()
             getMapsWithProgressUseCase().first()
 
-            _state.update { it.copy(isLoadingSteps = false) }
+            _state.update {
+                it.copy(
+                    isLoadingSteps = false,
+                    sharedDestinationsState = it.sharedDestinationsState.copy(
+                        hideUndiscovered = hideUndiscovered,
+                        sortingOrder = sortingOrder,
+                    ),
+                )
+            }
         }
-
-        _state.update { it.copy(isLoadingSteps = false) }
     }
 
     fun onAction(action: HomeAction) {
@@ -200,6 +230,30 @@ class HomeViewModel(
             HomeAction.CloseVisitedDestinations -> {
                 _state.update { state ->
                     state.copy(visitedDestinationsState = VisitedDestinationsState())
+                }
+            }
+
+            is HomeAction.ToggleDropdownMenu -> {
+                _state.update { state ->
+                    state.copy(
+                        sharedDestinationsState = state.sharedDestinationsState.copy(
+                            showDropdownMenu = !state.sharedDestinationsState.showDropdownMenu,
+                        ),
+                    )
+                }
+            }
+
+            is HomeAction.ToggleHideUndiscovered -> {
+                viewModelScope.launch {
+                    userPreferencesRepository.updateHideUndiscovered(
+                        !userPreferencesRepository.hideUndiscovered.first(),
+                    )
+                }
+            }
+
+            is HomeAction.UpdateSortOrder -> {
+                viewModelScope.launch {
+                    userPreferencesRepository.updateGridSortingOrder(action.sortOrder)
                 }
             }
         }
