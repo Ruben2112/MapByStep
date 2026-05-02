@@ -1,11 +1,11 @@
-package com.heveamobile.mapbystep.domain.repository
+package com.heveamobile.mapbystep.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.heveamobile.mapbystep.data.repository.UserPreferencesRepository
+import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.ui.home.SortingOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

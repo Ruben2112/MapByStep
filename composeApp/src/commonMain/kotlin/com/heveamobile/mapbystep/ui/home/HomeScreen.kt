@@ -153,7 +153,6 @@ fun HomeContent(
                         NavigationDrawerRoute.DestinationDetails -> backStack.add(
                             Route.DestinationDetails(destinationId = null),
                         )
-
                         NavigationDrawerRoute.Directions -> backStack.add(Route.Directions)
                         NavigationDrawerRoute.Settings -> backStack.add(Route.Settings)
                     }

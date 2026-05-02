@@ -24,10 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.theme.Outline
 import com.heveamobile.mapbystep.theme.PrimaryContainer
@@ -37,7 +40,9 @@ import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_question_mark
 import mapbystep.composeapp.generated.resources.ic_steps
+import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 
 @Composable
@@ -92,12 +97,14 @@ fun DestinationCard(
     }
 }
 
+@OptIn(InternalResourceApi::class)
 @Composable
 private fun CardFront(
     modifier: Modifier = Modifier,
     isLarge: Boolean,
     isNew: Boolean = false,
     destination: Destination,
+    fileStorage: FileStorage = koinInject(),
 ) {
     Box(
         modifier = modifier.aspectRatio(
@@ -122,13 +129,21 @@ private fun CardFront(
                     .fillMaxWidth()
                     .aspectRatio(1F),
             ) {
-                //TODO: Add image of country
-//                Icon(
-//                    modifier = Modifier.fillMaxSize(),
-//                    painter = painterResource(resource = Res.drawable.ic_question_mark),
-//                    contentDescription = "Placeholder card art",
-//                    tint = destination.rarity.color,
-//                )
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(MaterialTheme.spacing.medium),
+                    contentDescription = "Image of ${destination.name}",
+                    model = fileStorage.getAbsolutePath(
+                        "${destination.mapId}/${destination.id}.svg",
+                    ),
+                    colorFilter = ColorFilter.tint(
+                        color = destination.rarity.color.copy(
+                            alpha =
+                                0.75F,
+                        ),
+                    ),
+                )
             }
             Box(
                 modifier = Modifier
@@ -152,19 +167,6 @@ private fun CardFront(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(if (isLarge) MaterialTheme.spacing.large else MaterialTheme.spacing.medium),
-            contentAlignment = Alignment.TopStart,
-        ) {
-            Icon(
-                modifier = Modifier.size(if (isLarge) 32.dp else 24.dp),
-                painter = painterResource(Res.drawable.ic_steps),
-                contentDescription = "Rarity ${destination.rarity.name} icon",
-                tint = destination.rarity.color,
-            )
         }
         if (isNew) {
             Box(

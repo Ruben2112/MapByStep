@@ -1,5 +1,7 @@
 package com.heveamobile.mapbystep.domain.usecase
 
+import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
+import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import mapbystep.composeapp.generated.resources.Res
@@ -7,6 +9,7 @@ import mapbystep.composeapp.generated.resources.Res
 class UpsertInitialMapDataUseCase(
     val mapRepository: MapRepository,
     val destinationRepository: DestinationRepository,
+    val fileStorage: FileStorage,
 ) {
     val currentMapVersion = 2
     val initialMapId = "4d08314f-2224-4eff-a3bd-8d141d981fad"

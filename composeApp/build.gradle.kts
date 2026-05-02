@@ -62,6 +62,9 @@ kotlin {
 
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.svg)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -3,11 +3,17 @@ package com.heveamobile.mapbystep.data.repository
 import com.heveamobile.mapbystep.data.dao.DestinationDao
 import com.heveamobile.mapbystep.data.mapper.toDomain
 import com.heveamobile.mapbystep.data.mapper.toEntity
+import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
+import mapbystep.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.MissingResourceException
 
-class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : DestinationRepository {
+class DestinationRepositoryImpl(
+    private val destinationDao: DestinationDao,
+    private val fileStorage: FileStorage,
+) : DestinationRepository {
     override suspend fun upsertDestination(destination: Destination) {
         destinationDao.upsertDestination(destination.toEntity())
     }
@@ -34,6 +40,7 @@ class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : De
             }
 
         destinationDao.upsertDestinations(destinations.map { it.toEntity() })
+        writeBundledImagesToDisk(destinations)
     }
 
     override fun resetDiscovered(mapId: String) {
@@ -52,5 +59,22 @@ class DestinationRepositoryImpl(private val destinationDao: DestinationDao) : De
             id = id,
             visits = visits,
         )
+    }
+
+    suspend fun writeBundledImagesToDisk(destinations: List<Destination>) {
+        destinations.forEach { destination ->
+            try {
+                val path = "${destination.mapId}/${destination.id}.svg"
+                if (!fileStorage.exists(path)) {
+                    val bytes = Res.readBytes("files/cotw_${destination.id}.svg")
+                    fileStorage.saveFile(
+                        path,
+                        bytes,
+                    )
+                }
+            } catch (e: MissingResourceException) {
+                println("Could not find svg for destination ${destination.name}")
+            }
+        }
     }
 }

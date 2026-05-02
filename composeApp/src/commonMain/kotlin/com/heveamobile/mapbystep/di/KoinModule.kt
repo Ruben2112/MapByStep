@@ -3,12 +3,12 @@ package com.heveamobile.mapbystep.di
 import com.heveamobile.mapbystep.data.repository.DestinationRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.MapRepositoryImpl
 import com.heveamobile.mapbystep.data.repository.StepDataRepositoryImpl
-import com.heveamobile.mapbystep.data.repository.UserPreferencesRepository
+import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.data.repository.UserRepositoryImpl
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
-import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepositoryImpl
+import com.heveamobile.mapbystep.data.repository.UserPreferencesRepositoryImpl
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase

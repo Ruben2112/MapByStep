@@ -17,6 +17,11 @@ enum class Rarity(
     }
 }
 
+enum class ImageSource {
+    BUNDLED,
+    REMOTE
+}
+
 data class Destination(
     val id: String,
     val mapId: String,
@@ -26,4 +31,5 @@ data class Destination(
     var isNew: Boolean = false,
     var visits: Int = 0,
     var isRevealed: Boolean = false,
+    var imagePath: String? = null,
 )

@@ -25,6 +25,7 @@ sqlite = "2.6.2"
 ksp = "2.2.21-2.0.5" # Should match the kotlin version (https://github.com/google/ksp/releases)
 datetime = "0.7.1"
 datastore = "1.2.1"
+coil = "3.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -70,6 +71,9 @@ androidx-room-sqlite-wrapper = { module = "androidx.room:room-sqlite-wrapper", v
 
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

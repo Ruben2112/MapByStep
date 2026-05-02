@@ -2,7 +2,7 @@ package com.heveamobile.mapbystep.ui.destinations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heveamobile.mapbystep.data.repository.UserPreferencesRepository
+import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

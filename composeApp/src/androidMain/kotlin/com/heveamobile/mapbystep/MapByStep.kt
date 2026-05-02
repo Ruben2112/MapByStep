@@ -1,6 +1,9 @@
 package com.heveamobile.mapbystep
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.svg.SvgDecoder
 import com.heveamobile.mapbystep.di.initializeKoin
 import org.koin.android.ext.koin.androidContext
 

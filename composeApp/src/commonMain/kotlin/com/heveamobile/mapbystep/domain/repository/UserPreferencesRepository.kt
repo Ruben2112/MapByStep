@@ -1,4 +1,4 @@
-package com.heveamobile.mapbystep.data.repository
+package com.heveamobile.mapbystep.domain.repository
 
 import com.heveamobile.mapbystep.ui.home.SortingOrder
 import kotlinx.coroutines.flow.Flow
