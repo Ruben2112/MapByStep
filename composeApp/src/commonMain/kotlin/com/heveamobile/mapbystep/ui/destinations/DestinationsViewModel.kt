@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
+import com.heveamobile.mapbystep.navigation.NavigationHandler
+import com.heveamobile.mapbystep.navigation.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DestinationsViewModel(
+    private val navigationHandler: NavigationHandler,
     private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
@@ -68,7 +71,9 @@ class DestinationsViewModel(
                 _state.update { it.copy(isProgressExpanded = !it.isProgressExpanded) }
             }
 
-            is DestinationsAction.ViewDestinationDetails -> TODO()
+            is DestinationsAction.OpenDestinationInfo -> {
+                navigationHandler.navigateTo(Route.DestinationInfo(action.destinationId))
+            }
         }
     }
 }

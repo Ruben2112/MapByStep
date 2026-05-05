@@ -1,7 +1,6 @@
 package com.heveamobile.mapbystep.domain.usecase
 
-import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
-import com.heveamobile.mapbystep.domain.model.Destination
+import com.heveamobile.mapbystep.domain.repository.CountryInfoRepository
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import mapbystep.composeapp.generated.resources.Res
@@ -9,9 +8,9 @@ import mapbystep.composeapp.generated.resources.Res
 class UpsertInitialMapDataUseCase(
     val mapRepository: MapRepository,
     val destinationRepository: DestinationRepository,
-    val fileStorage: FileStorage,
+    val countryInfoRepository: CountryInfoRepository,
 ) {
-    val currentMapVersion = 2
+    val currentMapVersion = 3
     val initialMapId = "4d08314f-2224-4eff-a3bd-8d141d981fad"
 
     suspend operator fun invoke() {
@@ -23,6 +22,9 @@ class UpsertInitialMapDataUseCase(
         val destinationBytes = Res.readBytes("files/dCountriesOfTheWorld.csv")
         val destinationData = destinationBytes.decodeToString()
 
+        val infoBytes = Res.readBytes("files/iCountriesOfTheWorld.csv")
+        val infoData = infoBytes.decodeToString()
+
         map?.let { existingMap ->
             if (existingMap.version < currentMapVersion) {
                 val currentDestinations = destinationRepository.getDestinationsByMapId(initialMapId)
@@ -33,9 +35,9 @@ class UpsertInitialMapDataUseCase(
                     isActive = existingMap.isActive,
                 )
 
-                destinationRepository.importInitialDestinationCsvData(
-                    data = destinationData,
-                )
+                destinationRepository.importInitialDestinationCsvData(data = destinationData)
+
+                countryInfoRepository.importInitialDestinationCsvData(data = infoData)
 
                 visitMapping.forEach { (id, visits) ->
                     if (visits > 0) {
@@ -61,6 +63,8 @@ class UpsertInitialMapDataUseCase(
                 )
 
                 destinationRepository.importInitialDestinationCsvData(data = destinationData)
+
+                countryInfoRepository.importInitialDestinationCsvData(data = infoData)
             }
     }
 }

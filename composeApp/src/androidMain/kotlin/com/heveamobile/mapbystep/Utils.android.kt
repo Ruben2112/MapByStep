@@ -64,3 +64,10 @@ actual fun formatInstant(
 
     return "$formattedDate, $formattedTime"
 }
+
+actual fun formatPopulation(
+    population: Int,
+): String {
+    val numberFormatter = NumberFormat.getInstance(Locale.getDefault())
+    return numberFormatter.format(population)
+}

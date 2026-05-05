@@ -77,7 +77,6 @@ private fun MapsContent(
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             modifier = Modifier.weight(1f),
@@ -110,7 +109,7 @@ private fun MapsContent(
                         }
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.large))
                     }
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                     MapStatisticsList(
                         map = state.activeMap,
                         isExpanded = state.expandedMapId == state.activeMap.id,

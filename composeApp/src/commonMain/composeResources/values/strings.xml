@@ -23,7 +23,7 @@
     <string name="route_map_progress">Map Progress</string>
     <string name="route_directions">Directions</string>
     <string name="route_destinations">Destinations</string>
-    <string name="route_destination_details">Destination Details</string>
+    <string name="route_destination_info">Destination Info</string>
     <string name="route_settings">Settings</string>
 
     <!-- Profile screen -->

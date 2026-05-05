@@ -40,6 +40,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import com.heveamobile.mapbystep.navigation.NavigationHandler
 import com.heveamobile.mapbystep.navigation.Route
 import com.heveamobile.mapbystep.theme.OnSurface
 import com.heveamobile.mapbystep.theme.SurfaceContainerHigh
@@ -49,12 +50,15 @@ import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.app_name
 import mapbystep.composeapp.generated.resources.home_navigation_icon_description
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -101,6 +105,7 @@ fun HomeContent(
         }
     }
 
+    val navigationHandler = koinInject<NavigationHandler>()
     val entryProvider = koinEntryProvider<Any>()
     val backStack = rememberNavBackStack(
         configuration = SavedStateConfiguration {
@@ -119,8 +124,8 @@ fun HomeContent(
                         Route.Destinations.serializer(),
                     )
                     subclass(
-                        Route.DestinationDetails::class,
-                        Route.DestinationDetails.serializer(),
+                        Route.DestinationInfo::class,
+                        Route.DestinationInfo.serializer(),
                     )
                     subclass(
                         Route.Directions::class,
@@ -137,6 +142,14 @@ fun HomeContent(
             Route.Profile,
         ),
     )
+
+    LaunchedEffect(Unit) {
+        navigationHandler.navigationEvents.collect { route ->
+            backStack.removeLastOrNull()
+            backStack.add(route)
+        }
+    }
+
     ModalNavigationDrawer(
         modifier = Modifier.blur(
             if (state.visitedDestinationsState.destinations.isEmpty()) 0.dp else 8.dp,
@@ -150,9 +163,10 @@ fun HomeContent(
                         NavigationDrawerRoute.Profile -> backStack.add(Route.Profile)
                         NavigationDrawerRoute.Maps -> backStack.add(Route.Maps)
                         NavigationDrawerRoute.Destinations -> backStack.add(Route.Destinations)
-                        NavigationDrawerRoute.DestinationDetails -> backStack.add(
-                            Route.DestinationDetails(destinationId = null),
+                        NavigationDrawerRoute.DestinationInfo -> backStack.add(
+                            Route.DestinationInfo(destinationId = null),
                         )
+
                         NavigationDrawerRoute.Directions -> backStack.add(Route.Directions)
                         NavigationDrawerRoute.Settings -> backStack.add(Route.Settings)
                     }

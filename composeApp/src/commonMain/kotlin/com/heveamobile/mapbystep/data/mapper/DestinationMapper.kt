@@ -8,6 +8,7 @@ fun DestinationEntity.toDomain(): Destination {
     return Destination(
         id = this.id,
         mapId = this.mapId,
+        infoId = this.infoId,
         name = this.name,
         rarity = Rarity.fromInt(this.rarity),
         isDiscovered = this.isDiscovered,
@@ -19,6 +20,7 @@ fun Destination.toEntity(): DestinationEntity {
     return DestinationEntity(
         id = this.id,
         mapId = this.mapId,
+        infoId = this.infoId,
         name = this.name,
         rarity = this.rarity.intValue,
         isDiscovered = this.isDiscovered,

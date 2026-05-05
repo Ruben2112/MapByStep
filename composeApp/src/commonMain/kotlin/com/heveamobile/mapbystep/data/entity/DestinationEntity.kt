@@ -18,6 +18,7 @@ data class DestinationEntity(
     @PrimaryKey
     val id: String,
     val mapId: String,
+    val infoId: String,
     val name: String,
     val rarity: Int,
     val isDiscovered: Boolean = false,

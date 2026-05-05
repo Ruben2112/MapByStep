@@ -56,10 +56,7 @@ fun <T> DropDownMenu(
                     shape = MaterialTheme.shapes.small,
                 )
                 .clickable { expanded = !expanded }
-                .padding(
-                    vertical = MaterialTheme.spacing.medium,
-                    horizontal = MaterialTheme.spacing.medium,
-                ),
+                .padding(MaterialTheme.spacing.medium),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(modifier = Modifier.weight(1f)) {
@@ -110,8 +107,8 @@ fun <T> DropDownMenu(
                                 // End padding matches size of chevron icon
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.large + MaterialTheme.spacing.medium,
-                                top = MaterialTheme.spacing.medium,
-                                bottom = MaterialTheme.spacing.medium,
+                                top = MaterialTheme.spacing.small,
+                                bottom = MaterialTheme.spacing.small,
                             ),
                     ) {
                         itemContent(item)

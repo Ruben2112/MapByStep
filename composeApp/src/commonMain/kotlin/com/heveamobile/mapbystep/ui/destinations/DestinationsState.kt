@@ -16,5 +16,5 @@ sealed interface DestinationsAction {
     data object ToggleMapSelector : DestinationsAction
     data class SelectMap(val map: Map?) : DestinationsAction
     data object ToggleProgressDisplay : DestinationsAction
-    data class ViewDestinationDetails(val destination: Destination) : DestinationsAction
+    data class OpenDestinationInfo(val destinationId: String) : DestinationsAction
 }

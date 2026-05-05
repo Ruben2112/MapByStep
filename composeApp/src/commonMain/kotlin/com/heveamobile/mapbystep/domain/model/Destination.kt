@@ -25,6 +25,7 @@ enum class ImageSource {
 data class Destination(
     val id: String,
     val mapId: String,
+    val infoId: String,
     val name: String,
     val rarity: Rarity,
     var isDiscovered: Boolean = false,

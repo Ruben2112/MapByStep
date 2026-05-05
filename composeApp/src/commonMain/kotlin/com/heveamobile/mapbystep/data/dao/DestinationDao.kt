@@ -19,6 +19,9 @@ interface DestinationDao {
     @Query("SELECT * FROM DestinationEntity WHERE mapId = :mapId")
     fun getDestinationsByMapId(mapId: String): List<DestinationEntity>
 
+    @Query("SELECT * FROM DestinationEntity WHERE id = :id")
+    fun getDestinationById(id: String): DestinationEntity?
+
     @Upsert
     suspend fun upsertDestinations(destinations: List<DestinationEntity>)
 
