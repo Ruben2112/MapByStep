@@ -14,14 +14,14 @@ class SpendStepsUseCase(
     suspend operator fun invoke(): List<Destination> {
         val user = userRepository.getUser()
             ?: return emptyList()
-        val activeMap = mapRepository.getActiveMap()
+        val activeMap = mapRepository.getActiveMapWithDestinationInfo()
             ?: return emptyList()
 
         val costPerVisit = activeMap.calculatedDistance
-        val totalPossibleVisits = user.availableSteps
-            .floorDiv(costPerVisit)
-            .toInt()
-//        val totalPossibleVisits = 20
+//        val totalPossibleVisits = user.availableSteps
+//            .floorDiv(costPerVisit)
+//            .toInt()
+        val totalPossibleVisits = 5
         if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations
@@ -47,11 +47,11 @@ class SpendStepsUseCase(
                 val destinationCopy = destination.copy(
                     isNew = !destination.isDiscovered,
                     isDiscovered = true,
-                    visits = destination.visits + 1,
+                    totalVisits = destination.totalVisits + 1,
                 )
 
                 destination.isDiscovered = true
-                destination.visits++
+                destination.totalVisits++
 
                 visitedDestinations.add(destinationCopy)
 

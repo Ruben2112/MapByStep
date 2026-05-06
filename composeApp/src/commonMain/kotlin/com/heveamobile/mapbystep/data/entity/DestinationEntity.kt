@@ -12,6 +12,12 @@ import androidx.room.PrimaryKey
             childColumns = ["mapId"],
             onDelete = ForeignKey.CASCADE,
         ),
+        ForeignKey(
+            entity = CountryInfoEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["infoId"],
+            onDelete = ForeignKey.CASCADE,
+        ),
     ],
 )
 data class DestinationEntity(

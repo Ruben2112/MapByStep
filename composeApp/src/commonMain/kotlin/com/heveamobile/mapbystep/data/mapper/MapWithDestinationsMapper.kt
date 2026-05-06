@@ -32,6 +32,6 @@ fun MapWithDestinations.toDomain(): Map {
         price = this.map.price,
         isOwned = this.map.isOwned,
         isActive = this.map.isActive,
-        destinations = this.destinations.map { it.toDomain() },
+        destinations = this.destinations.map { it.destination.toDomain(it.countryInfo) },
     )
 }

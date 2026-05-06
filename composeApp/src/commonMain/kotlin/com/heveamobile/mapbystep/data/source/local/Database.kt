@@ -22,7 +22,7 @@ import com.heveamobile.mapbystep.data.entity.UserEntity
         DestinationEntity::class,
         CountryInfoEntity::class,
     ],
-    version = 9,
+    version = 1,
 )
 @TypeConverters(
     DateTimeConverters::class,

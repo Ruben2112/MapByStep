@@ -58,7 +58,7 @@ class MapRepositoryImpl(
             .map { it.map { mapProgress -> mapProgress.toDomain() } }
     }
 
-    override suspend fun getActiveMap(): Map? {
+    override suspend fun getActiveMapWithDestinationInfo(): Map? {
         return mapDao
             .getActiveMap()
             ?.toDomain()

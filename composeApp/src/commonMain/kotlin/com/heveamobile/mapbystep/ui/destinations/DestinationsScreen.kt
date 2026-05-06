@@ -92,7 +92,7 @@ private fun DestinationsContent(
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             Text(
                                 text = state.selectedMap.destinations
-                                    .sumOf { it.visits }
+                                    .sumOf { it.totalVisits }
                                     .toString(),
                                 modifier = Modifier.weight(1F),
                                 textAlign = TextAlign.End,

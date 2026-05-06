@@ -28,16 +28,16 @@ class UpsertInitialMapDataUseCase(
         map?.let { existingMap ->
             if (existingMap.version < currentMapVersion) {
                 val currentDestinations = destinationRepository.getDestinationsByMapId(initialMapId)
-                val visitMapping = currentDestinations.associate { it.id to it.visits }
+                val visitMapping = currentDestinations.associate { it.id to it.totalVisits }
 
                 mapRepository.importInitialMapCsvData(
                     data = mapData,
                     isActive = existingMap.isActive,
                 )
 
-                destinationRepository.importInitialDestinationCsvData(data = destinationData)
-
                 countryInfoRepository.importInitialDestinationCsvData(data = infoData)
+
+                destinationRepository.importInitialDestinationCsvData(data = destinationData)
 
                 visitMapping.forEach { (id, visits) ->
                     if (visits > 0) {
@@ -62,9 +62,9 @@ class UpsertInitialMapDataUseCase(
                     isActive = true,
                 )
 
-                destinationRepository.importInitialDestinationCsvData(data = destinationData)
-
                 countryInfoRepository.importInitialDestinationCsvData(data = infoData)
+
+                destinationRepository.importInitialDestinationCsvData(data = destinationData)
             }
     }
 }

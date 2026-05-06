@@ -39,7 +39,6 @@ import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_question_mark
-import mapbystep.composeapp.generated.resources.ic_steps
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -122,7 +121,7 @@ private fun CardFront(
                     color = MaterialTheme.colorScheme.outline,
                     shape = if (isLarge) MaterialTheme.shapes.large else MaterialTheme.shapes.medium,
                 )
-                .background(if (destination.visits > 0) SurfaceContainer else PrimaryContainer),
+                .background(if (destination.totalVisits > 0) SurfaceContainer else PrimaryContainer),
         ) {
             Box(
                 modifier = Modifier
@@ -217,7 +216,7 @@ private fun CardBack(
                 color = MaterialTheme.colorScheme.outline,
                 shape = if (isLarge) MaterialTheme.shapes.large else MaterialTheme.shapes.medium,
             )
-            .background(if (destination.visits > 0) SurfaceContainer else PrimaryContainer),
+            .background(if (destination.totalVisits > 0) SurfaceContainer else PrimaryContainer),
     ) {
         Box(
             modifier = Modifier

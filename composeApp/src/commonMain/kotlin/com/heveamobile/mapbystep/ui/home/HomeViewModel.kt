@@ -2,8 +2,8 @@ package com.heveamobile.mapbystep.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
+import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SpendStepsUseCase
@@ -254,6 +254,18 @@ class HomeViewModel(
             is HomeAction.UpdateSortOrder -> {
                 viewModelScope.launch {
                     userPreferencesRepository.updateGridSortingOrder(action.sortOrder)
+                }
+            }
+
+            is HomeAction.ToggleDestinationInfo -> {
+                viewModelScope.launch {
+                    _state.update { state ->
+                        state.copy(
+                            visitedDestinationsState = state.visitedDestinationsState.copy(
+                                showInfo = !state.visitedDestinationsState.showInfo,
+                            ),
+                        )
+                    }
                 }
             }
         }

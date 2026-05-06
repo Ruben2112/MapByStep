@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.ui.home
 
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,6 +26,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,9 +42,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import com.heveamobile.mapbystep.domain.model.Destination
+import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.theme.OnTertiaryContainer
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
+import com.heveamobile.mapbystep.ui.common.CountryInfoCard
 import com.heveamobile.mapbystep.ui.common.DestinationCard
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
 import kotlinx.coroutines.launch
@@ -88,7 +93,6 @@ fun VisitedDestinationsOverlay(
             .fillMaxSize()
             .background(backgroundColor.value),
     ) {
-        // Unified AnimatedContent to handle Grid <-> Detail transitions
         AnimatedContent(
             modifier = Modifier.fillMaxHeight(),
             targetState = state.isSingleCardLayout,
@@ -96,11 +100,12 @@ fun VisitedDestinationsOverlay(
                 // Smooth fade when opening/closing the detail view
                 fadeIn(tween(300)) togetherWith fadeOut(tween(300))
             },
-        ) { targetIndex ->
-            if (state.isSingleCardLayout && currentDestination != null) {
+        ) { isSingleCardLayout ->
+            if (isSingleCardLayout && currentDestination != null) {
                 SingleCardLayout(
                     pagerState = pagerState,
                     destinations = destinations,
+                    showInfo = state.showInfo,
                     onAction = onAction,
                 )
             } else {
@@ -112,30 +117,59 @@ fun VisitedDestinationsOverlay(
             }
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter,
+        val showRevealAllButton = !state.isSingleCardLayout && destinations.any { !it.isRevealed }
+
+        AnimatedVisibility(
+            visible = !showRevealAllButton,
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
-            if (state.isSingleCardLayout) {
-                PrimaryButton(
-                    modifier = Modifier.padding(MaterialTheme.spacing.large),
-                    label = "Close",
-                    onClick = { onAction(HomeAction.CloseSingleCardLayout) },
-                )
-            } else {
-                if (destinations.any { !it.isRevealed }) {
-                    PrimaryButton(
-                        modifier = Modifier.padding(MaterialTheme.spacing.large),
-                        label = "Reveal all",
-                        onClick = { onAction(HomeAction.RevealAllDestinations) },
-                    )
-                } else {
-                    PrimaryButton(
-                        modifier = Modifier.padding(MaterialTheme.spacing.large),
-                        label = "Close",
-                        onClick = { onAction(HomeAction.CloseVisitedDestinations) },
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        bottom = MaterialTheme.spacing.large,
+                    ),
+                contentAlignment = Alignment.BottomCenter,
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        if (state.showInfo) {
+                            onAction(HomeAction.ToggleDestinationInfo)
+                        } else if (state.isSingleCardLayout) {
+                            onAction(HomeAction.CloseSingleCardLayout)
+                        } else {
+                            onAction(HomeAction.CloseVisitedDestinations)
+                        }
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Close screen",
+                        modifier = Modifier.size(MaterialTheme.spacing.large),
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = showRevealAllButton,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        bottom = MaterialTheme.spacing.large,
+                    ),
+                contentAlignment = Alignment.BottomCenter,
+            ) {
+                PrimaryButton(
+                    label = "Reveal all",
+                    onClick = { onAction(HomeAction.RevealAllDestinations) },
+                )
             }
         }
     }
@@ -145,71 +179,80 @@ fun VisitedDestinationsOverlay(
 private fun SingleCardLayout(
     pagerState: PagerState,
     destinations: List<Destination>,
+    showInfo: Boolean,
     onAction: (HomeAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    AnimatedVisibility(
+        visible = !showInfo,
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            HorizontalPager(
-                state = pagerState,
-                beyondViewportPageCount = 1,
-            ) { index ->
-                val destination = destinations[index]
-
-                DestinationCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = MaterialTheme.spacing.extraLarge,
-                        ),
-                    destination = destination,
-                    isRevealed = destination.isRevealed,
-                    isNew = destination.isNew,
-                    onClick = {
-                        onAction(HomeAction.RevealDestination(destination))
-                    },
-                    isLarge = true,
-                )
-            }
-
-            // Navigation Overlay
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+            Box(
+                contentAlignment = Alignment.Center,
             ) {
-                FloatingActionButton(
-                    modifier = Modifier
-                        .rotate(90F)
-                        .graphicsLayer {
-                            rotationX = 180F
-                        }
-                        .alpha(if (pagerState.currentPage == 0) 0F else 1F),
-                    onClick = {
-                        if (pagerState.currentPage > 0) scope.launch {
-                            pagerState.animateScrollToPage(
-                                pagerState.currentPage - 1,
-                            )
-                        }
-                    },
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_steps),
-                        contentDescription = "Previous",
-                        modifier = Modifier.size(MaterialTheme.spacing.large),
+                HorizontalPager(
+                    state = pagerState,
+                    userScrollEnabled = !showInfo,
+                    beyondViewportPageCount = 1,
+                ) { index ->
+                    val destination = destinations[index]
+
+                    DestinationCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = MaterialTheme.spacing.extraLarge,
+                            ),
+                        destination = destination,
+                        isRevealed = destination.isRevealed,
+                        isNew = destination.isNew,
+                        onClick = {
+                            if (!destination.isRevealed) {
+                                onAction(HomeAction.RevealDestination(destination))
+                            } else {
+                                onAction(HomeAction.ToggleDestinationInfo)
+                            }
+                        },
+                        isLarge = true,
                     )
                 }
 
-                if (pagerState.currentPage < destinations.size - 1) {
+                // Navigation Overlay
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .rotate(90F)
+                            .graphicsLayer {
+                                rotationX = 180F
+                            }
+                            .alpha(if (pagerState.currentPage == 0) 0F else 1F),
+                        onClick = {
+                            if (pagerState.currentPage > 0) scope.launch {
+                                pagerState.animateScrollToPage(
+                                    pagerState.currentPage - 1,
+                                )
+                            }
+                        },
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_steps),
+                            contentDescription = "Previous",
+                            modifier = Modifier.size(MaterialTheme.spacing.large),
+                        )
+                    }
                     FloatingActionButton(
                         modifier = Modifier
                             .rotate(90F)
@@ -228,26 +271,52 @@ private fun SingleCardLayout(
                             modifier = Modifier.size(MaterialTheme.spacing.large),
                         )
                     }
-                } else {
-                    // Spacer to maintain Row symmetry when Next button is hidden
-                    Box(
-                        modifier = Modifier.size(
-                            MaterialTheme.spacing.large + MaterialTheme.spacing.medium + MaterialTheme.spacing.small,
+                }
+            }
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            AnimatedContent(targetState = destinations[pagerState.currentPage].isRevealed) { isRevealed ->
+                Box(contentAlignment = Alignment.Center) {
+                    PrimaryButton(
+                        modifier = Modifier.alpha(
+                            if (isRevealed) 1F else 0F,
+                        ),
+                        label = "Show info",
+                        onClick = {
+                            scope.launch {
+                                onAction(HomeAction.ToggleDestinationInfo)
+                            }
+                        },
+                    )
+                    Text(
+                        modifier = Modifier.alpha(
+                            if (!isRevealed) 1F else 0F,
+                        ),
+                        text = "Tap card to reveal",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = OnTertiaryContainer,
                         ),
                     )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        Text(
-            modifier = Modifier.alpha(
-                if (destinations[pagerState.currentPage].isRevealed) 0F else 1F,
-            ),
-            text = "Tap card to reveal",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = OnTertiaryContainer,
-            ),
-        )
+    }
+    AnimatedVisibility(
+        visible = showInfo,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val destination = destinations[pagerState.currentPage]
+            if (destination.info is Info.CountryInfo) {
+                CountryInfoCard(
+                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                    destination = destination,
+                )
+            }
+        }
     }
 }
 
