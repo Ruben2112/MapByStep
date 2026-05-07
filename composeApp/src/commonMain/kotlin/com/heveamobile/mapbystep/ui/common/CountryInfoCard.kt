@@ -62,10 +62,7 @@ fun CountryInfoCard(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(
-                            text = "*insert map here*",
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
+//                        MapImage(countryInfo = info)
                     }
                 }
             }

@@ -24,3 +24,5 @@ node_modules/
 /multiplatformLibrary/build/
 /*/build/
 /androidlk/build/
+
+composeApp/src/commonMain/composeResources/values/keys.xml

@@ -311,6 +311,7 @@ private fun SingleCardLayout(
         ) {
             val destination = destinations[pagerState.currentPage]
             if (destination.info is Info.CountryInfo) {
+                //TODO: Update visibility in card to show only revealed visits to avoid spoilers
                 CountryInfoCard(
                     modifier = Modifier.padding(MaterialTheme.spacing.medium),
                     destination = destination,

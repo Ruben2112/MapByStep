@@ -23,6 +23,7 @@ class CountryInfoRepositoryImpl(private val infoDao: CountryInfoDao) : CountryIn
                     languages = columns[5],
                     population = columns[6].toInt(),
                     capitals = columns[7],
+                    boundingBox = columns[8],
                 )
             }
 

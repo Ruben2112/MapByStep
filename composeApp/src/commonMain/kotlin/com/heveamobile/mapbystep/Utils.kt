@@ -31,3 +31,5 @@ fun String.toTitleCase(): String {
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
         }
 }
+
+expect fun encodeUrl(url: String): String

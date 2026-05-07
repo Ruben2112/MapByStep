@@ -1,5 +1,7 @@
 package com.heveamobile.mapbystep
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.sql.Date
 import java.text.DateFormat
 import java.text.NumberFormat
@@ -70,4 +72,16 @@ actual fun formatPopulation(
 ): String {
     val numberFormatter = NumberFormat.getInstance(Locale.getDefault())
     return numberFormatter.format(population)
+}
+
+actual fun encodeUrl(url: String): String {
+    return URLEncoder
+        .encode(
+            url,
+            StandardCharsets.UTF_8.toString(),
+        )
+        .replace(
+            "+",
+            "",
+        )
 }

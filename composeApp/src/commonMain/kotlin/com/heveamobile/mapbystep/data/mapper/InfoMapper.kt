@@ -13,6 +13,9 @@ fun CountryInfoEntity.toDomain(): Info.CountryInfo {
         languages = this.languages,
         population = this.population,
         capitals = this.capitals,
+        boundingBox = this.boundingBox
+            .split(",")
+            .map { it.toDouble() },
     )
 }
 
@@ -26,5 +29,6 @@ fun Info.CountryInfo.toEntity(): CountryInfoEntity {
         languages = this.languages,
         population = this.population,
         capitals = this.capitals,
+        boundingBox = this.boundingBox.joinToString(","),
     )
 }

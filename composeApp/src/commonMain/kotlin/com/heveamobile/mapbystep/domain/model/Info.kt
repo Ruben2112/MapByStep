@@ -12,5 +12,6 @@ sealed interface Info {
         val languages: String,
         val population: Int,
         val capitals: String,
+        val boundingBox: List<Double>,
     ) : Info
 }

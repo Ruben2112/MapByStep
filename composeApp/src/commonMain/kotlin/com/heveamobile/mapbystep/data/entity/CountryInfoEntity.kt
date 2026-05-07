@@ -14,4 +14,5 @@ data class CountryInfoEntity(
     val languages: String,
     val population: Int,
     val capitals: String,
+    val boundingBox: String,
 )

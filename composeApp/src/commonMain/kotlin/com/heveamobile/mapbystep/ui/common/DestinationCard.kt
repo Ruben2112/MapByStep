@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,17 +22,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
 import com.heveamobile.mapbystep.domain.model.Destination
+import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.theme.Outline
 import com.heveamobile.mapbystep.theme.PrimaryContainer
 import com.heveamobile.mapbystep.theme.SurfaceContainer
@@ -128,21 +131,42 @@ private fun CardFront(
                     .fillMaxWidth()
                     .aspectRatio(1F),
             ) {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(MaterialTheme.spacing.medium),
-                    contentDescription = "Image of ${destination.name}",
-                    model = fileStorage.getAbsolutePath(
-                        "${destination.mapId}/${destination.id}.svg",
-                    ),
-                    colorFilter = ColorFilter.tint(
-                        color = destination.rarity.color.copy(
-                            alpha =
-                                0.75F,
-                        ),
-                    ),
-                )
+                if (destination.info is Info.CountryInfo) {
+                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                        val density = LocalDensity.current
+                        val size = remember(
+                            maxWidth,
+                            maxHeight,
+                        ) {
+                            IntSize(
+                                width = with(density) { maxWidth.roundToPx() },
+                                height = with(density) { maxHeight.roundToPx() },
+                            )
+                        }
+
+                        MapImage(
+                            modifier = Modifier.fillMaxSize(),
+                            countryInfo = destination.info,
+                            rarity = destination.rarity,
+                            size = size,
+                        )
+                    }
+                }
+//                AsyncImage(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(MaterialTheme.spacing.medium),
+//                    contentDescription = "Image of ${destination.name}",
+//                    model = fileStorage.getAbsolutePath(
+//                        "${destination.mapId}/${destination.id}.svg",
+//                    ),
+//                    colorFilter = ColorFilter.tint(
+//                        color = destination.rarity.color.copy(
+//                            alpha =
+//                                0.75F,
+//                        ),
+//                    ),
+//                )
             }
             Box(
                 modifier = Modifier
