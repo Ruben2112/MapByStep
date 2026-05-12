@@ -1,25 +1,16 @@
 package com.heveamobile.mapbystep.data.repository
 
 import com.heveamobile.mapbystep.data.dao.StepDataDao
-import com.heveamobile.mapbystep.data.mapper.toDomain
 import com.heveamobile.mapbystep.data.mapper.toEntity
 import com.heveamobile.mapbystep.data.source.remote.HealthDataSource
 import com.heveamobile.mapbystep.domain.model.StepData
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlin.time.Instant
 
 class StepDataRepositoryImpl(
     private val stepDao: StepDataDao,
     private val healthDataSource: HealthDataSource,
 ) : StepDataRepository {
-
-    override fun getStepsFlow(): Flow<List<StepData>> {
-        return stepDao
-            .getStepsFlow()
-            .map { it.map { stepData -> stepData.toDomain() } }
-    }
 
     override suspend fun saveStepData(
         userId: Long,

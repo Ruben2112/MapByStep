@@ -17,11 +17,12 @@ class SpendStepsUseCase(
         val activeMap = mapRepository.getActiveMapWithDestinationInfo()
             ?: return emptyList()
 
+        // Calculate how many visits we can reward
         val costPerVisit = activeMap.calculatedDistance
         val totalPossibleVisits = user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
-//        val totalPossibleVisits = 5
+//        val totalPossibleVisits = 5 // For testing purposes
         if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations
@@ -30,6 +31,7 @@ class SpendStepsUseCase(
 
         run loop@{
             repeat(totalPossibleVisits) {
+                // Randomly select a rarity
                 val random = (1..10000).random()
                 val targetRarity = when (random) {
                     in 1..8109 -> Rarity.Common
@@ -58,7 +60,7 @@ class SpendStepsUseCase(
                 if (destinations.all { it.isDiscovered }) {
                     levelUpOccurred = true
 
-                    // 1. Update Map Level
+                    // Update Map Level
                     mapRepository.updateMap(
                         activeMap.copy(
                             currentLevel = activeMap.currentLevel + 1,
@@ -66,7 +68,7 @@ class SpendStepsUseCase(
                         ),
                     )
 
-                    // 2. Clear discovery flags in DB
+                    // Clear discovery flags in DB
                     destinationRepository.resetDiscovered(mapId = activeMap.id)
                     return@loop
                 }

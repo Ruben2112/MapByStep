@@ -47,13 +47,6 @@ class UpsertInitialMapDataUseCase(
                         )
                     }
                 }
-
-                /** TODO Migrate existing Destination data. Fetch current Destinations of Map,
-                 * create a mapping of [destinationId:visits], delete Destinations of Map, import
-                 * new Destinations an update visits of the Destinations by ID in the created
-                 * mapping. All other data is immutable anyway so no need to migrate. This makes
-                 * it easy to add or remove columns.
-                 */
             }
         }
             ?: run {

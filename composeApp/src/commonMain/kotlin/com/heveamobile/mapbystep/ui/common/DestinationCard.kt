@@ -32,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.theme.Outline
@@ -44,7 +43,6 @@ import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_question_mark
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
 
 
 @Composable
@@ -106,7 +104,6 @@ private fun CardFront(
     isLarge: Boolean,
     isNew: Boolean = false,
     destination: Destination,
-    fileStorage: FileStorage = koinInject(),
 ) {
     Box(
         modifier = modifier.aspectRatio(

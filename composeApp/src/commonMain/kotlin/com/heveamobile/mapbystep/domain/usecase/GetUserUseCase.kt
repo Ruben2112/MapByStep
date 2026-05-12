@@ -13,7 +13,7 @@ class GetUserUseCase(
         return userRepository
             .getUserFlow()
             .onEach { user ->
-                // This makes sure a user is created when it doesn't exist
+                // onEach is called on an empty list with a null value, so this makes sure there is always a user
                 if (user == null) {
                     userRepository.createUser()
                 }
@@ -24,13 +24,12 @@ class GetUserUseCase(
         val user = userRepository
             .getUserFlow()
             .first()
-        return if (user == null) {
+
+        if (user == null) {
             userRepository.createUser()
-            userRepository
-                .getUserFlow()
-                .first()!!
+            return getOneShotUser()
         } else {
-            user
+            return user
         }
     }
 }

@@ -15,8 +15,6 @@ class UpdateUserRecordsUseCase(
         val stepData = user?.stepData
             ?: return
 
-//        if (stepData.isEmpty()) return
-
         // Sort by time to ensure the sliding window moves correctly
         val sortedSteps = stepData.sortedBy { it.startTime }
 

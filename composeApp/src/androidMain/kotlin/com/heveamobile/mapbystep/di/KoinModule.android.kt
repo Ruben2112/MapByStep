@@ -7,8 +7,6 @@ import com.heveamobile.mapbystep.data.source.local.getDatabaseBuilder
 import com.heveamobile.mapbystep.data.source.remote.HealthDataSource
 import com.heveamobile.mapbystep.domain.AndroidHealthPermissionManager
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
-import com.heveamobile.mapbystep.domain.infrastructure.AndroidFileStorage
-import com.heveamobile.mapbystep.domain.infrastructure.FileStorage
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -21,7 +19,6 @@ actual val targetModule = module {
             produceFile = { androidContext().filesDir.resolve("user_prefs.preferences_pb") },
         )
     }
-    single<FileStorage> { AndroidFileStorage(androidContext()) }
     single { get<AppDatabase>().getUserDao() }
     single { get<AppDatabase>().getStepDataDao() }
     single { get<AppDatabase>().getMapDao() }

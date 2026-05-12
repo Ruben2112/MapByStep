@@ -14,10 +14,11 @@ class GetMapsWithProgressUseCase(
         hideUndiscovered: Boolean = false,
     ): Flow<List<Map>> {
         return repository
-            .getAllWithProgressFlow()
+            .getAllMapsWithProgressFlow() // Get all maps
             .map { maps ->
                 maps.map { map ->
                     map.copy(
+                        // Update the destinations to be filtered and sorted accordingly
                         destinations = map.destinations
                             .filter { if (hideUndiscovered) it.isDiscovered else true }
                             .sortedWith(
