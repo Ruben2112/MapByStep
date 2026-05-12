@@ -159,16 +159,19 @@ fun HomeContent(
             NavigationDrawer(
                 onDrawerItemClicked = { route ->
                     onAction(HomeAction.CloseNavigationDrawer)
-                    when (route) {
-                        NavigationDrawerRoute.Profile -> backStack.add(Route.Profile)
-                        NavigationDrawerRoute.Maps -> backStack.add(Route.Maps)
-                        NavigationDrawerRoute.Destinations -> backStack.add(Route.Destinations)
-                        NavigationDrawerRoute.DestinationInfo -> backStack.add(
-                            Route.DestinationInfo(destinationId = null),
-                        )
-
-                        NavigationDrawerRoute.Directions -> backStack.add(Route.Directions)
-                        NavigationDrawerRoute.Settings -> backStack.add(Route.Settings)
+                    val navKey = when (route) {
+                        NavigationDrawerRoute.Profile -> Route.Profile
+                        NavigationDrawerRoute.Maps -> Route.Maps
+                        NavigationDrawerRoute.Destinations -> Route.Destinations
+                        NavigationDrawerRoute.DestinationInfo -> Route.DestinationInfo(destinationId = null)
+                        NavigationDrawerRoute.Directions -> Route.Directions
+                        NavigationDrawerRoute.Settings -> Route.Settings
+                    }
+                    if (backStack.lastOrNull() != navKey && backStack.lastOrNull() != Route.Profile) {
+                        backStack.removeLastOrNull()
+                    }
+                    if (backStack.lastOrNull() != navKey && (navKey != Route.Profile || backStack.lastOrNull() != Route.Profile)) {
+                        backStack.add(navKey)
                     }
                 },
             )

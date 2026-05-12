@@ -33,6 +33,7 @@ import com.heveamobile.mapbystep.ui.maps.MapsViewModel
 import com.heveamobile.mapbystep.ui.profile.ProfileScreen
 import com.heveamobile.mapbystep.ui.profile.ProfileViewModel
 import com.heveamobile.mapbystep.ui.settings.SettingsScreen
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.context.startKoin
@@ -42,6 +43,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
@@ -51,7 +53,12 @@ val navigationModule = module {
     navigation<Route.Profile> { ProfileScreen() }
     navigation<Route.Maps> { MapsScreen() }
     navigation<Route.Destinations> { DestinationsScreen() }
-    navigation<Route.DestinationInfo> { route -> DestinationInfoScreen(route = route) }
+    navigation<Route.DestinationInfo> { route ->
+        DestinationInfoScreen(
+            viewModel = koinViewModel { parametersOf(route) },
+            route = route,
+        )
+    }
     navigation<Route.Directions> { DirectionsScreen() }
     navigation<Route.Settings> { SettingsScreen() }
 }
@@ -61,9 +68,8 @@ val viewModelModule = module {
     viewModelOf(::ProfileViewModel)
     viewModelOf(::MapsViewModel)
     viewModelOf(::DestinationsViewModel)
-    viewModel { (route: Route.DestinationInfo) ->
+    viewModel { _ ->
         DestinationInfoViewModel(
-            route = route,
             destinationRepository = get(),
             destinationInfoRepository = get(),
             getMapsWithProgressUseCase = get(),

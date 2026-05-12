@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,16 +19,18 @@ import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.CountryInfoCard
 import com.heveamobile.mapbystep.ui.common.DropDownMenu
 import com.heveamobile.mapbystep.ui.common.MapDropDownMenu
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun DestinationInfoScreen(
     modifier: Modifier = Modifier,
+    viewModel: DestinationInfoViewModel,
     route: Route.DestinationInfo,
 ) {
-    val viewModel: DestinationInfoViewModel = koinViewModel { parametersOf(route) }
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(route.destinationId) {
+        viewModel.loadDestinationInfo(route.destinationId)
+    }
 
     DestinationInfoContent(
         modifier = modifier,

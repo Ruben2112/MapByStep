@@ -7,7 +7,6 @@ import com.heveamobile.mapbystep.domain.model.Map
 import com.heveamobile.mapbystep.domain.repository.DestinationInfoRepository
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
-import com.heveamobile.mapbystep.navigation.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DestinationInfoViewModel(
-    private val route: Route.DestinationInfo,
     private val destinationRepository: DestinationRepository,
     private val destinationInfoRepository: DestinationInfoRepository,
     private val getMapsWithProgressUseCase: GetMapsWithProgressUseCase,
@@ -26,7 +24,7 @@ class DestinationInfoViewModel(
     private val _state = MutableStateFlow(DestinationInfoState())
     val state: StateFlow<DestinationInfoState> = _state.asStateFlow()
 
-    init {
+    fun loadDestinationInfo(destinationId: String?) {
         _state.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,7 +35,7 @@ class DestinationInfoViewModel(
                 }
 
                 var selectedDestination: Destination? =
-                    if (route.destinationId != null) destinationRepository.getDestinationById(route.destinationId) else null
+                    if (destinationId != null) destinationRepository.getDestinationById(destinationId) else _state.value.selectedDestination
 
                 val selectedMap: Map? = if (selectedDestination == null) {
                     maps.firstOrNull { it.isActive }
