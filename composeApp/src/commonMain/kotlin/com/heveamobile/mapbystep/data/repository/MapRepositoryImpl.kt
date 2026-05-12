@@ -52,7 +52,6 @@ class MapRepositoryImpl(
     }
 
     override fun getAllWithProgressFlow(): Flow<List<Map>> {
-        mapDao.getMapsWithProgress()
         return mapDao
             .getMapsWithProgressFlow()
             .map { it.map { mapProgress -> mapProgress.toDomain() } }

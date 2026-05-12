@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.heveamobile.mapbystep.data.entity.DestinationEntity
+import com.heveamobile.mapbystep.data.entity.DestinationWithInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,7 +21,7 @@ interface DestinationDao {
     fun getDestinationsByMapId(mapId: String): List<DestinationEntity>
 
     @Query("SELECT * FROM DestinationEntity WHERE id = :id")
-    fun getDestinationById(id: String): DestinationEntity?
+    fun getDestinationById(id: String): DestinationWithInfo?
 
     @Upsert
     suspend fun upsertDestinations(destinations: List<DestinationEntity>)
