@@ -58,12 +58,10 @@ fun CountryInfoCard(
             )
             Box(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
                 Card(modifier = Modifier.height(160.dp)) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-//                        MapImage(countryInfo = info)
-                    }
+                    MapboxMap(
+                        modifier = modifier.fillMaxSize(),
+                        boundingBox = destination.info.boundingBox,
+                    )
                 }
             }
             HorizontalDivider(

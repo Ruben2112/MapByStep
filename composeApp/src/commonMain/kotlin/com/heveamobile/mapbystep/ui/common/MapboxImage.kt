@@ -28,8 +28,8 @@ import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.theme.toHex
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.mapbox_access_token
 import mapbystep.composeapp.generated.resources.mapbox_style_id
-import mapbystep.composeapp.generated.resources.mapbox_token
 import mapbystep.composeapp.generated.resources.mapbox_username
 import org.jetbrains.compose.resources.stringResource
 
@@ -41,7 +41,7 @@ fun MapImage(
     size: IntSize,
 ) {
     // Kept in private file not added to git. Use commented out variables below instead to disable mapbox.
-    val token = stringResource(Res.string.mapbox_token)
+    val token = stringResource(Res.string.mapbox_access_token)
     val styleId = stringResource(Res.string.mapbox_style_id)
     val username = stringResource(Res.string.mapbox_username)
 

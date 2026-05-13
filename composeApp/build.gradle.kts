@@ -33,6 +33,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.mapbox.maps)
+            implementation(libs.mapbox.maps.compose)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
