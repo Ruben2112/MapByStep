@@ -3,12 +3,13 @@ package com.heveamobile.mapbystep.ui.common
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapOptions
 import com.mapbox.maps.MapboxDelicateApi
+import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.extension.compose.ComposeMapInitOptions
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
@@ -27,15 +28,13 @@ actual fun MapboxMap(
 
     MapboxMap(
         mapViewportState = mapViewportState,
-        composeMapInitOptions = with(LocalDensity.current) {
-            remember {
-                ComposeMapInitOptions(
-                    density,
-                    // Use a TextureView instead of SurfaceView to prevent fade animation issues
-                    textureView = true,
-                )
-            }
-        },
+        composeMapInitOptions = ComposeMapInitOptions(
+            MapOptions
+                .Builder()
+                .applyDefaultParams(LocalContext.current)
+                .build(),
+            textureView = true,
+        ),
         scaleBar = {},
     ) {
         MapEffect(boundingBox) { mapView ->
