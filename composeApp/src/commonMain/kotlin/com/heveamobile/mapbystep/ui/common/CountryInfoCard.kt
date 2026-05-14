@@ -59,7 +59,7 @@ fun CountryInfoCard(
             Box(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
                 Card(modifier = Modifier.height(160.dp)) {
                     MapboxMap(
-                        modifier = modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         boundingBox = destination.info.boundingBox,
                     )
                 }
