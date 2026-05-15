@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.rememberHealthPermissionLauncher
+import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.formatInstant
-import com.heveamobile.mapbystep.formatStepAmount
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.ErrorCard
@@ -175,7 +175,7 @@ fun HistoricDataCard(state: ProfileState) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = formatStepAmount(
+                    text = formatAmount(
                         state.totalSteps,
                         FormatMode.Long,
                     ),
@@ -207,12 +207,12 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                 Text(
                     modifier = Modifier.weight(1F),
                     text = "${
-                        formatStepAmount(
+                        formatAmount(
                             state.previousTwentyFourHours,
                             FormatMode.Long,
                         )
                     } / ${
-                        formatStepAmount(
+                        formatAmount(
                             state.twentyFourHourRecord,
                             FormatMode.Long,
                         )
@@ -231,12 +231,12 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                 Text(
                     modifier = Modifier.weight(1F),
                     text = "${
-                        formatStepAmount(
+                        formatAmount(
                             state.previousSevenDays,
                             FormatMode.Long,
                         )
                     } / ${
-                        formatStepAmount(
+                        formatAmount(
                             state.sevenDayRecord,
                             FormatMode.Long,
                         )
@@ -255,12 +255,12 @@ fun PersonalRecordsDataCard(state: ProfileState) {
                 Text(
                     modifier = Modifier.weight(1F),
                     text = "${
-                        formatStepAmount(
+                        formatAmount(
                             state.previousThirtyDays,
                             FormatMode.Long,
                         )
                     } / ${
-                        formatStepAmount(
+                        formatAmount(
                             state.thirtyDayRecord,
                             FormatMode.Long,
                         )

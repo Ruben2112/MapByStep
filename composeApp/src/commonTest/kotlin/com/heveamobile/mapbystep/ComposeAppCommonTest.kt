@@ -9,42 +9,42 @@ class ComposeAppCommonTest {
     fun format_step_amount_short() {
         assertEquals(
             "3M",
-            formatStepAmount(
+            formatAmount(
                 3_141_593L,
                 FormatMode.Short,
             ),
         )
         assertEquals(
             "1K",
-            formatStepAmount(
+            formatAmount(
                 1_337,
                 FormatMode.Short,
             ),
         )
         assertEquals(
             "1M",
-            formatStepAmount(
+            formatAmount(
                 1_000_000L,
                 FormatMode.Short,
             ),
         )
         assertEquals(
             "1K",
-            formatStepAmount(
+            formatAmount(
                 1_000L,
                 FormatMode.Short,
             ),
         )
         assertEquals(
             "0K",
-            formatStepAmount(
+            formatAmount(
                 100L,
                 FormatMode.Short,
             ),
         )
         assertEquals(
             "0K",
-            formatStepAmount(
+            formatAmount(
                 0L,
                 FormatMode.Short,
             ),
@@ -55,42 +55,42 @@ class ComposeAppCommonTest {
     fun format_step_amount_medium() {
         assertEquals(
             "3,141K",
-            formatStepAmount(
+            formatAmount(
                 3_141_593L,
                 FormatMode.Medium,
             ),
         )
         assertEquals(
             "1K",
-            formatStepAmount(
+            formatAmount(
                 1_337,
                 FormatMode.Medium,
             ),
         )
         assertEquals(
             "1,000K",
-            formatStepAmount(
+            formatAmount(
                 1_000_000L,
                 FormatMode.Medium,
             ),
         )
         assertEquals(
             "1K",
-            formatStepAmount(
+            formatAmount(
                 1_000L,
                 FormatMode.Medium,
             ),
         )
         assertEquals(
             "100",
-            formatStepAmount(
+            formatAmount(
                 100L,
                 FormatMode.Medium,
             ),
         )
         assertEquals(
             "0",
-            formatStepAmount(
+            formatAmount(
                 0L,
                 FormatMode.Medium,
             ),
@@ -101,42 +101,42 @@ class ComposeAppCommonTest {
     fun format_step_amount_long() {
         assertEquals(
             "3,141,593",
-            formatStepAmount(
+            formatAmount(
                 3_141_593L,
                 FormatMode.Long,
             ),
         )
         assertEquals(
             "1,337",
-            formatStepAmount(
+            formatAmount(
                 1_337,
                 FormatMode.Long,
             ),
         )
         assertEquals(
             "1,000,000",
-            formatStepAmount(
+            formatAmount(
                 1_000_000L,
                 FormatMode.Long,
             ),
         )
         assertEquals(
             "1,000",
-            formatStepAmount(
+            formatAmount(
                 1_000L,
                 FormatMode.Long,
             ),
         )
         assertEquals(
             "100",
-            formatStepAmount(
+            formatAmount(
                 100L,
                 FormatMode.Long,
             ),
         )
         assertEquals(
             "0",
-            formatStepAmount(
+            formatAmount(
                 0L,
                 FormatMode.Long,
             ),

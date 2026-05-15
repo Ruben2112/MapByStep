@@ -25,11 +25,15 @@ data class Map(
     val calculatedDistance: Long = (baseDistance * (1.25.pow(currentLevel - 1))).toLong(),
     val currentMapPoints: Long = 0,
     val commonValue: Int,
+    val commonDirections: Int = 0,
     val uncommonValue: Int,
+    val uncommonDirections: Int = 0,
     val rareValue: Int,
+    val rareDirections: Int = 0,
     val epicValue: Int,
+    val epicDirections: Int = 0,
     val legendaryValue: Int,
-    val price: Double? = null,
+    val legendaryDirections: Int = 0,
     val isOwned: Boolean = false,
     val isActive: Boolean = false,
     val destinations: List<Destination> = emptyList(),
@@ -72,5 +76,16 @@ data class Map(
 
         val progressPercentage = if (total == 0) 0 else ((visited * 100) / total)
         return "$visited / $total ($progressPercentage%)"
+    }
+
+    fun storePrice(rarity: Rarity): Int {
+        val baseValue = when (rarity) {
+            Rarity.Common -> commonValue
+            Rarity.Uncommon -> uncommonValue
+            Rarity.Rare -> rareValue
+            Rarity.Epic -> epicValue
+            Rarity.Legendary -> legendaryValue
+        }
+        return baseValue * 10
     }
 }

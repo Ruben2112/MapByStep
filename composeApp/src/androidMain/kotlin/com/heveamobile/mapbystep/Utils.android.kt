@@ -9,14 +9,14 @@ import java.util.Locale
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
-actual fun formatStepAmount(
-    steps: Long,
+actual fun formatAmount(
+    amount: Long,
     formatMode: FormatMode,
 ): String {
     val numberFormatter = NumberFormat.getInstance(Locale.getDefault())
     when (formatMode) {
         FormatMode.Short -> {
-            val shortNumber = steps.floorDiv(1_000)
+            val shortNumber = amount.floorDiv(1_000)
             if (shortNumber < 1_000L) {
                 return "${numberFormatter.format(shortNumber)}K"
             }
@@ -24,10 +24,10 @@ actual fun formatStepAmount(
         }
 
         FormatMode.Medium -> {
-            if (steps < 1_000L) {
-                return "${numberFormatter.format(steps)}"
+            if (amount < 1_000L) {
+                return "${numberFormatter.format(amount)}"
             }
-            val shortNumber = steps.floorDiv(1_000)
+            val shortNumber = amount.floorDiv(1_000)
             if (shortNumber < 10_000L) {
                 return "${numberFormatter.format(shortNumber)}K"
             }
@@ -35,7 +35,38 @@ actual fun formatStepAmount(
         }
 
         FormatMode.Long -> {
-            return numberFormatter.format(steps)
+            return numberFormatter.format(amount)
+        }
+    }
+}
+
+actual fun formatAmount(
+    amount: Int,
+    formatMode: FormatMode,
+): String {
+    val numberFormatter = NumberFormat.getInstance(Locale.getDefault())
+    when (formatMode) {
+        FormatMode.Short -> {
+            val shortNumber = amount.floorDiv(1_000)
+            if (shortNumber < 1_000L) {
+                return "${numberFormatter.format(shortNumber)}K"
+            }
+            return "${numberFormatter.format(shortNumber.floorDiv(1_000))}M"
+        }
+
+        FormatMode.Medium -> {
+            if (amount < 1_000L) {
+                return "${numberFormatter.format(amount)}"
+            }
+            val shortNumber = amount.floorDiv(1_000)
+            if (shortNumber < 10_000L) {
+                return "${numberFormatter.format(shortNumber)}K"
+            }
+            return "${numberFormatter.format(shortNumber.floorDiv(1_000))}M"
+        }
+
+        FormatMode.Long -> {
+            return numberFormatter.format(amount)
         }
     }
 }

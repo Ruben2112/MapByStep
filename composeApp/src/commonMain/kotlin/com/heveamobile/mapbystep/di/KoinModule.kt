@@ -14,8 +14,10 @@ import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
+import com.heveamobile.mapbystep.domain.usecase.GetCountOfDirectionsInStockUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
+import com.heveamobile.mapbystep.domain.usecase.PurchaseDirectionsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SpendStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpdateUserRecordsUseCase
@@ -27,6 +29,7 @@ import com.heveamobile.mapbystep.ui.destinationinfo.DestinationInfoViewModel
 import com.heveamobile.mapbystep.ui.destinations.DestinationsScreen
 import com.heveamobile.mapbystep.ui.destinations.DestinationsViewModel
 import com.heveamobile.mapbystep.ui.directions.DirectionsScreen
+import com.heveamobile.mapbystep.ui.directions.DirectionsViewModel
 import com.heveamobile.mapbystep.ui.home.HomeViewModel
 import com.heveamobile.mapbystep.ui.maps.MapsScreen
 import com.heveamobile.mapbystep.ui.maps.MapsViewModel
@@ -75,6 +78,7 @@ val viewModelModule = module {
             getMapsWithProgressUseCase = get(),
         )
     }
+    viewModelOf(::DirectionsViewModel)
 }
 
 val useCaseModule = module {
@@ -84,6 +88,8 @@ val useCaseModule = module {
     factoryOf(::UpsertInitialMapDataUseCase)
     factoryOf(::GetMapsWithProgressUseCase)
     factoryOf(::SpendStepsUseCase)
+    factoryOf(::GetCountOfDirectionsInStockUseCase)
+    factoryOf(::PurchaseDirectionsUseCase)
 }
 
 val repositoryModule = module {

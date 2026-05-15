@@ -79,11 +79,7 @@ private fun DestinationsContent(
                     title = if (state.maps.size > 1) null else state.selectedMap.name,
                     bottomContent = {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = MaterialTheme.spacing.small,
-                                ),
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
                                 "Total visits",

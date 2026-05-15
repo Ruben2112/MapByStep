@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.FormatMode
-import com.heveamobile.mapbystep.formatStepAmount
+import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.theme.OnSurface
 import com.heveamobile.mapbystep.theme.SecondaryContainer
 import com.heveamobile.mapbystep.theme.spacing
@@ -66,12 +66,12 @@ fun StepProgressPill(
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Text(
                     text = "${
-                        formatStepAmount(
+                        formatAmount(
                             availableSteps,
                             FormatMode.Medium,
                         )
                     } / ${
-                        formatStepAmount(
+                        formatAmount(
                             requiredSteps,
                             FormatMode.Medium,
                         )

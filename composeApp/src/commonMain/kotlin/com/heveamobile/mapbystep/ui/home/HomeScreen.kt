@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -31,6 +32,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -150,10 +153,19 @@ fun HomeContent(
         }
     }
 
+    val focusManager = LocalFocusManager.current
     ModalNavigationDrawer(
-        modifier = Modifier.blur(
-            if (state.visitedDestinationsState.destinations.isEmpty()) 0.dp else 8.dp,
-        ),
+        modifier = Modifier
+            .blur(
+                if (state.visitedDestinationsState.destinations.isEmpty()) 0.dp else 8.dp,
+            )
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
+                    },
+                )
+            },
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawer(

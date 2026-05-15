@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
-import com.heveamobile.mapbystep.formatStepAmount
+import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.MapStatisticsList
@@ -94,12 +94,12 @@ private fun MapsContent(
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                             Text(
                                 text = "${
-                                    formatStepAmount(
+                                    formatAmount(
                                         state.availableSteps,
                                         FormatMode.Long,
                                     )
                                 } / ${
-                                    formatStepAmount(
+                                    formatAmount(
                                         state.activeMap.calculatedDistance,
                                         formatMode = FormatMode.Medium,
                                     )

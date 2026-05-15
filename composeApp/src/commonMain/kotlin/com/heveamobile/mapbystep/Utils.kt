@@ -8,8 +8,13 @@ enum class FormatMode {
     Long
 }
 
-expect fun formatStepAmount(
-    steps: Long,
+expect fun formatAmount(
+    amount: Long,
+    formatMode: FormatMode = FormatMode.Long,
+): String
+
+expect fun formatAmount(
+    amount: Int,
     formatMode: FormatMode = FormatMode.Long,
 ): String
 

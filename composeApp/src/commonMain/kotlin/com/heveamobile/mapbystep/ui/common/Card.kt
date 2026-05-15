@@ -79,7 +79,7 @@ fun Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            vertical = MaterialTheme.spacing.small,
+                            vertical = MaterialTheme.spacing.medium,
                             horizontal = MaterialTheme.spacing.medium,
                         ),
                     contentAlignment = Alignment.CenterEnd,
