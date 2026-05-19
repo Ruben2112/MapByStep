@@ -76,27 +76,29 @@ fun DestinationCard(
                 onClick()
             },
     ) {
-        if (rotation.value <= 90F) {
-            Box {
-                CardFront(
-                    isLarge = isLarge,
-                    isNew = isNew,
-                    mapPointsGained = mapPointsGained,
-                    destination = destination,
-                )
-            }
-        } else {
-            Box(
-                Modifier.graphicsLayer {
-                    rotationY = 180F
-                },
-            ) {
-                CardBack(
-                    isLarge = isLarge,
-                    raritySpoiler = raritySpoiler,
-                    destination = destination,
-                )
-            }
+        Box(
+            modifier = Modifier.graphicsLayer {
+                alpha = if (rotation.value <= 90F) 1f else 0f
+            },
+        ) {
+            CardFront(
+                isLarge = isLarge,
+                isNew = isNew,
+                mapPointsGained = mapPointsGained,
+                destination = destination,
+            )
+        }
+        Box(
+            modifier = Modifier.graphicsLayer {
+                rotationY = 180F
+                alpha = if (rotation.value > 90F) 1f else 0f
+            },
+        ) {
+            CardBack(
+                isLarge = isLarge,
+                raritySpoiler = raritySpoiler,
+                destination = destination,
+            )
         }
     }
 }
@@ -145,7 +147,7 @@ private fun CardFront(
                             )
                         }
 
-                        MapImage(
+                        MapboxImage(
                             modifier = Modifier.fillMaxSize(),
                             countryInfo = destination.info,
                             rarity = destination.rarity,

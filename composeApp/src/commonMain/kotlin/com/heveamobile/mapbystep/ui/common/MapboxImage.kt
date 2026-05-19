@@ -14,13 +14,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import coil3.SingletonImageLoader
+import coil3.compose.LocalPlatformContext
 import coil3.compose.SubcomposeAsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.encodeUrl
@@ -34,12 +39,14 @@ import mapbystep.composeapp.generated.resources.mapbox_username
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun MapImage(
+fun MapboxImage(
     modifier: Modifier = Modifier,
     countryInfo: Info.CountryInfo,
     rarity: Rarity,
     size: IntSize,
 ) {
+    val context = LocalPlatformContext.current
+
     // Kept in private file not added to git. Use commented out variables below instead to disable mapbox.
     val token = stringResource(Res.string.mapbox_access_token)
     val styleId = stringResource(Res.string.mapbox_style_id)
@@ -63,10 +70,22 @@ fun MapImage(
 
     val imageUrl =
         "https://api.mapbox.com/styles/v1/$username/$styleId/static/[$lonMin,$latMin,$lonMax,$latMax]/${size.width}x${size.height}?padding=$padding,$padding,$padding&addlayer=$encodedFill&access_token=$token"
+    val imageRequest = ImageRequest
+        .Builder(context)
+        .data(imageUrl)
+        .crossfade(true)
+        .build()
+
+    LaunchedEffect(imageUrl) {
+        // Preload the image so the user is less likely to see the loading state
+        SingletonImageLoader
+            .get(context)
+            .enqueue(imageRequest)
+    }
 
     SubcomposeAsyncImage(
         modifier = modifier,
-        model = imageUrl,
+        model = imageRequest,
         loading = {
             Box(
                 modifier = Modifier.fillMaxSize(),
