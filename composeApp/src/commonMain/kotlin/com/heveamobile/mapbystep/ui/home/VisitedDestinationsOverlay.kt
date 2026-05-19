@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.theme.OnTertiaryContainer
@@ -91,7 +93,12 @@ fun VisitedDestinationsOverlay(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(backgroundColor.value),
+            .background(backgroundColor.value)
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    /* Consumes tap events so they don't reach the UI behind */
+                }
+            },
     ) {
         AnimatedContent(
             modifier = Modifier.fillMaxHeight(),
