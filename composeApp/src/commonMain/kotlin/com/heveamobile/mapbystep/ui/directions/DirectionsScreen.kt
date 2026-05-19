@@ -240,21 +240,15 @@ fun DirectionsContent(
                     },
                 ) {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                    Rarity.entries.forEach {
-                        val amountOwned = when (it) {
-                            Rarity.Common -> state.selectedMap.commonDirections
-                            Rarity.Uncommon -> state.selectedMap.uncommonDirections
-                            Rarity.Rare -> state.selectedMap.rareDirections
-                            Rarity.Epic -> state.selectedMap.epicDirections
-                            Rarity.Legendary -> state.selectedMap.legendaryDirections
-                        }
-                        val cost = state.selectedMap.storePrice(it)
-                        val amountInCart = state.cart[it]
+                    Rarity.entries.forEach { rarity ->
+                        val amountOwned = state.selectedMap.directions.count { it == rarity }
+                        val cost = state.selectedMap.storePrice(rarity)
+                        val amountInCart = state.cart[rarity]
                             ?: 0
-                        val amountInStock = state.amountInStock[it]
+                        val amountInStock = state.amountInStock[rarity]
                             ?: 0
                         DirectionsShopRow(
-                            rarity = it,
+                            rarity = rarity,
                             cost = cost,
                             amountInCart = amountInCart,
                             amountOwned = amountOwned,

@@ -25,6 +25,7 @@ data class Destination(
     val rarity: Rarity,
     var isDiscovered: Boolean = false,
     var isNew: Boolean = false,
+    var mapPointsGained: Int? = null,
     var totalVisits: Int = 0,
     var isRevealed: Boolean = false,
     var imagePath: String? = null,

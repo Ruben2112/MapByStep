@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ import com.heveamobile.mapbystep.theme.SurfaceContainer
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.ic_map_points
 import mapbystep.composeapp.generated.resources.ic_question_mark
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -54,6 +56,7 @@ fun DestinationCard(
     raritySpoiler: Boolean = false,
     onClick: () -> Unit,
     isLarge: Boolean = false,
+    mapPointsGained: Int? = null,
 ) {
     val rotation = animateFloatAsState(
         targetValue = if (isRevealed) 0F else 180F,
@@ -78,6 +81,7 @@ fun DestinationCard(
                 CardFront(
                     isLarge = isLarge,
                     isNew = isNew,
+                    mapPointsGained = mapPointsGained,
                     destination = destination,
                 )
             }
@@ -103,6 +107,7 @@ private fun CardFront(
     modifier: Modifier = Modifier,
     isLarge: Boolean,
     isNew: Boolean = false,
+    mapPointsGained: Int? = null,
     destination: Destination,
 ) {
     Box(
@@ -110,7 +115,6 @@ private fun CardFront(
             5F / 7F,
             matchHeightConstraintsFirst = true,
         ),
-        contentAlignment = Alignment.TopEnd,
     ) {
         Column(
             modifier = modifier
@@ -149,21 +153,6 @@ private fun CardFront(
                         )
                     }
                 }
-//                AsyncImage(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(MaterialTheme.spacing.medium),
-//                    contentDescription = "Image of ${destination.name}",
-//                    model = fileStorage.getAbsolutePath(
-//                        "${destination.mapId}/${destination.id}.svg",
-//                    ),
-//                    colorFilter = ColorFilter.tint(
-//                        color = destination.rarity.color.copy(
-//                            alpha =
-//                                0.75F,
-//                        ),
-//                    ),
-//                )
             }
             Box(
                 modifier = Modifier
@@ -190,9 +179,12 @@ private fun CardFront(
         }
         if (isNew) {
             Box(
-                modifier = Modifier.padding(
-                    if (isLarge) MaterialTheme.spacing.medium else MaterialTheme.spacing.small,
-                ),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        if (isLarge) MaterialTheme.spacing.medium else MaterialTheme.spacing.small,
+                    ),
+                contentAlignment = Alignment.TopEnd,
             ) {
                 Badge(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh) {
                     if (isLarge) {
@@ -210,6 +202,37 @@ private fun CardFront(
                             modifier = Modifier.size(8.dp),
                             contentDescription = "New!",
                             tint = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+            }
+        }
+        if (mapPointsGained != null) {
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1F)
+                    .padding(
+                        if (isLarge) MaterialTheme.spacing.medium else MaterialTheme.spacing.small,
+                    ),
+                contentAlignment = Alignment.BottomEnd,
+            ) {
+                Badge(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh) {
+                    Row(
+                        modifier = Modifier.padding(
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.small,
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painter = painterResource(resource = Res.drawable.ic_map_points),
+                            modifier = Modifier.size(20.dp),
+                            contentDescription = "Map points icon",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            text = mapPointsGained.toString(),
+                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }

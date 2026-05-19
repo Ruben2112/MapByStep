@@ -25,17 +25,13 @@ data class Map(
     val calculatedDistance: Long = (baseDistance * (1.25.pow(currentLevel - 1))).toLong(),
     val currentMapPoints: Long = 0,
     val commonValue: Int,
-    val commonDirections: Int = 0,
     val uncommonValue: Int,
-    val uncommonDirections: Int = 0,
     val rareValue: Int,
-    val rareDirections: Int = 0,
     val epicValue: Int,
-    val epicDirections: Int = 0,
     val legendaryValue: Int,
-    val legendaryDirections: Int = 0,
     val isOwned: Boolean = false,
     val isActive: Boolean = false,
+    val directions: List<Rarity> = emptyList(),
     val destinations: List<Destination> = emptyList(),
 ) {
     fun formatProgress(rarity: Rarity?): String {

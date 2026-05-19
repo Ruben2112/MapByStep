@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.data.mapper
 
 import com.heveamobile.mapbystep.data.entity.MapEntity
 import com.heveamobile.mapbystep.domain.model.Map
+import com.heveamobile.mapbystep.domain.model.Rarity
 
 fun MapEntity.toDomain(): Map {
     return Map(
@@ -13,17 +14,21 @@ fun MapEntity.toDomain(): Map {
         currentLevel = this.currentLevel,
         currentMapPoints = this.currentMapPoints,
         commonValue = this.commonValue,
-        commonDirections = this.commonDirections,
         uncommonValue = this.uncommonValue,
-        uncommonDirections = this.uncommonDirections,
         rareValue = this.rareValue,
-        rareDirections = this.rareDirections,
         epicValue = this.epicValue,
-        epicDirections = this.epicDirections,
         legendaryValue = this.legendaryValue,
-        legendaryDirections = this.legendaryDirections,
         isOwned = this.isOwned,
         isActive = this.isActive,
+        directions = mutableListOf<Rarity>()
+            .apply {
+                repeat(commonDirections) { add(Rarity.Common) }
+                repeat(uncommonDirections) { add(Rarity.Uncommon) }
+                repeat(rareDirections) { add(Rarity.Rare) }
+                repeat(epicDirections) { add(Rarity.Epic) }
+                repeat(legendaryDirections) { add(Rarity.Legendary) }
+            }
+            .sortedByDescending { it.intValue },
     )
 }
 
@@ -37,15 +42,15 @@ fun Map.toEntity(): MapEntity {
         currentLevel = this.currentLevel,
         currentMapPoints = this.currentMapPoints,
         commonValue = this.commonValue,
-        commonDirections = this.commonDirections,
+        commonDirections = this.directions.count { it == Rarity.Common },
         uncommonValue = this.uncommonValue,
-        uncommonDirections = this.uncommonDirections,
+        uncommonDirections = this.directions.count { it == Rarity.Uncommon },
         rareValue = this.rareValue,
-        rareDirections = this.rareDirections,
+        rareDirections = this.directions.count { it == Rarity.Rare },
         epicValue = this.epicValue,
-        epicDirections = this.epicDirections,
+        epicDirections = this.directions.count { it == Rarity.Epic },
         legendaryValue = this.legendaryValue,
-        legendaryDirections = this.legendaryDirections,
+        legendaryDirections = this.directions.count { it == Rarity.Legendary },
         isOwned = this.isOwned,
         isActive = this.isActive,
     )

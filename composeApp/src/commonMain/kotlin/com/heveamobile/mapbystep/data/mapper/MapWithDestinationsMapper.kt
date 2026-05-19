@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.data.mapper
 
 import com.heveamobile.mapbystep.data.entity.MapWithDestinations
 import com.heveamobile.mapbystep.domain.model.Map
+import com.heveamobile.mapbystep.domain.model.Rarity
 
 fun MapWithDestinations.toDomain(): Map {
     return Map(
@@ -15,19 +16,14 @@ fun MapWithDestinations.toDomain(): Map {
         totalDestinationsVisited = this.totalDestinationsVisited(),
         commonDestinationCount = this.commonDestinationCount(),
         commonDestinationsVisited = this.commonDestinationsVisited(),
-        commonDirections = this.map.commonDirections,
         uncommonDestinationCount = this.uncommonDestinationCount(),
         uncommonDestinationsVisited = this.uncommonDestinationsVisited(),
-        uncommonDirections = this.map.uncommonDirections,
         rareDestinationCount = this.rareDestinationCount(),
         rareDestinationsVisited = this.rareDestinationsVisited(),
-        rareDirections = this.map.rareDirections,
         epicDestinationCount = this.epicDestinationCount(),
         epicDestinationsVisited = this.epicDestinationsVisited(),
-        epicDirections = this.map.epicDirections,
         legendaryDestinationCount = this.legendaryDestinationCount(),
         legendaryDestinationsVisited = this.legendaryDestinationsVisited(),
-        legendaryDirections = this.map.legendaryDirections,
         currentMapPoints = this.map.currentMapPoints,
         commonValue = this.map.commonValue,
         uncommonValue = this.map.uncommonValue,
@@ -36,6 +32,15 @@ fun MapWithDestinations.toDomain(): Map {
         legendaryValue = this.map.legendaryValue,
         isOwned = this.map.isOwned,
         isActive = this.map.isActive,
+        directions = mutableListOf<Rarity>()
+            .apply {
+                repeat(map.commonDirections) { add(Rarity.Common) }
+                repeat(map.uncommonDirections) { add(Rarity.Uncommon) }
+                repeat(map.rareDirections) { add(Rarity.Rare) }
+                repeat(map.epicDirections) { add(Rarity.Epic) }
+                repeat(map.legendaryDirections) { add(Rarity.Legendary) }
+            }
+            .sortedByDescending { it.intValue },
         destinations = this.destinations.map { it.destination.toDomain(it.countryInfo) },
     )
 }

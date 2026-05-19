@@ -204,24 +204,27 @@ private fun SingleCardLayout(
                 ) { index ->
                     val destination = destinations[index]
 
-                    DestinationCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = MaterialTheme.spacing.extraLarge,
-                            ),
-                        destination = destination,
-                        isRevealed = destination.isRevealed,
-                        isNew = destination.isNew,
-                        onClick = {
-                            if (!destination.isRevealed) {
-                                onAction(HomeAction.RevealDestination(destination))
-                            } else {
-                                onAction(HomeAction.ToggleDestinationInfo)
-                            }
-                        },
-                        isLarge = true,
-                    )
+                    Box {
+                        DestinationCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = MaterialTheme.spacing.extraLarge,
+                                ),
+                            destination = destination,
+                            isRevealed = destination.isRevealed,
+                            isNew = destination.isNew,
+                            mapPointsGained = destination.mapPointsGained,
+                            onClick = {
+                                if (!destination.isRevealed) {
+                                    onAction(HomeAction.RevealDestination(destination))
+                                } else {
+                                    onAction(HomeAction.ToggleDestinationInfo)
+                                }
+                            },
+                            isLarge = true,
+                        )
+                    }
                 }
 
                 // Navigation Overlay
@@ -311,7 +314,6 @@ private fun SingleCardLayout(
         ) {
             val destination = destinations[pagerState.currentPage]
             if (destination.info is Info.CountryInfo) {
-                //TODO: Update visibility in card to show only revealed visits to avoid spoilers
                 CountryInfoCard(
                     modifier = Modifier.padding(MaterialTheme.spacing.medium),
                     destination = destination,

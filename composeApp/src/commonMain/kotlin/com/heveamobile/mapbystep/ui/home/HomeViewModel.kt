@@ -131,10 +131,11 @@ class HomeViewModel(
 
             HomeAction.SpendSteps -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    val result = spendStepsUseCase().sortedBy { it.rarity }
                     _state.update { state ->
                         state.copy(
                             visitedDestinationsState = state.visitedDestinationsState.copy(
-                                destinations = spendStepsUseCase().sortedBy { it.rarity },
+                                destinations = result,
                             ),
                         )
                     }

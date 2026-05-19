@@ -22,28 +22,52 @@ class SpendStepsUseCase(
         val totalPossibleVisits = user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
-//        val totalPossibleVisits = 5 // For testing purposes
+//        val totalPossibleVisits = 1 // For testing purposes
         if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations
+        val directions = activeMap.directions.toMutableList()
         val visitedDestinations = mutableListOf<Destination>()
+        var totalMapPointsGained = 0
         var levelUpOccurred = false
 
         run loop@{
             repeat(totalPossibleVisits) {
-                // Randomly select a rarity
-                val random = (1..10000).random()
-                val targetRarity = when (random) {
-                    in 1..8109 -> Rarity.Common
-                    in 8110..9609 -> Rarity.Uncommon
-                    in 9610..9909 -> Rarity.Rare
-                    in 9910..9975 -> Rarity.Epic
-                    else -> Rarity.Legendary
-                }
 
-                val destination = destinations
-                    .filter { it.rarity == targetRarity }
-                    .random()
+                // Select a rarity based on direction or random if no direction is provided
+                val direction = directions.removeFirstOrNull()
+                val targetRarity: Rarity = direction
+                    ?: when ((1..10000).random()) {
+                        in 1..8109 -> Rarity.Common
+                        in 8110..9609 -> Rarity.Uncommon
+                        in 9610..9909 -> Rarity.Rare
+                        in 9910..9975 -> Rarity.Epic
+                        else -> Rarity.Legendary
+                    }
+
+                // Randomly select a destination with the specified rarity. If a direction is provided,
+                // the destination has to be undiscovered
+                val filteredDestinations = if (direction != null) {
+                    destinations.filter { destination ->
+                        !destination.isDiscovered && destination.rarity == targetRarity
+                    }
+                } else {
+                    destinations.filter { destination -> destination.rarity == targetRarity }
+                }
+                val destination = filteredDestinations.random()
+
+                // Reward map points if the destination was already discovered
+                if (destination.isDiscovered) {
+                    val mapPointsGained = when (destination.rarity) {
+                        Rarity.Common -> activeMap.commonValue
+                        Rarity.Uncommon -> activeMap.uncommonValue
+                        Rarity.Rare -> activeMap.rareValue
+                        Rarity.Epic -> activeMap.epicValue
+                        Rarity.Legendary -> activeMap.legendaryValue
+                    }
+                    destination.mapPointsGained = mapPointsGained
+                    totalMapPointsGained += mapPointsGained
+                }
 
                 // We make a copy so we can mark only the first occurrence of the destination as new
                 val destinationCopy = destination.copy(
@@ -51,35 +75,37 @@ class SpendStepsUseCase(
                     isDiscovered = true,
                     totalVisits = destination.totalVisits + 1,
                 )
+                visitedDestinations.add(destinationCopy)
 
                 destination.isDiscovered = true
                 destination.totalVisits++
 
-                visitedDestinations.add(destinationCopy)
-
+                // Update Map Level when all its destinations are discovered
                 if (destinations.all { it.isDiscovered }) {
                     levelUpOccurred = true
 
-                    // Update Map Level
                     mapRepository.updateMap(
                         activeMap.copy(
                             currentLevel = activeMap.currentLevel + 1,
                             currentMapPoints = 0,
+                            directions = emptyList(),
                         ),
                     )
 
                     // Clear discovery flags in DB
                     destinationRepository.resetDiscovered(mapId = activeMap.id)
+
+                    // Break the loop to prevent spending steps on more visits
                     return@loop
                 }
             }
         }
 
         // Mark only first destination in the list as new
-        val newlyDiscoveredIds = visitedDestinations
-            .filter { it.isNew }
-            .map { it.id }
-            .toSet()
+//        val newlyDiscoveredIds = visitedDestinations
+//            .filter { it.isNew }
+//            .map { it.id }
+//            .toSet()
 
         // Update destinations
         if (visitedDestinations.isNotEmpty()) {
@@ -96,15 +122,22 @@ class SpendStepsUseCase(
             user.copy(availableSteps = user.availableSteps - (visitedDestinations.size * costPerVisit)),
         )
 
+        mapRepository.updateMap(
+            activeMap.copy(
+                currentMapPoints = activeMap.currentMapPoints + totalMapPointsGained,
+                directions = directions,
+            ),
+        )
+
         // Mark only the first occurrence of the destination as new
-        newlyDiscoveredIds.forEach { id ->
-            val matchingDestinations = visitedDestinations.filter { it.id == id }
-            if (matchingDestinations.size > 1) {
-                matchingDestinations.forEachIndexed { index, destination ->
-                    destination.isNew = index == 0
-                }
-            }
-        }
+//        newlyDiscoveredIds.forEach { id ->
+//            val matchingDestinations = visitedDestinations.filter { it.id == id }
+//            if (matchingDestinations.size > 1) {
+//                matchingDestinations.forEachIndexed { index, destination ->
+//                    destination.isNew = index == 0
+//                }
+//            }
+//        }
 
         return visitedDestinations.toList()
     }

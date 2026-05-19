@@ -22,13 +22,7 @@ class GetCountOfDirectionsInStockUseCase {
             Rarity.Epic -> map.epicDestinationsVisited
             Rarity.Legendary -> map.legendaryDestinationsVisited
         }
-        val owned = when (rarity) {
-            Rarity.Common -> map.commonDirections
-            Rarity.Uncommon -> map.uncommonDirections
-            Rarity.Rare -> map.rareDirections
-            Rarity.Epic -> map.epicDirections
-            Rarity.Legendary -> map.legendaryDirections
-        }
+        val owned = map.directions.count { it == rarity }
 
         return (total - visited - owned).coerceAtLeast(0)
     }

@@ -14,30 +14,14 @@ class PurchaseDirectionsUseCase(
     ) {
         if (map.currentMapPoints < cost) return
 
-        var updatedCommonDirectionCount = map.commonDirections
-        var updatedUncommonDirectionCount = map.uncommonDirections
-        var updatedRareDirectionCount = map.rareDirections
-        var updatedEpicDirectionCount = map.epicDirections
-        var updatedLegendaryDirectionCount = map.legendaryDirections
-
-        cart.forEach {
-            when (it.key) {
-                Rarity.Common -> updatedCommonDirectionCount += it.value
-                Rarity.Uncommon -> updatedUncommonDirectionCount += it.value
-                Rarity.Rare -> updatedRareDirectionCount += it.value
-                Rarity.Epic -> updatedEpicDirectionCount += it.value
-                Rarity.Legendary -> updatedLegendaryDirectionCount += it.value
-            }
+        val newDirections = cart.flatMap { (rarity, count) ->
+            List(count) { rarity }
         }
 
         mapRepository.updateMap(
             map.copy(
-                commonDirections = updatedCommonDirectionCount,
-                uncommonDirections = updatedUncommonDirectionCount,
-                rareDirections = updatedRareDirectionCount,
-                epicDirections = updatedEpicDirectionCount,
-                legendaryDirections = updatedLegendaryDirectionCount,
                 currentMapPoints = map.currentMapPoints - cost,
+                directions = map.directions + newDirections,
             ),
         )
     }
