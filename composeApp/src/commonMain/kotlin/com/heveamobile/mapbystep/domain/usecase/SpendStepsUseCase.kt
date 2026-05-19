@@ -68,17 +68,24 @@ class SpendStepsUseCase(
                     destination.mapPointsGained = mapPointsGained
                     totalMapPointsGained += mapPointsGained
                 }
+                println("destination.totalVisits = ${destination.totalVisits}")
+                val newVisitCount = ++destination.totalVisits
+                println("newVisitCount = $newVisitCount")
 
                 // We make a copy so we can mark only the first occurrence of the destination as new
                 val destinationCopy = destination.copy(
                     isNew = !destination.isDiscovered,
                     isDiscovered = true,
-                    totalVisits = destination.totalVisits + 1,
                 )
                 visitedDestinations.add(destinationCopy)
 
+                visitedDestinations
+                    .filter { it.id == destinationCopy.id }
+                    .forEach {
+                        it.totalVisits = newVisitCount
+                    }
+
                 destination.isDiscovered = true
-                destination.totalVisits++
 
                 // Update Map Level when all its destinations are discovered
                 if (destinations.all { it.isDiscovered }) {

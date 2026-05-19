@@ -324,6 +324,7 @@ private fun SingleCardLayout(
                 CountryInfoCard(
                     modifier = Modifier.padding(MaterialTheme.spacing.medium),
                     destination = destination,
+                    visitCountOverride = destination.totalVisits - destinations.count { it.id == destination.id && !it.isRevealed },
                 )
             }
         }

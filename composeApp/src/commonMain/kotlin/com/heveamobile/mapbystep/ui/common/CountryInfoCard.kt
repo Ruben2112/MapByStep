@@ -37,6 +37,7 @@ import org.jetbrains.compose.resources.painterResource
 fun CountryInfoCard(
     modifier: Modifier = Modifier,
     destination: Destination,
+    visitCountOverride: Int? = null,
 ) {
     val info = destination.info as Info.CountryInfo
     Card(modifier = modifier) {
@@ -139,7 +140,8 @@ fun CountryInfoCard(
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = destination.totalVisits.toString(),
+                            text = visitCountOverride?.toString()
+                                ?: destination.totalVisits.toString(),
                             style = MaterialTheme.typography.titleMedium,
                         )
                     }
