@@ -34,7 +34,6 @@ class MapRepositoryImpl(
                     epicValue = columns[7].toInt(),
                     legendaryValue = columns[8].toInt(),
                     isOwned = true,
-                    isActive = isActive,
                 )
             }
             .first()
@@ -55,11 +54,5 @@ class MapRepositoryImpl(
         return mapDao
             .getMapsWithProgressFlow()
             .map { it.map { mapProgress -> mapProgress.toDomain() } }
-    }
-
-    override suspend fun getActiveMapWithDestinationInfo(): Map? {
-        return mapDao
-            .getActiveMap()
-            ?.toDomain()
     }
 }

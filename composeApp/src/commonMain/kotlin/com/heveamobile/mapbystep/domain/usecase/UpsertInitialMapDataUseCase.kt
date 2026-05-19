@@ -32,7 +32,6 @@ class UpsertInitialMapDataUseCase(
 
                 mapRepository.importInitialMapCsvData(
                     data = mapData,
-                    isActive = existingMap.isActive,
                 )
 
                 countryInfoRepository.importInitialDestinationCsvData(data = infoData)

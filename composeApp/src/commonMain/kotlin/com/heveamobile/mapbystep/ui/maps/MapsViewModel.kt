@@ -46,9 +46,8 @@ class MapsViewModel(
                     _state.update { state ->
                         state.copy(
                             maps = maps,
-                            activeMap = maps.firstOrNull { it.isActive },
                             expandedMapId = state.expandedMapId
-                                ?: maps.first { it.isActive }.id,
+                                ?: maps.first().id,
                             isLoading = false,
                         )
                     }
@@ -65,7 +64,6 @@ class MapsViewModel(
 
     fun onAction(action: MapsAction) {
         when (action) {
-            is MapsAction.SetActive -> TODO()
             is MapsAction.ViewProgress -> TODO()
             is MapsAction.ExpandProgress -> {
                 _state.update {

@@ -38,8 +38,7 @@ class DestinationInfoViewModel(
                     if (destinationId != null) destinationRepository.getDestinationById(destinationId) else _state.value.selectedDestination
 
                 val selectedMap: Map? = if (selectedDestination == null) {
-                    maps.firstOrNull { it.isActive }
-                        ?: maps.firstOrNull()
+                    maps.firstOrNull()
                 } else {
                     maps.firstOrNull { it.id == selectedDestination.mapId }
                 }

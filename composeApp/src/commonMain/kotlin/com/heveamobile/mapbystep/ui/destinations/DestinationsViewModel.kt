@@ -46,7 +46,7 @@ class DestinationsViewModel(
                     _state.update { state ->
                         val currentSelectedId = state.selectedMap?.id
                         val selectedMap = maps.find { it.id == currentSelectedId }
-                            ?: maps.firstOrNull { it.isActive }
+                            ?: maps.firstOrNull()
 
                         state.copy(
                             selectedMap = selectedMap,

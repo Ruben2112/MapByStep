@@ -19,7 +19,6 @@ fun MapEntity.toDomain(): Map {
         epicValue = this.epicValue,
         legendaryValue = this.legendaryValue,
         isOwned = this.isOwned,
-        isActive = this.isActive,
         directions = mutableListOf<Rarity>()
             .apply {
                 repeat(commonDirections) { add(Rarity.Common) }
@@ -52,6 +51,5 @@ fun Map.toEntity(): MapEntity {
         legendaryValue = this.legendaryValue,
         legendaryDirections = this.directions.count { it == Rarity.Legendary },
         isOwned = this.isOwned,
-        isActive = this.isActive,
     )
 }

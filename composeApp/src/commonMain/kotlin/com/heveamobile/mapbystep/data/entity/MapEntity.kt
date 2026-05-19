@@ -28,5 +28,4 @@ data class MapEntity(
     val legendaryValue: Int,
     val legendaryDirections: Int = 0,
     val isOwned: Boolean = false,
-    val isActive: Boolean = false,
 )

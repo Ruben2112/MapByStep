@@ -4,7 +4,6 @@ import com.heveamobile.mapbystep.domain.model.Map
 
 data class MapsState(
     val maps: List<Map> = emptyList(),
-    val activeMap: Map? = null,
     val expandedMapId: String? = null,
 
     val availableSteps: Long = 0L,
@@ -14,6 +13,5 @@ data class MapsState(
 
 sealed interface MapsAction {
     data class ViewProgress(val map: Map) : MapsAction
-    data class SetActive(val map: Map) : MapsAction
     data class ExpandProgress(val map: Map) : MapsAction
 }

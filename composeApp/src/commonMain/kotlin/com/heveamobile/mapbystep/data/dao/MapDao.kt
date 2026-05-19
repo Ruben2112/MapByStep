@@ -19,13 +19,6 @@ interface MapDao {
     @Query("SELECT * FROM MapEntity WHERE id = :id LIMIT 1")
     fun getMapWithProgressById(id: String): MapWithDestinations?
 
-    @Transaction
-    @Query("SELECT * FROM MapEntity WHERE isActive = TRUE LIMIT 1")
-    fun getActiveMapWithProgressFlow(): Flow<MapWithDestinations?>
-
-    @Query("SELECT * FROM MapEntity WHERE isActive = TRUE LIMIT 1")
-    fun getActiveMap(): MapWithDestinations?
-
     @Upsert
     suspend fun upsertMap(map: MapEntity)
 }

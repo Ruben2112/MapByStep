@@ -55,7 +55,7 @@ class HomeViewModel(
             getMapsWithProgressUseCase().collectLatest { maps ->
                 _state.update { state ->
                     state.copy(
-                        requiredSteps = maps.firstOrNull { it.isActive }?.calculatedDistance
+                        requiredSteps = maps.firstOrNull()?.calculatedDistance
                             ?: 0L,
                     )
                 }

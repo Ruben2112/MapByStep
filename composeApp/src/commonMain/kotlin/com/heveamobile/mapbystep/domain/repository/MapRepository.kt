@@ -12,5 +12,4 @@ interface MapRepository {
     suspend fun updateMap(map: Map)
     fun getMapById(id: String): Map?
     fun getAllMapsWithProgressFlow(): Flow<List<Map>>
-    suspend fun getActiveMapWithDestinationInfo(): Map?
 }

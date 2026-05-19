@@ -31,7 +31,6 @@ fun MapWithDestinations.toDomain(): Map {
         epicValue = this.map.epicValue,
         legendaryValue = this.map.legendaryValue,
         isOwned = this.map.isOwned,
-        isActive = this.map.isActive,
         directions = mutableListOf<Rarity>()
             .apply {
                 repeat(map.commonDirections) { add(Rarity.Common) }

@@ -5,6 +5,7 @@ import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
+import kotlinx.coroutines.flow.first
 
 class SpendStepsUseCase(
     private val userRepository: UserRepository,
@@ -14,8 +15,10 @@ class SpendStepsUseCase(
     suspend operator fun invoke(): List<Destination> {
         val user = userRepository.getUser()
             ?: return emptyList()
-        val activeMap = mapRepository.getActiveMapWithDestinationInfo()
-            ?: return emptyList()
+        val activeMap = mapRepository
+            .getAllMapsWithProgressFlow()
+            .first()
+            .first()
 
         // Calculate how many visits we can reward
         val costPerVisit = activeMap.calculatedDistance

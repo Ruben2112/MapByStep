@@ -41,7 +41,6 @@
     <string name="personal_records_thirty_days">Thirty days:</string>
 
     <!-- Maps screen -->
-    <string name="maps_active_map">Active Map</string>
     <string name="maps_step_progress_icon_description">Step progress icon</string>
     <string name="maps_expand_progress_icon_description">Expand progress icon</string>
 </resources>

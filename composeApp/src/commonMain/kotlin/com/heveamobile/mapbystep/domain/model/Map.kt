@@ -30,7 +30,6 @@ data class Map(
     val epicValue: Int,
     val legendaryValue: Int,
     val isOwned: Boolean = false,
-    val isActive: Boolean = false,
     val directions: List<Rarity> = emptyList(),
     val destinations: List<Destination> = emptyList(),
 ) {
