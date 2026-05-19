@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -51,6 +52,7 @@ import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.InfoCard
 import com.heveamobile.mapbystep.ui.common.InputField
+import com.heveamobile.mapbystep.ui.common.LocalScaffoldPadding
 import com.heveamobile.mapbystep.ui.common.MapDropDownMenu
 import com.heveamobile.mapbystep.ui.common.MapStatisticsList
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
@@ -81,7 +83,8 @@ fun DirectionsContent(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
-            .padding(MaterialTheme.spacing.medium)
+            .padding(horizontal = MaterialTheme.spacing.medium)
+            .consumeWindowInsets(LocalScaffoldPadding.current)
             .imePadding(),
     ) {
         val inlineContentId = "inlineContentId"
@@ -113,6 +116,9 @@ fun DirectionsContent(
             ),
         )
 
+        item {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        }
         item {
             InfoCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -256,9 +262,12 @@ fun DirectionsContent(
                             onAction = onAction,
                         )
                     }
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
                 }
             }
+        }
+        item {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         }
     }
 }

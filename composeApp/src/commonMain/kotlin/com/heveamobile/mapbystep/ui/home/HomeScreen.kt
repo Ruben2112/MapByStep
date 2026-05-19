@@ -26,6 +26,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import com.heveamobile.mapbystep.navigation.NavigationHandler
 import com.heveamobile.mapbystep.navigation.Route
 import com.heveamobile.mapbystep.theme.OnSurface
 import com.heveamobile.mapbystep.theme.SurfaceContainerHigh
+import com.heveamobile.mapbystep.ui.common.LocalScaffoldPadding
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import mapbystep.composeapp.generated.resources.Res
@@ -310,20 +312,22 @@ fun HomeContent(
                 )
             },
         ) { paddingValues ->
-            NavDisplay(
-                modifier = Modifier.padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding(),
-                ),
-                backStack = backStack,
-                entryProvider = entryProvider,
-                onBack = {
-                    backStack.removeLastOrNull()
-                },
-                transitionSpec = {
-                    fadeIn(tween(400)) togetherWith fadeOut(tween(400))
-                },
-            )
+            CompositionLocalProvider(LocalScaffoldPadding provides paddingValues) {
+                NavDisplay(
+                    modifier = Modifier.padding(
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = paddingValues.calculateBottomPadding(),
+                    ),
+                    backStack = backStack,
+                    entryProvider = entryProvider,
+                    onBack = {
+                        backStack.removeLastOrNull()
+                    },
+                    transitionSpec = {
+                        fadeIn(tween(400)) togetherWith fadeOut(tween(400))
+                    },
+                )
+            }
         }
     }
 
