@@ -29,7 +29,6 @@ import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.formatPopulation
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
-import com.heveamobile.mapbystep.toTitleCase
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_steps
 import org.jetbrains.compose.resources.painterResource
@@ -250,17 +249,23 @@ fun CountryInfoCard(
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.medium),
             ) {
+                val currencies = info.currencies.split(",")
                 Text(
-                    "Currency:",
+                    if (currencies.size == 1) "Currency:" else "Currencies:",
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Text(
+                Column(
                     modifier = Modifier.weight(1F),
-                    text = info.currencies.toTitleCase(),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    currencies.forEach { currency ->
+                        Text(
+                            text = currency,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         }
