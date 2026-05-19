@@ -150,7 +150,16 @@ fun HomeContent(
 
     LaunchedEffect(Unit) {
         navigationHandler.navigationEvents.collect { route ->
-            backStack.removeLastOrNull()
+            if (backStack.size > 1 && !(backStack.last() is Route.Destinations && route is Route.DestinationInfo)) {
+                // Unless we are performing nested navigation, clear backstack until only first
+                // screen (Profile) remains
+                backStack
+                    .subList(
+                        1,
+                        backStack.size,
+                    )
+                    .clear()
+            }
             backStack.add(route)
         }
     }
@@ -181,8 +190,14 @@ fun HomeContent(
                         NavigationDrawerRoute.Directions -> Route.Directions
                         NavigationDrawerRoute.Settings -> Route.Settings
                     }
-                    if (backStack.lastOrNull() != navKey && backStack.lastOrNull() != Route.Profile) {
-                        backStack.removeLastOrNull()
+                    if (backStack.lastOrNull() != navKey) {
+                        // Clear backstack until only first screen (Profile) remains
+                        backStack
+                            .subList(
+                                1,
+                                backStack.size,
+                            )
+                            .clear()
                     }
                     if (backStack.lastOrNull() != navKey && (navKey != Route.Profile || backStack.lastOrNull() != Route.Profile)) {
                         backStack.add(navKey)
