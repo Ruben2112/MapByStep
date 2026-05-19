@@ -84,60 +84,32 @@ class SpendStepsUseCase(
                 if (destinations.all { it.isDiscovered }) {
                     levelUpOccurred = true
 
-                    mapRepository.updateMap(
-                        activeMap.copy(
-                            currentLevel = activeMap.currentLevel + 1,
-                            currentMapPoints = 0,
-                            directions = emptyList(),
-                        ),
-                    )
-
-                    // Clear discovery flags in DB
-                    destinationRepository.resetDiscovered(mapId = activeMap.id)
-
                     // Break the loop to prevent spending steps on more visits
                     return@loop
                 }
             }
         }
 
-        // Mark only first destination in the list as new
-//        val newlyDiscoveredIds = visitedDestinations
-//            .filter { it.isNew }
-//            .map { it.id }
-//            .toSet()
-
-        // Update destinations
-        if (visitedDestinations.isNotEmpty()) {
-            val finalToSave = visitedDestinations.map { destination ->
-                destination.copy(
-                    // If level up happened, they are no longer "discovered" for the new level
-                    isDiscovered = !levelUpOccurred,
-                )
-            }
-            destinationRepository.upsertDestinations(finalToSave)
+        if (levelUpOccurred) {
+            // Clear discovery flags in DB if level up occurred
+            destinationRepository.resetDiscovered(mapId = activeMap.id)
+        } else {
+            // Update destinations
+            destinationRepository.upsertDestinations(visitedDestinations)
         }
 
+        // Subtract spent steps from user
         userRepository.updateUser(
             user.copy(availableSteps = user.availableSteps - (visitedDestinations.size * costPerVisit)),
         )
 
         mapRepository.updateMap(
             activeMap.copy(
-                currentMapPoints = activeMap.currentMapPoints + totalMapPointsGained,
-                directions = directions,
+                currentLevel = if (levelUpOccurred) activeMap.currentLevel + 1 else activeMap.currentLevel,
+                currentMapPoints = if (levelUpOccurred) 0 else activeMap.currentMapPoints + totalMapPointsGained,
+                directions = if (levelUpOccurred) emptyList() else activeMap.directions,
             ),
         )
-
-        // Mark only the first occurrence of the destination as new
-//        newlyDiscoveredIds.forEach { id ->
-//            val matchingDestinations = visitedDestinations.filter { it.id == id }
-//            if (matchingDestinations.size > 1) {
-//                matchingDestinations.forEachIndexed { index, destination ->
-//                    destination.isNew = index == 0
-//                }
-//            }
-//        }
 
         return visitedDestinations.toList()
     }
