@@ -52,7 +52,6 @@ import com.heveamobile.mapbystep.ui.common.LocalScaffoldPadding
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import mapbystep.composeapp.generated.resources.Res
-import mapbystep.composeapp.generated.resources.app_name
 import mapbystep.composeapp.generated.resources.home_navigation_icon_description
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -213,7 +212,9 @@ fun HomeContent(
                 TopAppBar(
                     title = {
                         Text(
-                            text = stringResource(Res.string.app_name),
+                            text = stringResource(
+                                (backStack.last() as Route).toNavigationDrawerRoute().routeName,
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                         )
                     },

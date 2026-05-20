@@ -13,10 +13,15 @@ expect fun formatAmount(
     formatMode: FormatMode = FormatMode.Long,
 ): String
 
-expect fun formatAmount(
+fun formatAmount(
     amount: Int,
     formatMode: FormatMode = FormatMode.Long,
-): String
+): String {
+    return formatAmount(
+        amount.toLong(),
+        formatMode,
+    )
+}
 
 expect fun formatInstant(
     instant: Instant,

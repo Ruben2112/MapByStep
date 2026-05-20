@@ -29,6 +29,7 @@ import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.formatPopulation
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
+import com.heveamobile.mapbystep.toTitleCase
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_steps
 import org.jetbrains.compose.resources.painterResource
@@ -239,7 +240,7 @@ fun CountryInfoCard(
                 ) {
                     languages.forEach { language ->
                         Text(
-                            text = language,
+                            text = language.toTitleCase(),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
@@ -263,7 +264,7 @@ fun CountryInfoCard(
                 ) {
                     currencies.forEach { currency ->
                         Text(
-                            text = currency,
+                            text = currency.toTitleCase(),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }

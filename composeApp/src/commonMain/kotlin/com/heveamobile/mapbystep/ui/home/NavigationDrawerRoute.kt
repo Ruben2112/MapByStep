@@ -1,5 +1,6 @@
 package com.heveamobile.mapbystep.ui.home
 
+import com.heveamobile.mapbystep.navigation.Route
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.ic_destination_info
 import mapbystep.composeapp.generated.resources.ic_destinations
@@ -43,5 +44,16 @@ enum class NavigationDrawerRoute(
     Settings(
         Res.string.route_settings,
         Res.drawable.ic_settings,
-    ),
+    )
+}
+
+fun NavigationDrawerRoute.toRoute(): Route {
+    return when (this) {
+        NavigationDrawerRoute.Profile -> Route.Profile
+        NavigationDrawerRoute.Maps -> Route.Maps
+        NavigationDrawerRoute.Destinations -> Route.Destinations
+        NavigationDrawerRoute.DestinationInfo -> Route.DestinationInfo(destinationId = null)
+        NavigationDrawerRoute.Directions -> Route.Directions
+        NavigationDrawerRoute.Settings -> Route.Settings
+    }
 }

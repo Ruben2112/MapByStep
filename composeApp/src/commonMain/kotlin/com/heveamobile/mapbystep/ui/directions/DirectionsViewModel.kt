@@ -38,15 +38,16 @@ class DirectionsViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             getMapsWithProgressUseCase().collect { maps ->
+                val selectedMap = maps.first()
                 _state.update { state ->
                     state.copy(
                         maps = maps,
-                        selectedMap = state.selectedMap,
+                        selectedMap = selectedMap,
                         amountInStock = Rarity.entries.associateWith {
-                            if (state.selectedMap != null) getCountOfDirectionsInStock(
-                                state.selectedMap,
+                            getCountOfDirectionsInStock(
+                                selectedMap,
                                 it,
-                            ) else 0
+                            )
                         },
                     )
                 }

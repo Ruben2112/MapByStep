@@ -40,37 +40,6 @@ actual fun formatAmount(
     }
 }
 
-actual fun formatAmount(
-    amount: Int,
-    formatMode: FormatMode,
-): String {
-    val numberFormatter = NumberFormat.getInstance(Locale.getDefault())
-    when (formatMode) {
-        FormatMode.Short -> {
-            val shortNumber = amount.floorDiv(1_000)
-            if (shortNumber < 1_000L) {
-                return "${numberFormatter.format(shortNumber)}K"
-            }
-            return "${numberFormatter.format(shortNumber.floorDiv(1_000))}M"
-        }
-
-        FormatMode.Medium -> {
-            if (amount < 1_000L) {
-                return "${numberFormatter.format(amount)}"
-            }
-            val shortNumber = amount.floorDiv(1_000)
-            if (shortNumber < 10_000L) {
-                return "${numberFormatter.format(shortNumber)}K"
-            }
-            return "${numberFormatter.format(shortNumber.floorDiv(1_000))}M"
-        }
-
-        FormatMode.Long -> {
-            return numberFormatter.format(amount)
-        }
-    }
-}
-
 actual fun formatInstant(
     instant: Instant,
     formatMode: FormatMode,
