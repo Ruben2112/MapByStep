@@ -132,10 +132,15 @@ class HomeViewModel(
             HomeAction.SpendSteps -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val result = spendStepsUseCase().sortedBy { it.rarity }
+                    val mapPointsGained = result.sumOf {
+                        it.mapPointsGained
+                            ?: 0
+                    }
                     _state.update { state ->
                         state.copy(
                             visitedDestinationsState = state.visitedDestinationsState.copy(
                                 destinations = result,
+                                mapPointsGained = mapPointsGained,
                             ),
                         )
                     }
@@ -156,6 +161,19 @@ class HomeViewModel(
                                 },
                             ),
                         )
+                    }
+
+                    val allDestinationsRevealed =
+                        _state.value.visitedDestinationsState.destinations.all { it.isRevealed }
+                    if (allDestinationsRevealed) {
+                        delay(1000)
+                        _state.update { state ->
+                            state.copy(
+                                visitedDestinationsState = state.visitedDestinationsState.copy(
+                                    showResultSummary = true,
+                                ),
+                            )
+                        }
                     }
                 }
             }
@@ -222,6 +240,14 @@ class HomeViewModel(
                         _state.update { state ->
                             state.copy(
                                 visitedDestinationsState = state.visitedDestinationsState.copy(revealingAll = false),
+                            )
+                        }
+                        delay(1000)
+                        _state.update { state ->
+                            state.copy(
+                                visitedDestinationsState = state.visitedDestinationsState.copy(
+                                    showResultSummary = true,
+                                ),
                             )
                         }
                     }

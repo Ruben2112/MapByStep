@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -43,16 +44,22 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Info
+import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.theme.OnTertiaryContainer
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
+import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.CountryInfoCard
 import com.heveamobile.mapbystep.ui.common.DestinationCard
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
 import kotlinx.coroutines.launch
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.ic_map_points
 import mapbystep.composeapp.generated.resources.ic_steps
 import org.jetbrains.compose.resources.painterResource
 
@@ -120,6 +127,8 @@ fun VisitedDestinationsOverlay(
                     pagerState = pagerState,
                     destinations = destinations,
                     onAction = onAction,
+                    showResultSummary = state.showResultSummary,
+                    mapPointsGained = state.mapPointsGained,
                 )
             }
         }
@@ -336,6 +345,8 @@ private fun GridLayout(
     pagerState: PagerState,
     destinations: List<Destination>,
     onAction: (HomeAction) -> Unit,
+    showResultSummary: Boolean,
+    mapPointsGained: Int,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -356,6 +367,25 @@ private fun GridLayout(
                     .height(MaterialTheme.spacing.large),
             )
         }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.medium),
+                    text = "During your travels, you visited...",
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MaterialTheme.spacing.medium),
+            )
+        }
         items(destinations) { destination ->
             DestinationCard(
                 destination = destination,
@@ -373,6 +403,85 @@ private fun GridLayout(
                     }
                 },
             )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MaterialTheme.spacing.medium),
+            )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            AnimatedVisibility(
+                visible = showResultSummary,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(1F),
+                                text = "Destinations visited:",
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                            Text(
+                                text = destinations.size.toString(),
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(1F),
+                                text = "New destinations:",
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                            Text(
+                                text = destinations
+                                    .count { it.isNew }
+                                    .toString(),
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(1F),
+                                text = "Map points gained:",
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                painter = painterResource(Res.drawable.ic_map_points),
+                                contentDescription = "Map Point icon",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            )
+                            Text(
+                                text = formatAmount(
+                                    mapPointsGained,
+                                    formatMode = FormatMode.Long,
+                                ),
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {

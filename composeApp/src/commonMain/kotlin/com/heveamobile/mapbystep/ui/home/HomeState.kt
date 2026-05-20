@@ -19,6 +19,8 @@ data class VisitedDestinationsState(
     val isSingleCardLayout: Boolean = true,
     val showInfo: Boolean = false,
     val revealingAll: Boolean = false,
+    val mapPointsGained: Int = 0,
+    val showResultSummary: Boolean = false,
 )
 
 enum class SortingOrder {
