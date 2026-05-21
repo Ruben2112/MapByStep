@@ -71,7 +71,7 @@ fun StepProgressPill(
                 Text(
                     text = formatAmount(
                         availableSteps,
-                        FormatMode.Medium,
+                        FormatMode.Long,
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
