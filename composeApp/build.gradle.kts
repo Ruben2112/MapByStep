@@ -68,6 +68,9 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network)
             implementation(libs.coil.svg)
+
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -31,6 +31,12 @@ class UserRepositoryImpl(
             ?.toDomain()
     }
 
+    override fun getUserWithStepDataFlow(): Flow<User?> {
+        return userDao
+            .getUserWithStepDataFlow()
+            .map { it?.toDomain() }
+    }
+
     override suspend fun createUser() {
         userDao.upsertUser(UserEntity(startTime = Clock.System.now()))
     }

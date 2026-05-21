@@ -21,6 +21,10 @@ interface UserDao {
     @Query("SELECT * FROM UserEntity LIMIT 1")
     suspend fun getUserWithStepData(): UserWithStepDataEntity?
 
+    @Transaction
+    @Query("SELECT * FROM UserEntity LIMIT 1")
+    fun getUserWithStepDataFlow(): Flow<UserWithStepDataEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertUser(user: UserEntity)
 }

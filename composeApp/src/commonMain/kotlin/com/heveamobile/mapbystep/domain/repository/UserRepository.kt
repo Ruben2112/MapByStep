@@ -7,6 +7,7 @@ interface UserRepository {
     suspend fun getUser(): User?
     fun getUserFlow(): Flow<User?>
     suspend fun getUserWithStepData(): User?
+    fun getUserWithStepDataFlow(): Flow<User?>
     suspend fun createUser()
     suspend fun updateUser(user: User)
 }

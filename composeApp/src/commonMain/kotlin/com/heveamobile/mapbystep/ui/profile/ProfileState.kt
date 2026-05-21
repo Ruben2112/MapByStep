@@ -13,7 +13,7 @@ data class ProfileState(
     val sevenDayRecord: Long = 0L,
     val previousThirtyDays: Long = 0L,
     val thirtyDayRecord: Long = 0L,
-
+    val dailyStepData: Map<Instant, Long> = emptyMap(),
 
     val isLoading: Boolean = false,
     val errorMessage: String? = null,

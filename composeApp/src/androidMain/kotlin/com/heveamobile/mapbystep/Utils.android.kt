@@ -1,13 +1,16 @@
 package com.heveamobile.mapbystep
 
+import android.text.format.DateFormat.getBestDateTimePattern
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.sql.Date
 import java.text.DateFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
+
 
 actual fun formatAmount(
     amount: Long,
@@ -40,7 +43,39 @@ actual fun formatAmount(
     }
 }
 
-actual fun formatInstant(
+actual fun formatDate(
+    instant: Instant,
+    formatMode: FormatMode,
+): String {
+    val date = java.util.Date.from(instant.toJavaInstant())
+
+    return if (formatMode == FormatMode.Short) {
+        // "MMd" provides a localized pattern for Month and Day without the Year
+        val pattern = getBestDateTimePattern(
+            Locale.getDefault(),
+            "MMd",
+        )
+        val simpleDateFormat = SimpleDateFormat(
+            pattern,
+            Locale.getDefault(),
+        )
+        simpleDateFormat.format(date)
+    } else {
+        val format = when (formatMode) {
+            FormatMode.Medium -> DateFormat.MEDIUM
+            FormatMode.Long -> DateFormat.LONG
+            else -> DateFormat.SHORT // Fallback, though Short is handled above
+        }
+        DateFormat
+            .getDateInstance(
+                format,
+                Locale.getDefault(),
+            )
+            .format(date)
+    }
+}
+
+actual fun formatTime(
     instant: Instant,
     formatMode: FormatMode,
 ): String {
@@ -51,20 +86,13 @@ actual fun formatInstant(
     }
 
     val date = Date.from(instant.toJavaInstant())
-    val formattedDate = DateFormat
-        .getDateInstance(
+    return DateFormat
+        .getTimeInstance(
             format,
             Locale.getDefault(),
         )
         .format(date)
-    val formattedTime = DateFormat
-        .getTimeInstance(
-            DateFormat.MEDIUM,
-            Locale.getDefault(),
-        )
-        .format(date)
 
-    return "$formattedDate, $formattedTime"
 }
 
 actual fun formatPopulation(

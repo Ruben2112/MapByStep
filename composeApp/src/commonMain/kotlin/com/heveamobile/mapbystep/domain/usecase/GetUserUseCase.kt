@@ -11,7 +11,7 @@ class GetUserUseCase(
 ) {
     operator fun invoke(): Flow<User?> {
         return userRepository
-            .getUserFlow()
+            .getUserWithStepDataFlow()
             .onEach { user ->
                 // onEach is called on an empty list with a null value, so this makes sure there is always a user
                 if (user == null) {

@@ -15,6 +15,7 @@ import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import com.heveamobile.mapbystep.domain.usecase.GetCountOfDirectionsInStockUseCase
+import com.heveamobile.mapbystep.domain.usecase.GetDailyStepsChartDataUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.PurchaseDirectionsUseCase
@@ -90,6 +91,7 @@ val useCaseModule = module {
     factoryOf(::SpendStepsUseCase)
     factoryOf(::GetCountOfDirectionsInStockUseCase)
     factoryOf(::PurchaseDirectionsUseCase)
+    factoryOf(::GetDailyStepsChartDataUseCase)
 }
 
 val repositoryModule = module {

@@ -27,6 +27,7 @@ datetime = "0.8.0"
 datastore = "1.2.1"
 coil = "3.4.0"
 mapbox = "11.23.1"
+vico = "3.1.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -79,6 +80,9 @@ coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
 
 mapbox-maps = { module = "com.mapbox.maps:android-ndk27", version.ref = "mapbox" }
 mapbox-maps-compose = { module = "com.mapbox.extension:maps-compose-ndk27", version.ref = "mapbox" }
+
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

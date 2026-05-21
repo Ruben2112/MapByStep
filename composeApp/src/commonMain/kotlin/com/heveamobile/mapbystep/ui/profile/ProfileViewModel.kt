@@ -3,6 +3,7 @@ package com.heveamobile.mapbystep.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heveamobile.mapbystep.domain.HealthPermissionManager
+import com.heveamobile.mapbystep.domain.usecase.GetDailyStepsChartDataUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
@@ -18,6 +19,7 @@ class ProfileViewModel(
     val healthPermissionManager: HealthPermissionManager,
     val syncStepsUseCase: SyncStepsUseCase,
     val getUserUseCase: GetUserUseCase,
+    val getDailyStepsChartDataUseCase: GetDailyStepsChartDataUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProfileState())
     val state: StateFlow<ProfileState> = _state.asStateFlow()
@@ -28,25 +30,28 @@ class ProfileViewModel(
             _state.update { it.copy(healthPermissionState = permissionState) }
 
             getUserUseCase().collectLatest { user ->
-                _state.update {
-                    it.copy(
-                        totalSteps = user?.totalSteps
-                            ?: 0,
-                        startTime = user?.startTime
-                            ?: Clock.System.now(),
-                        previousTwentyFourHours = user?.previousTwentyFourHours
-                            ?: 0,
-                        twentyFourHourRecord = user?.twentyFourHourRecord
-                            ?: 0,
-                        previousSevenDays = user?.previousSevenDays
-                            ?: 0,
-                        sevenDayRecord = user?.sevenDayRecord
-                            ?: 0,
-                        previousThirtyDays = user?.previousThirtyDays
-                            ?: 0,
-                        thirtyDayRecord = user?.thirtyDayRecord
-                            ?: 0,
-                    )
+                getDailyStepsChartDataUseCase().collectLatest { dailyStepData ->
+                    _state.update {
+                        it.copy(
+                            totalSteps = user?.totalSteps
+                                ?: 0,
+                            startTime = user?.startTime
+                                ?: Clock.System.now(),
+                            previousTwentyFourHours = user?.previousTwentyFourHours
+                                ?: 0,
+                            twentyFourHourRecord = user?.twentyFourHourRecord
+                                ?: 0,
+                            previousSevenDays = user?.previousSevenDays
+                                ?: 0,
+                            sevenDayRecord = user?.sevenDayRecord
+                                ?: 0,
+                            previousThirtyDays = user?.previousThirtyDays
+                                ?: 0,
+                            thirtyDayRecord = user?.thirtyDayRecord
+                                ?: 0,
+                            dailyStepData = dailyStepData,
+                        )
+                    }
                 }
             }
         }
@@ -66,8 +71,5 @@ class ProfileViewModel(
                 }
             }
         }
-    }
-
-    private fun checkPermissions() {
     }
 }

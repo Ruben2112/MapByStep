@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -25,11 +28,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.rememberHealthPermissionLauncher
 import com.heveamobile.mapbystep.formatAmount
-import com.heveamobile.mapbystep.formatInstant
+import com.heveamobile.mapbystep.formatDate
+import com.heveamobile.mapbystep.formatDateTime
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.ErrorCard
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
+import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.Scroll
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer.ColumnProvider
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.TextComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.historic_step_data_start_time
 import mapbystep.composeapp.generated.resources.historic_step_data_title
@@ -45,6 +64,7 @@ import mapbystep.composeapp.generated.resources.profile_error_permissions_not_gr
 import mapbystep.composeapp.generated.resources.profile_loading_step_data
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Instant
 
 @Composable
 fun ProfileScreen(
@@ -129,7 +149,7 @@ fun ProfileContent(
 }
 
 @Composable
-fun HistoricDataCard(state: ProfileState) {
+private fun HistoricDataCard(state: ProfileState) {
     Card(
         title = stringResource(Res.string.historic_step_data_title),
     ) {
@@ -140,13 +160,14 @@ fun HistoricDataCard(state: ProfileState) {
         ) {
             Card(modifier = Modifier.height(160.dp)) {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(MaterialTheme.spacing.small),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        text = "*insert fancy graph here*",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                    if (state.dailyStepData.isNotEmpty()) {
+                        DailyStepsChart(state.dailyStepData)
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -158,9 +179,9 @@ fun HistoricDataCard(state: ProfileState) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = formatInstant(
+                    text = formatDateTime(
                         state.startTime,
-                        FormatMode.Long,
+                        FormatMode.Medium,
                     ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
@@ -188,7 +209,69 @@ fun HistoricDataCard(state: ProfileState) {
 }
 
 @Composable
-fun PersonalRecordsDataCard(state: ProfileState) {
+private fun DailyStepsChart(dailyStepData: Map<Instant, Long>) {
+    val modelProducer = remember { CartesianChartModelProducer() }
+
+    val horizontalAxisValueFormatter = CartesianValueFormatter { _, x, _ ->
+        val instant = Instant.fromEpochSeconds(x.toLong())
+        formatDate(
+            instant,
+            FormatMode.Short,
+        )
+    }
+
+    val verticalAxisValueFormatter = CartesianValueFormatter { _, y, _ ->
+        formatAmount(
+            y.toLong(),
+            FormatMode.Medium,
+        )
+    }
+
+    LaunchedEffect(dailyStepData) {
+        modelProducer.runTransaction {
+            columnSeries {
+                series(
+                    x = dailyStepData.keys.map { it.epochSeconds },
+                    y = dailyStepData.values,
+                )
+            }
+        }
+    }
+
+    CartesianChartHost(
+        modifier = Modifier,
+        chart = rememberCartesianChart(
+            rememberColumnCartesianLayer(
+                columnProvider = ColumnProvider.series(
+                    rememberLineComponent(
+                        fill = Fill(MaterialTheme.colorScheme.onSurface),
+                        thickness = 8.dp,
+                        shape = MaterialTheme.shapes.small.copy(
+                            bottomStart = CornerSize(0.dp),
+                            bottomEnd = CornerSize(0.dp),
+                        ),
+                    ),
+                ),
+                columnCollectionSpacing = MaterialTheme.spacing.small,
+                dataLabel = rememberTextComponent(MaterialTheme.typography.bodySmall),
+            ),
+            startAxis = VerticalAxis.rememberStart(
+                valueFormatter = verticalAxisValueFormatter,
+                label = TextComponent(MaterialTheme.typography.bodySmall),
+            ),
+            bottomAxis = HorizontalAxis.rememberBottom(
+                valueFormatter = horizontalAxisValueFormatter,
+                guideline = null,
+                label = TextComponent(MaterialTheme.typography.bodySmall),
+            ),
+        ),
+        modelProducer = modelProducer,
+        scrollState = rememberVicoScrollState(initialScroll = Scroll.Absolute.End),
+    )
+}
+
+@Composable
+private fun PersonalRecordsDataCard(state: ProfileState) {
     Card(
         title = stringResource(Res.string.personal_records_title),
         subtitle = stringResource(Res.string.personal_records_subtitle),

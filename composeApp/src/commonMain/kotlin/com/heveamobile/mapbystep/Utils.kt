@@ -23,10 +23,28 @@ fun formatAmount(
     )
 }
 
-expect fun formatInstant(
+expect fun formatDate(
     instant: Instant,
     formatMode: FormatMode = FormatMode.Long,
 ): String
+
+expect fun formatTime(
+    instant: Instant,
+    formatMode: FormatMode = FormatMode.Long,
+): String
+
+fun formatDateTime(
+    instant: Instant,
+    formatMode: FormatMode = FormatMode.Long,
+): String {
+    return formatDate(
+        instant,
+        formatMode,
+    ) + ", " + formatTime(
+        instant,
+        formatMode,
+    )
+}
 
 expect fun formatPopulation(
     population: Int,
