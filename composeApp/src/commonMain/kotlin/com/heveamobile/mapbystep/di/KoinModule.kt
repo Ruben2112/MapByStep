@@ -37,6 +37,7 @@ import com.heveamobile.mapbystep.ui.maps.MapsViewModel
 import com.heveamobile.mapbystep.ui.profile.ProfileScreen
 import com.heveamobile.mapbystep.ui.profile.ProfileViewModel
 import com.heveamobile.mapbystep.ui.settings.SettingsScreen
+import com.heveamobile.mapbystep.ui.settings.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -80,6 +81,7 @@ val viewModelModule = module {
         )
     }
     viewModelOf(::DirectionsViewModel)
+    viewModelOf(::SettingsViewModel)
 }
 
 val useCaseModule = module {

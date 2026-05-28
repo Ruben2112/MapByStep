@@ -86,6 +86,8 @@
     <string name="directions_sold_out">Sold out!</string>
 
     <!-- SettingsScreen -->
+    <string name="settings_distance_multiplier_explanation">Adjust how many steps are required to reach each destination. This allows you to responsibly play the game at your own pace and to your body's ability. Setting the multiplier to 0.0 allows you to visit a single destination whenever you want.</string>
+    <string name="settings_distance_multiplier">Distance multiplier:</string>
 
     <!-- MapStatisticsList -->
     <string name="map_statistics_destinations_discovered">Destinations discovered:</string>

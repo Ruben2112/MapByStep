@@ -4,6 +4,7 @@ import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Rarity
 import com.heveamobile.mapbystep.domain.repository.DestinationRepository
 import com.heveamobile.mapbystep.domain.repository.MapRepository
+import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 
@@ -11,6 +12,7 @@ class SpendStepsUseCase(
     private val userRepository: UserRepository,
     private val mapRepository: MapRepository,
     private val destinationRepository: DestinationRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) {
     suspend operator fun invoke(): List<Destination> {
         val user = userRepository.getUser()
@@ -21,11 +23,13 @@ class SpendStepsUseCase(
             .first()
 
         // Calculate how many visits we can reward
-        val costPerVisit = activeMap.calculatedDistance
-        val totalPossibleVisits = user.availableSteps
+        val costPerVisit =
+            activeMap.calculatedDistance * userPreferencesRepository.distanceMultiplier
+                .first()
+                .toLong()
+        val totalPossibleVisits = if (costPerVisit == 0L) 1 else user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
-//        val totalPossibleVisits = 1 // For testing purposes
         if (totalPossibleVisits <= 0) return emptyList()
 
         val destinations = activeMap.destinations

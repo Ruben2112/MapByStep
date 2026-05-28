@@ -52,11 +52,18 @@ class HomeViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            getMapsWithProgressUseCase().collectLatest { maps ->
+            combine(
+                getMapsWithProgressUseCase(),
+                userPreferencesRepository.distanceMultiplier,
+            ) { maps, multiplier -> maps to multiplier }.collectLatest { (maps, multiplier) ->
+                val calculatedDistance = maps.firstOrNull()?.calculatedDistance
+                    ?: 0L
+                val requiredSteps = (calculatedDistance * multiplier).toLong()
+
                 _state.update { state ->
+                    println(maps.firstOrNull())
                     state.copy(
-                        requiredSteps = maps.firstOrNull()?.calculatedDistance
-                            ?: 0L,
+                        requiredSteps = requiredSteps,
                     )
                 }
             }
