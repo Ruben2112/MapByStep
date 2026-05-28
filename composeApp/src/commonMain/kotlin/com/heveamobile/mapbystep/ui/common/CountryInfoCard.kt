@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,7 +27,6 @@ import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.formatPopulation
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
-import com.heveamobile.mapbystep.toTitleCase
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.country_info_card_capitals
 import mapbystep.composeapp.generated.resources.country_info_card_continents
@@ -173,133 +170,51 @@ fun CountryInfoCard(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.outline,
             )
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
+                    .padding(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
-                Text(
-                    text = stringResource(Res.string.country_info_card_population),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = formatPopulation(info.population),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-            ) {
+                val population = info.population
                 val capitals = info.capitals.split(",")
-                Text(
-                    text = pluralStringResource(
+                val continents = info.continents.split(",")
+                val languages = info.languages.split(",")
+                val currencies = info.currencies.split(",")
+
+                KeyValueRow(
+                    key = stringResource(Res.string.country_info_card_population),
+                    value = formatPopulation(population),
+                )
+                KeyValueRow(
+                    key = pluralStringResource(
                         Res.plurals.country_info_card_capitals,
                         capitals.size,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    values = capitals,
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Column(
-                    modifier = Modifier.weight(1F),
-                    horizontalAlignment = Alignment.End,
-                ) {
-                    capitals.forEach { capital ->
-                        Text(
-                            text = capital,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-            ) {
-                val continents = info.continents.split(",")
-                Text(
-                    text = pluralStringResource(
+                KeyValueRow(
+                    key = pluralStringResource(
                         Res.plurals.country_info_card_continents,
                         continents.size,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    values = continents,
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Column(
-                    modifier = Modifier.weight(1F),
-                    horizontalAlignment = Alignment.End,
-                ) {
-                    continents.forEach { continent ->
-                        Text(
-                            text = continent,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-            ) {
-                val languages = info.languages.split(",")
-                Text(
-                    text = pluralStringResource(
+                KeyValueRow(
+                    key = pluralStringResource(
                         Res.plurals.country_info_card_languages,
                         languages.size,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    values = languages,
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Column(
-                    modifier = Modifier.weight(1F),
-                    horizontalAlignment = Alignment.End,
-                ) {
-                    languages.forEach { language ->
-                        Text(
-                            text = language.toTitleCase(),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-            ) {
-                val currencies = info.currencies.split(",")
-                Text(
-                    text = pluralStringResource(
+                KeyValueRow(
+                    key = pluralStringResource(
                         Res.plurals.country_info_card_currencies,
                         currencies.size,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    values = currencies,
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
-                Column(
-                    modifier = Modifier.weight(1F),
-                    horizontalAlignment = Alignment.End,
-                ) {
-                    currencies.forEach { currency ->
-                        Text(
-                            text = currency.toTitleCase(),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
             }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         }
     }
 }

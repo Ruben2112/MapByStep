@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.ui.profile
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
@@ -34,6 +34,7 @@ import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.ErrorCard
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
+import com.heveamobile.mapbystep.ui.common.KeyValueRow
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Scroll
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
@@ -172,39 +173,21 @@ private fun HistoricDataCard(state: ProfileState) {
                 }
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(Res.string.historic_step_data_start_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = formatDateTime(
-                        state.startTime,
-                        FormatMode.Medium,
-                    ),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
+            KeyValueRow(
+                key = stringResource(Res.string.historic_step_data_start_time),
+                value = formatDateTime(
+                    state.startTime,
+                    FormatMode.Medium,
+                ),
+            )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(Res.string.historic_step_data_total_steps),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = formatAmount(
-                        state.totalSteps,
-                        FormatMode.Long,
-                    ),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
+            KeyValueRow(
+                key = stringResource(Res.string.historic_step_data_total_steps),
+                value = formatAmount(
+                    state.totalSteps,
+                    FormatMode.Long,
+                ),
+            )
         }
     }
 }
@@ -281,78 +264,53 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(Res.string.personal_records_twenty_four_hours),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(
-                        Res.string.personal_current_vs_best_steps,
-                        formatAmount(
-                            state.previousTwentyFourHours,
-                            FormatMode.Long,
-                        ),
-                        formatAmount(
-                            state.twentyFourHourRecord,
-                            FormatMode.Long,
-                        ),
+            KeyValueRow(
+                key = stringResource(Res.string.personal_records_twenty_four_hours),
+                value = stringResource(
+                    Res.string.personal_current_vs_best_steps,
+                    formatAmount(
+                        state.previousTwentyFourHours,
+                        FormatMode.Long,
                     ),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(Res.string.personal_records_seven_days),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(
-                        Res.string.personal_current_vs_best_steps,
-                        formatAmount(
-                            state.previousSevenDays,
-                            FormatMode.Long,
-                        ),
-                        formatAmount(
-                            state.sevenDayRecord,
-                            FormatMode.Long,
-                        ),
+                    formatAmount(
+                        state.twentyFourHourRecord,
+                        FormatMode.Long,
                     ),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(Res.string.personal_records_thirty_days),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(
-                        Res.string.personal_current_vs_best_steps,
-                        formatAmount(
-                            state.previousThirtyDays,
-                            FormatMode.Long,
-                        ),
-                        formatAmount(
-                            state.thirtyDayRecord,
-                            FormatMode.Long,
-                        ),
+                ),
+                valueTitleCasingEnabled = false,
+            )
+            KeyValueRow(
+                key = stringResource(Res.string.personal_records_seven_days),
+                value = stringResource(
+                    Res.string.personal_current_vs_best_steps,
+                    formatAmount(
+                        state.previousTwentyFourHours,
+                        FormatMode.Long,
                     ),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
+                    formatAmount(
+                        state.twentyFourHourRecord,
+                        FormatMode.Long,
+                    ),
+                ),
+                valueTitleCasingEnabled = false,
+            )
+            KeyValueRow(
+                key = stringResource(Res.string.personal_records_thirty_days),
+                value = stringResource(
+                    Res.string.personal_current_vs_best_steps,
+                    formatAmount(
+                        state.previousTwentyFourHours,
+                        FormatMode.Long,
+                    ),
+                    formatAmount(
+                        state.twentyFourHourRecord,
+                        FormatMode.Long,
+                    ),
+                ),
+                valueTitleCasingEnabled = false,
+            )
         }
     }
 }

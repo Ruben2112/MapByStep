@@ -4,27 +4,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.DestinationCard
+import com.heveamobile.mapbystep.ui.common.KeyValueRow
 import com.heveamobile.mapbystep.ui.common.MapDropDownMenu
 import com.heveamobile.mapbystep.ui.common.MapStatisticsList
 import mapbystep.composeapp.generated.resources.Res
@@ -82,44 +78,25 @@ private fun DestinationsContent(
                         },
                     title = if (state.maps.size > 1) null else state.selectedMap.name,
                     bottomContent = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.destinations_total_visits),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                            Text(
-                                text = state.selectedMap.destinations
-                                    .sumOf { it.totalVisits }
-                                    .toString(),
-                                modifier = Modifier.weight(1F),
-                                textAlign = TextAlign.End,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
+                        KeyValueRow(
+                            key = stringResource(Res.string.destinations_total_visits),
+                            value = state.selectedMap.destinations
+                                .sumOf { it.totalVisits }
+                                .toString(),
+                        )
                     },
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(MaterialTheme.spacing.medium),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = stringResource(Res.string.destinations_current_level),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                            Text(
-                                text = state.selectedMap.currentLevel.toString(),
-                                modifier = Modifier.weight(1F),
-                                textAlign = TextAlign.End,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                        KeyValueRow(
+                            modifier = Modifier.padding(end = MaterialTheme.spacing.large),
+                            key = stringResource(Res.string.destinations_current_level),
+                            value = state.selectedMap.currentLevel.toString(),
+                        )
                         MapStatisticsList(
                             map = state.selectedMap,
                             isExpanded = state.isProgressExpanded,

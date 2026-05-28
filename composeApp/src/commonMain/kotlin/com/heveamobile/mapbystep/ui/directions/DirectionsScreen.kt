@@ -33,13 +33,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.model.Rarity
@@ -92,6 +93,10 @@ fun DirectionsContent(
     state: DirectionsState,
     onAction: (DirectionsAction) -> Unit,
 ) {
+
+    val density = LocalDensity.current
+    val mapPointsIconSize = with(density) { MaterialTheme.typography.bodyMedium.lineHeight.toDp() }
+
     val explanation = stringResource(Res.string.directions_explanation)
     val inlineContentId = stringResource(Res.string.map_points_icon_description)
     val inlinedString = buildAnnotatedString {
@@ -108,13 +113,13 @@ fun DirectionsContent(
             inlineContentId,
             InlineTextContent(
                 placeholder = Placeholder(
-                    width = 24.sp,
-                    height = 24.sp,
+                    width = MaterialTheme.typography.bodyMedium.lineHeight,
+                    height = MaterialTheme.typography.bodyMedium.lineHeight,
                     placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
                 ),
             ) {
                 Icon(
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(mapPointsIconSize),
                     painter = painterResource(Res.drawable.ic_map_points),
                     contentDescription = stringResource(Res.string.map_points_icon_description),
                     tint = MaterialTheme.colorScheme.onSurface,
@@ -129,6 +134,7 @@ fun DirectionsContent(
             .padding(horizontal = MaterialTheme.spacing.medium)
             .consumeWindowInsets(LocalScaffoldPadding.current)
             .imePadding(),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         item {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -142,9 +148,6 @@ fun DirectionsContent(
         }
         if (state.maps.size > 1) {
             item {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            }
-            item {
                 MapDropDownMenu(
                     maps = state.maps,
                     selectedMap = state.selectedMap
@@ -154,9 +157,6 @@ fun DirectionsContent(
             }
         }
         if (state.selectedMap != null) {
-            item {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            }
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -170,9 +170,9 @@ fun DirectionsContent(
                                 text = stringResource(Res.string.directions_current_map_points),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
-                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
                             Icon(
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(mapPointsIconSize),
                                 painter = painterResource(Res.drawable.ic_map_points),
                                 contentDescription = stringResource(Res.string.map_points_icon_description),
                                 tint = MaterialTheme.colorScheme.onSurface,
@@ -199,9 +199,6 @@ fun DirectionsContent(
         }
         if (state.selectedMap != null) {
             item {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            }
-            item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(Res.string.directions_shop),
@@ -222,7 +219,7 @@ fun DirectionsContent(
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                                 Icon(
-                                    modifier = Modifier.size(24.dp),
+                                    modifier = Modifier.size(mapPointsIconSize),
                                     painter = painterResource(Res.drawable.ic_map_points),
                                     contentDescription = stringResource(Res.string.map_points_icon_description),
                                     tint = MaterialTheme.colorScheme.onSurface,
@@ -273,6 +270,7 @@ fun DirectionsContent(
                             amountInCart = amountInCart,
                             amountOwned = amountOwned,
                             amountInStock = amountInStock,
+                            mapPointsIconSize = mapPointsIconSize,
                             onAction = onAction,
                         )
                     }
@@ -294,6 +292,7 @@ private fun DirectionsShopRow(
     amountInCart: Int,
     amountOwned: Int,
     amountInStock: Int,
+    mapPointsIconSize: Dp,
     onAction: (DirectionsAction) -> Unit,
 ) {
     Row(
@@ -312,7 +311,7 @@ private fun DirectionsShopRow(
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
         Icon(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(mapPointsIconSize),
             painter = painterResource(Res.drawable.ic_map_points),
             contentDescription = stringResource(Res.string.map_points_icon_description),
             tint = MaterialTheme.colorScheme.onSurface,
