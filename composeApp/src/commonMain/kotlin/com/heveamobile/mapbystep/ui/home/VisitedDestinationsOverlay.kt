@@ -44,8 +44,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Info
@@ -477,8 +477,13 @@ private fun GridLayout(
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
+                            val density = LocalDensity.current
+                            val mapPointsIconSize =
+                                with(density) { MaterialTheme.typography.bodyMedium.lineHeight.toDp() }
+
                             Icon(
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(mapPointsIconSize),
                                 painter = painterResource(Res.drawable.ic_map_points),
                                 contentDescription = stringResource(Res.string.map_points_icon_description),
                                 tint = MaterialTheme.colorScheme.onSurface,
