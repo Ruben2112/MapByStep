@@ -30,6 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.heveamobile.mapbystep.theme.spacing
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.expand_icon_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun <T> DropDownMenu(
@@ -68,7 +71,7 @@ fun <T> DropDownMenu(
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
             Icon(
                 imageVector = if (expanded) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
-                contentDescription = "Expand map selection icon",
+                contentDescription = stringResource(Res.string.expand_icon_description),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
@@ -80,8 +83,6 @@ fun <T> DropDownMenu(
             exit = shrinkVertically() + fadeOut(),
         ) {
             Column(
-                // Static width is better for Popup, to make sure it doesn't animate its
-                // width
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(

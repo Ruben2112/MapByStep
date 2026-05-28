@@ -27,6 +27,10 @@ import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.DestinationCard
 import com.heveamobile.mapbystep.ui.common.MapDropDownMenu
 import com.heveamobile.mapbystep.ui.common.MapStatisticsList
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.destinations_current_level
+import mapbystep.composeapp.generated.resources.destinations_total_visits
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -82,7 +86,7 @@ private fun DestinationsContent(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
-                                "Total visits",
+                                text = stringResource(Res.string.destinations_total_visits),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -104,7 +108,7 @@ private fun DestinationsContent(
                     ) {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Text(
-                                "Current level:",
+                                text = stringResource(Res.string.destinations_current_level),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))

@@ -32,9 +32,9 @@ import com.heveamobile.mapbystep.theme.OnSurface
 import com.heveamobile.mapbystep.theme.SecondaryContainer
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.footsteps_icon_description
 import mapbystep.composeapp.generated.resources.ic_footstep
 import mapbystep.composeapp.generated.resources.ic_steps
-import mapbystep.composeapp.generated.resources.step_progress_pill_step_progress_icon_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -83,7 +83,7 @@ fun StepProgressPill(
                     Icon(
                         modifier = Modifier.size(16.dp),
                         painter = painterResource(Res.drawable.ic_steps),
-                        contentDescription = stringResource(Res.string.step_progress_pill_step_progress_icon_description),
+                        contentDescription = stringResource(Res.string.footsteps_icon_description),
                         tint = OnSurface,
                     )
                 }
@@ -98,16 +98,15 @@ private fun WalkingFootsteps() {
 
     @Composable
     fun AnimatedFootstep(
-        delayMillis: Int,
         isTop: Boolean,
     ) {
+        // 0F to 1F is for top step animation, 1F to 2F is for bottom step animation
         val progress by infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 2f,
+            initialValue = 0F,
+            targetValue = 2F,
             animationSpec = infiniteRepeatable(
                 animation = TweenSpec(
                     durationMillis = 2000,
-                    delay = delayMillis,
                     easing = LinearEasing,
                 ),
                 repeatMode = RepeatMode.Restart,
@@ -137,10 +136,10 @@ private fun WalkingFootsteps() {
                     translationX = offset
                     translationY = if (isTop) (-5).dp.toPx() else 5.dp.toPx()
                     alpha = translucency.coerceIn(
-                        0f,
-                        1f,
+                        0F,
+                        1F,
                     )
-                    rotationZ = 90f
+                    rotationZ = 90F
                 },
         )
     }
@@ -149,11 +148,9 @@ private fun WalkingFootsteps() {
         contentAlignment = Alignment.Center, // Start from the left
     ) {
         AnimatedFootstep(
-            delayMillis = 0,
             isTop = true,
         )
         AnimatedFootstep(
-            delayMillis = 0,
             isTop = false,
         )
     }

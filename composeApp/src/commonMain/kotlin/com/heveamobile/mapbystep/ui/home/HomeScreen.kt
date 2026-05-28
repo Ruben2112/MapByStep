@@ -52,7 +52,13 @@ import com.heveamobile.mapbystep.ui.common.LocalScaffoldPadding
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import mapbystep.composeapp.generated.resources.Res
-import mapbystep.composeapp.generated.resources.home_navigation_icon_description
+import mapbystep.composeapp.generated.resources.checkmark_icon_description
+import mapbystep.composeapp.generated.resources.destinations_hide_undiscovered
+import mapbystep.composeapp.generated.resources.destinations_sort_alphabetically
+import mapbystep.composeapp.generated.resources.destinations_sort_by_rarity
+import mapbystep.composeapp.generated.resources.destinations_sort_by_visit_count
+import mapbystep.composeapp.generated.resources.navigation_drawer_icon_description
+import mapbystep.composeapp.generated.resources.overflow_icon_description
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
@@ -226,7 +232,7 @@ fun HomeContent(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
-                                contentDescription = stringResource(Res.string.home_navigation_icon_description),
+                                contentDescription = stringResource(Res.string.navigation_drawer_icon_description),
                                 tint = OnSurface,
                             )
                         }
@@ -246,7 +252,7 @@ fun HomeContent(
                                 Icon(
                                     Icons.Default.MoreVert,
                                     tint = MaterialTheme.colorScheme.onSurface,
-                                    contentDescription = "Show actions button",
+                                    contentDescription = stringResource(Res.string.overflow_icon_description),
                                 )
                             }
                             DropdownMenu(
@@ -260,14 +266,14 @@ fun HomeContent(
                                         if (state.sharedDestinationsState.hideUndiscovered) {
                                             Icon(
                                                 imageVector = Icons.Default.Check,
-                                                contentDescription = "Checkmark icon",
+                                                contentDescription = stringResource(Res.string.checkmark_icon_description),
                                                 tint = MaterialTheme.colorScheme.onSurface,
                                             )
                                         }
                                     },
                                     text = {
                                         Text(
-                                            "Hide undiscovered",
+                                            text = stringResource(Res.string.destinations_hide_undiscovered),
                                             style = MaterialTheme.typography.bodyMedium,
                                         )
                                     },
@@ -282,14 +288,14 @@ fun HomeContent(
                                         if (state.sharedDestinationsState.sortingOrder == SortingOrder.Rarity) {
                                             Icon(
                                                 imageVector = Icons.Default.Check,
-                                                contentDescription = "Checkmark icon",
+                                                contentDescription = stringResource(Res.string.checkmark_icon_description),
                                                 tint = MaterialTheme.colorScheme.onSurface,
                                             )
                                         }
                                     },
                                     text = {
                                         Text(
-                                            "Sort by rarity",
+                                            text = stringResource(Res.string.destinations_sort_by_rarity),
                                             style = MaterialTheme.typography.bodyMedium,
                                         )
                                     },
@@ -303,20 +309,41 @@ fun HomeContent(
                                         if (state.sharedDestinationsState.sortingOrder == SortingOrder.Alphabetical) {
                                             Icon(
                                                 imageVector = Icons.Default.Check,
-                                                contentDescription = "Checkmark icon",
+                                                contentDescription = stringResource(Res.string.checkmark_icon_description),
                                                 tint = MaterialTheme.colorScheme.onSurface,
                                             )
                                         }
                                     },
                                     text = {
                                         Text(
-                                            "Sort alphabetically",
+                                            text = stringResource(Res.string.destinations_sort_alphabetically),
                                             style = MaterialTheme.typography.bodyMedium,
                                         )
                                     },
                                     onClick = {
                                         onAction(HomeAction.ToggleDropdownMenu)
                                         onAction(HomeAction.UpdateSortOrder(SortingOrder.Alphabetical))
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    leadingIcon = {
+                                        if (state.sharedDestinationsState.sortingOrder == SortingOrder.VisitCount) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = stringResource(Res.string.checkmark_icon_description),
+                                                tint = MaterialTheme.colorScheme.onSurface,
+                                            )
+                                        }
+                                    },
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.destinations_sort_by_visit_count),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
+                                    },
+                                    onClick = {
+                                        onAction(HomeAction.ToggleDropdownMenu)
+                                        onAction(HomeAction.UpdateSortOrder(SortingOrder.VisitCount))
                                     },
                                 )
                             }

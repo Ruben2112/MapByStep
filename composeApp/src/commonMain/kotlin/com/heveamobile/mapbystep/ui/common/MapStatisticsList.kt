@@ -27,8 +27,8 @@ import com.heveamobile.mapbystep.theme.RarityRare
 import com.heveamobile.mapbystep.theme.RarityUncommon
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
-import mapbystep.composeapp.generated.resources.map_progress_destinations_discovered
-import mapbystep.composeapp.generated.resources.maps_expand_progress_icon_description
+import mapbystep.composeapp.generated.resources.expand_icon_description
+import mapbystep.composeapp.generated.resources.map_statistics_destinations_discovered
 import mapbystep.composeapp.generated.resources.rarity_common
 import mapbystep.composeapp.generated.resources.rarity_epic
 import mapbystep.composeapp.generated.resources.rarity_legendary
@@ -53,7 +53,7 @@ fun MapStatisticsList(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = stringResource(Res.string.map_progress_destinations_discovered),
+                text = stringResource(Res.string.map_statistics_destinations_discovered),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
@@ -67,7 +67,7 @@ fun MapStatisticsList(
                 Icon(
                     modifier = Modifier.size(24.dp),
                     imageVector = if (isExpanded) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
-                    contentDescription = stringResource(Res.string.maps_expand_progress_icon_description),
+                    contentDescription = stringResource(Res.string.expand_icon_description),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }

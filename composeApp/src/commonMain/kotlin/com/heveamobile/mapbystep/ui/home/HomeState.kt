@@ -24,8 +24,9 @@ data class VisitedDestinationsState(
 )
 
 enum class SortingOrder {
-    Alphabetical,
     Rarity,
+    Alphabetical,
+    VisitCount,
 }
 
 data class SharedDestinationsState(

@@ -31,8 +31,18 @@ import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.toTitleCase
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.country_info_card_capitals
+import mapbystep.composeapp.generated.resources.country_info_card_continents
+import mapbystep.composeapp.generated.resources.country_info_card_currencies
+import mapbystep.composeapp.generated.resources.country_info_card_flag
+import mapbystep.composeapp.generated.resources.country_info_card_languages
+import mapbystep.composeapp.generated.resources.country_info_card_population
+import mapbystep.composeapp.generated.resources.country_info_card_visits
 import mapbystep.composeapp.generated.resources.ic_steps
+import mapbystep.composeapp.generated.resources.rarity_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CountryInfoCard(
@@ -89,7 +99,10 @@ fun CountryInfoCard(
                             .size(48.dp),
                         painter = painterResource(Res.drawable.ic_steps),
                         tint = destination.rarity.color,
-                        contentDescription = "Rarity ${destination.rarity.name} icon",
+                        contentDescription = stringResource(
+                            Res.string.rarity_icon_description,
+                            destination.rarity.name,
+                        ),
                     )
                     Text(
                         text = destination.rarity.name,
@@ -121,7 +134,7 @@ fun CountryInfoCard(
                         )
                     }
                     Text(
-                        text = "Flag",
+                        text = stringResource(Res.string.country_info_card_flag),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
@@ -147,7 +160,11 @@ fun CountryInfoCard(
                         )
                     }
                     Text(
-                        text = if (destination.totalVisits == 1) "Visit" else "Visits",
+                        text = pluralStringResource(
+                            Res.plurals.country_info_card_visits,
+                            visitCountOverride
+                                ?: destination.totalVisits,
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
@@ -163,7 +180,7 @@ fun CountryInfoCard(
                     .padding(horizontal = MaterialTheme.spacing.medium),
             ) {
                 Text(
-                    "Population:",
+                    text = stringResource(Res.string.country_info_card_population),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
@@ -182,7 +199,10 @@ fun CountryInfoCard(
             ) {
                 val capitals = info.capitals.split(",")
                 Text(
-                    if (capitals.size == 1) "Capital:" else "Capitals:",
+                    text = pluralStringResource(
+                        Res.plurals.country_info_card_capitals,
+                        capitals.size,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
@@ -206,7 +226,10 @@ fun CountryInfoCard(
             ) {
                 val continents = info.continents.split(",")
                 Text(
-                    if (continents.size == 1) "Continent:" else "Continents:",
+                    text = pluralStringResource(
+                        Res.plurals.country_info_card_continents,
+                        continents.size,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
@@ -230,7 +253,10 @@ fun CountryInfoCard(
             ) {
                 val languages = info.languages.split(",")
                 Text(
-                    if (languages.size == 1) "Language:" else "Languages:",
+                    text = pluralStringResource(
+                        Res.plurals.country_info_card_languages,
+                        languages.size,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))
@@ -254,7 +280,10 @@ fun CountryInfoCard(
             ) {
                 val currencies = info.currencies.split(",")
                 Text(
-                    if (currencies.size == 1) "Currency:" else "Currencies:",
+                    text = pluralStringResource(
+                        Res.plurals.country_info_card_currencies,
+                        currencies.size,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraLarge))

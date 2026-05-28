@@ -45,7 +45,7 @@ fun InputField(
             cursorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             selectionColors = TextSelectionColors(
                 handleColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f), // The highlight color
+                backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f),
             ),
         ),
     )

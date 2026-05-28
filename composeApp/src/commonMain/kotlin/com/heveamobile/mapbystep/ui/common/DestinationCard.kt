@@ -41,10 +41,16 @@ import com.heveamobile.mapbystep.theme.SurfaceContainer
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.destination_card_new
+import mapbystep.composeapp.generated.resources.destination_card_unrevealed_card_title
 import mapbystep.composeapp.generated.resources.ic_map_points
 import mapbystep.composeapp.generated.resources.ic_question_mark
+import mapbystep.composeapp.generated.resources.map_points_icon_description
+import mapbystep.composeapp.generated.resources.new_icon_description
+import mapbystep.composeapp.generated.resources.unrevealed_card_icon_description
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -195,14 +201,14 @@ private fun CardFront(
                                 horizontal = MaterialTheme.spacing.medium,
                                 vertical = MaterialTheme.spacing.small,
                             ),
-                            text = if (isLarge) "New!" else "",
+                            text = if (isLarge) stringResource(Res.string.destination_card_new) else "",
                             style = MaterialTheme.typography.bodySmall,
                         )
                     } else {
                         Icon(
                             Icons.Default.Star,
                             modifier = Modifier.size(8.dp),
-                            contentDescription = "New!",
+                            contentDescription = stringResource(Res.string.new_icon_description),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -229,7 +235,7 @@ private fun CardFront(
                         Icon(
                             painter = painterResource(resource = Res.drawable.ic_map_points),
                             modifier = Modifier.size(20.dp),
-                            contentDescription = "Map points icon",
+                            contentDescription = stringResource(Res.string.map_points_icon_description),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                         Text(
@@ -272,7 +278,7 @@ private fun CardBack(
             Icon(
                 modifier = Modifier.fillMaxSize(),
                 painter = painterResource(resource = Res.drawable.ic_question_mark),
-                contentDescription = "Hidden card icon",
+                contentDescription = stringResource(Res.string.unrevealed_card_icon_description),
                 tint = if (raritySpoiler) destination.rarity.color else MaterialTheme.colorScheme.onSurface,
             )
         }
@@ -292,7 +298,7 @@ private fun CardBack(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = "???",
+                text = stringResource(Res.string.destination_card_unrevealed_card_title),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
             )

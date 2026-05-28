@@ -29,6 +29,7 @@ class GetMapsWithProgressUseCase(
                                     )
 
                                     SortingOrder.Alphabetical -> compareBy { it.name }
+                                    SortingOrder.VisitCount -> compareBy { it.totalVisits }
                                 },
                             ),
                     )

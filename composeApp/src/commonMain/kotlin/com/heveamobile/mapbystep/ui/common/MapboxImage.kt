@@ -33,9 +33,12 @@ import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.theme.toHex
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.map_image_description
 import mapbystep.composeapp.generated.resources.mapbox_access_token
+import mapbystep.composeapp.generated.resources.mapbox_image_loading_failed
 import mapbystep.composeapp.generated.resources.mapbox_style_id
 import mapbystep.composeapp.generated.resources.mapbox_username
+import mapbystep.composeapp.generated.resources.warning_card_icon_description
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -109,13 +112,13 @@ fun MapboxImage(
                 ) {
                     Icon(
                         Icons.Rounded.Warning,
-                        contentDescription = "Warning icon",
+                        contentDescription = stringResource(Res.string.warning_card_icon_description),
                         modifier = Modifier.size(24.dp),
                         tint = rarity.color,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                     Text(
-                        "Failed to load map image",
+                        stringResource(Res.string.mapbox_image_loading_failed),
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                     )
@@ -123,6 +126,9 @@ fun MapboxImage(
             }
         },
         contentScale = ContentScale.Crop,
-        contentDescription = "Map showing ${countryInfo.cca2}",
+        contentDescription = stringResource(
+            Res.string.map_image_description,
+            countryInfo.cca2,
+        ),
     )
 }

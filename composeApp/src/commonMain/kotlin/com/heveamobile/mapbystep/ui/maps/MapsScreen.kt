@@ -23,6 +23,10 @@ import com.heveamobile.mapbystep.theme.RarityCommon
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.MapStatisticsList
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.maps_level
+import mapbystep.composeapp.generated.resources.maps_steps_per_visit
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -59,7 +63,10 @@ private fun MapsContent(
                             )
                         },
                     title = map.name,
-                    subtitle = "Level ${map.currentLevel}",
+                    subtitle = stringResource(
+                        Res.string.maps_level,
+                        map.currentLevel,
+                    ),
                 ) {
                     Column(
                         modifier = Modifier
@@ -72,7 +79,7 @@ private fun MapsContent(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
-                                text = "Steps per visit:",
+                                text = stringResource(Res.string.maps_steps_per_visit),
                                 style = MaterialTheme.typography.bodyMedium.copy(color = RarityCommon),
                             )
                             Text(

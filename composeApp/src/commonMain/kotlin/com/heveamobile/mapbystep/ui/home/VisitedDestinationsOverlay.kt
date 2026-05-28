@@ -59,9 +59,21 @@ import com.heveamobile.mapbystep.ui.common.DestinationCard
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
 import kotlinx.coroutines.launch
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.close_screen_button
 import mapbystep.composeapp.generated.resources.ic_map_points
 import mapbystep.composeapp.generated.resources.ic_steps
+import mapbystep.composeapp.generated.resources.map_points_icon_description
+import mapbystep.composeapp.generated.resources.next_icon_description
+import mapbystep.composeapp.generated.resources.overlay_destinations_visited
+import mapbystep.composeapp.generated.resources.overlay_map_points_gained
+import mapbystep.composeapp.generated.resources.overlay_new_destinations
+import mapbystep.composeapp.generated.resources.overlay_reveal_all_button
+import mapbystep.composeapp.generated.resources.overlay_show_info_button
+import mapbystep.composeapp.generated.resources.overlay_tap_to_reveal_button
+import mapbystep.composeapp.generated.resources.overlay_title
+import mapbystep.composeapp.generated.resources.previous_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun VisitedDestinationsOverlay(
@@ -161,7 +173,7 @@ fun VisitedDestinationsOverlay(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close screen",
+                        contentDescription = stringResource(Res.string.close_screen_button),
                         modifier = Modifier.size(MaterialTheme.spacing.large),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
@@ -183,7 +195,7 @@ fun VisitedDestinationsOverlay(
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 PrimaryButton(
-                    label = "Reveal all",
+                    label = stringResource(Res.string.overlay_reveal_all_button),
                     onClick = { onAction(HomeAction.RevealAllDestinations) },
                 )
             }
@@ -268,7 +280,7 @@ private fun SingleCardLayout(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_steps),
-                            contentDescription = "Previous",
+                            contentDescription = stringResource(Res.string.previous_icon_description),
                             modifier = Modifier.size(MaterialTheme.spacing.large),
                         )
                     }
@@ -286,7 +298,7 @@ private fun SingleCardLayout(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_steps),
-                            contentDescription = "Next",
+                            contentDescription = stringResource(Res.string.next_icon_description),
                             modifier = Modifier.size(MaterialTheme.spacing.large),
                         )
                     }
@@ -299,7 +311,7 @@ private fun SingleCardLayout(
                         modifier = Modifier.alpha(
                             if (isRevealed) 1F else 0F,
                         ),
-                        label = "Show info",
+                        label = stringResource(Res.string.overlay_show_info_button),
                         onClick = {
                             scope.launch {
                                 onAction(HomeAction.ToggleDestinationInfo)
@@ -310,7 +322,7 @@ private fun SingleCardLayout(
                         modifier = Modifier.alpha(
                             if (!isRevealed) 1F else 0F,
                         ),
-                        text = "Tap card to reveal",
+                        text = stringResource(Res.string.overlay_tap_to_reveal_button),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = OnTertiaryContainer,
                         ),
@@ -373,8 +385,8 @@ private fun GridLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(MaterialTheme.spacing.medium),
-                    text = "During your travels, you visited...",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = stringResource(Res.string.overlay_title),
+                    style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -427,7 +439,7 @@ private fun GridLayout(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1F),
-                                text = "Destinations visited:",
+                                text = stringResource(Res.string.overlay_destinations_visited),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
@@ -443,7 +455,7 @@ private fun GridLayout(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1F),
-                                text = "New destinations:",
+                                text = stringResource(Res.string.overlay_new_destinations),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
@@ -461,14 +473,14 @@ private fun GridLayout(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1F),
-                                text = "Map points gained:",
+                                text = stringResource(Res.string.overlay_map_points_gained),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                             Icon(
                                 modifier = Modifier.size(24.dp),
                                 painter = painterResource(Res.drawable.ic_map_points),
-                                contentDescription = "Map Point icon",
+                                contentDescription = stringResource(Res.string.map_points_icon_description),
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                             Text(

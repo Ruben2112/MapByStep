@@ -53,6 +53,7 @@ import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.historic_step_data_start_time
 import mapbystep.composeapp.generated.resources.historic_step_data_title
 import mapbystep.composeapp.generated.resources.historic_step_data_total_steps
+import mapbystep.composeapp.generated.resources.personal_current_vs_best_steps
 import mapbystep.composeapp.generated.resources.personal_records_seven_days
 import mapbystep.composeapp.generated.resources.personal_records_subtitle
 import mapbystep.composeapp.generated.resources.personal_records_thirty_days
@@ -289,17 +290,17 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = "${
+                    text = stringResource(
+                        Res.string.personal_current_vs_best_steps,
                         formatAmount(
                             state.previousTwentyFourHours,
                             FormatMode.Long,
-                        )
-                    } / ${
+                        ),
                         formatAmount(
                             state.twentyFourHourRecord,
                             FormatMode.Long,
-                        )
-                    } steps",
+                        ),
+                    ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -313,17 +314,17 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = "${
+                    text = stringResource(
+                        Res.string.personal_current_vs_best_steps,
                         formatAmount(
                             state.previousSevenDays,
                             FormatMode.Long,
-                        )
-                    } / ${
+                        ),
                         formatAmount(
                             state.sevenDayRecord,
                             FormatMode.Long,
-                        )
-                    } steps",
+                        ),
+                    ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -337,17 +338,17 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = "${
+                    text = stringResource(
+                        Res.string.personal_current_vs_best_steps,
                         formatAmount(
                             state.previousThirtyDays,
                             FormatMode.Long,
-                        )
-                    } / ${
+                        ),
                         formatAmount(
                             state.thirtyDayRecord,
                             FormatMode.Long,
-                        )
-                    } steps",
+                        ),
+                    ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                 )

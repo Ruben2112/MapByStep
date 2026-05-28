@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.heveamobile.mapbystep.theme.spacing
+import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.route_icon_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -36,7 +38,10 @@ fun NavigationDrawerItem(
     ) {
         Icon(
             painter = painterResource(route.icon),
-            contentDescription = "${route.name} navigation icon",
+            contentDescription = stringResource(
+                Res.string.route_icon_description,
+                stringResource(route.routeName),
+            ),
             tint = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.width(width = MaterialTheme.spacing.medium))

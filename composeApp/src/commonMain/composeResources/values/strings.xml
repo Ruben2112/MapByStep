@@ -8,25 +8,45 @@
     <string name="rarity_epic">Epic</string>
     <string name="rarity_legendary">Legendary</string>
 
-    <!-- Common composables -->
+    <!-- Content descriptions -->
     <string name="error_card_icon_description">Error icon</string>
-    <string name="map_progress_destinations_discovered">Destinations discovered:</string>
+    <string name="warning_card_icon_description">Warning icon</string>
     <string name="steps_divider_icon_description">Footstep icon</string>
+    <string name="rarity_icon_description">Rarity %1$s icon</string>
+    <string name="footsteps_icon_description">Footsteps icon</string>
+    <string name="expand_icon_description">Expand icon</string>
+    <string name="new_icon_description">New icon</string>
+    <string name="map_points_icon_description">Map points icon</string>
+    <string name="unrevealed_card_icon_description">Unrevealed card icon</string>
+    <string name="map_image_description">Map of %1$s</string>
+    <string name="decrease_icon_description">Decrease icon</string>
+    <string name="increase_icon_description">Increase icon</string>
+    <string name="overflow_icon_description">Show actions button</string>
+    <string name="checkmark_icon_description">Checkmark icon</string>
+    <string name="route_icon_description">%1$s screen icon</string>
+    <string name="close_screen_button">Close screen button</string>
+    <string name="navigation_drawer_icon_description">Navigation drawer icon</string>
+    <string name="previous_icon_description">Previous destination button</string>
+    <string name="next_icon_description">Next destination button</string>
+    <string name="logo_description">Map By Step logo</string>
 
-    <!-- Home screen -->
-    <string name="home_navigation_icon_description">Navigation drawer icon</string>
-    <string name="home_sync_icon_description">Sync icon</string>
-    <string name="navigation_drawer_map_by_step_logo_description">Map By Step logo</string>
-    <string name="step_progress_pill_step_progress_icon_description">Step progress icon</string>
-    <string name="route_profile">Profile</string>
-    <string name="route_maps">Maps</string>
-    <string name="route_map_progress">Map Progress</string>
-    <string name="route_directions">Directions</string>
-    <string name="route_destinations">Destinations</string>
-    <string name="route_destination_info">Destination Info</string>
-    <string name="route_settings">Settings</string>
+    <!-- HomeScreen -->
+    <string name="navigation_route_profile">Profile</string>
+    <string name="navigation_route_maps">Maps</string>
+    <string name="navigation_route_map_progress">Map Progress</string>
+    <string name="navigation_route_directions">Directions</string>
+    <string name="navigation_route_destinations">Destinations</string>
+    <string name="navigation_route_destination_info">Destination Info</string>
+    <string name="navigation_route_settings">Settings</string>
+    <string name="overlay_reveal_all_button">Reveal all</string>
+    <string name="overlay_show_info_button">Show info</string>
+    <string name="overlay_tap_to_reveal_button">Tap card to reveal</string>
+    <string name="overlay_title">During your travels, you visited...</string>
+    <string name="overlay_destinations_visited">Destinations visited:</string>
+    <string name="overlay_new_destinations">New destinations:</string>
+    <string name="overlay_map_points_gained">Map points gained:</string>
 
-    <!-- Profile screen -->
+    <!-- ProfileScreen -->
     <string name="profile_loading_step_data">Loading step data...</string>
     <string name="profile_error_permissions_not_granted">Missing required permissions</string>
     <string name="profile_error_action_request_permissions">Grant permissions</string>
@@ -36,11 +56,68 @@
     <string name="historic_step_data_start_time">Start time:</string>
     <string name="personal_records_title">Personal Records</string>
     <string name="personal_records_subtitle">Current vs. Personal Best</string>
+    <string name="personal_current_vs_best_steps">%1$s/%2$s steps</string>
     <string name="personal_records_twenty_four_hours">24 hours:</string>
     <string name="personal_records_seven_days">Seven days:</string>
     <string name="personal_records_thirty_days">Thirty days:</string>
 
-    <!-- Maps screen -->
-    <string name="maps_step_progress_icon_description">Step progress icon</string>
-    <string name="maps_expand_progress_icon_description">Expand progress icon</string>
+    <!-- MapsScreen -->
+    <string name="maps_level">Level %1$d</string>
+    <string name="maps_steps_per_visit">Steps per visit:</string>
+
+    <!-- DestinationsScreen -->
+    <string name="destinations_total_visits">Total visits:</string>
+    <string name="destinations_current_level">Current level:</string>
+    <string name="destinations_hide_undiscovered">Hide undiscovered</string>
+    <string name="destinations_sort_by_rarity">Sort by rarity</string>
+    <string name="destinations_sort_alphabetically">Sort alphabetically</string>
+    <string name="destinations_sort_by_visit_count">Sort by visit count</string>
+
+    <!-- DestinationInfoScreen -->
+
+    <!-- DirectionsScreen -->
+    <string name="directions_explanation">Purchase directions with [M] Map Points to guarantee the rarity of your next destinations. Directions that you own will be used in order of highest to lowest rarity.</string>
+    <string name="directions_current_map_points">Current map points:</string>
+    <string name="directions_shop">Directions Shop</string>
+    <string name="directions_total_cost">Total cost:</string>
+    <string name="directions_autofill">Autofill</string>
+    <string name="directions_reset">Reset</string>
+    <string name="directions_purchase">Purchase</string>
+    <string name="directions_sold_out">Sold out!</string>
+
+    <!-- SettingsScreen -->
+
+    <!-- MapStatisticsList -->
+    <string name="map_statistics_destinations_discovered">Destinations discovered:</string>
+
+    <!-- CountryInfoCard -->
+    <string name="country_info_card_flag">Flag</string>
+    <plurals name="country_info_card_visits">
+        <item quantity="one">Visit</item>
+        <item quantity="other">Visits</item>
+    </plurals>
+    <string name="country_info_card_population">Population:</string>
+    <plurals name="country_info_card_capitals">
+        <item quantity="one">Capital:</item>
+        <item quantity="other">Capitals:</item>
+    </plurals>
+    <plurals name="country_info_card_continents">
+        <item quantity="one">Continent:</item>
+        <item quantity="other">Continents:</item>
+    </plurals>
+    <plurals name="country_info_card_languages">
+        <item quantity="one">Language:</item>
+        <item quantity="other">Languages:</item>
+    </plurals>
+    <plurals name="country_info_card_currencies">
+        <item quantity="one">Currency:</item>
+        <item quantity="other">Currencies:</item>
+    </plurals>
+
+    <!-- DestinationCard -->
+    <string name="destination_card_new">New!</string>
+    <string name="destination_card_unrevealed_card_title">???</string>
+
+    <!-- MapboxImage -->
+    <string name="mapbox_image_loading_failed">Failed to load map image</string>
 </resources>

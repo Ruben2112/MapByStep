@@ -58,8 +58,20 @@ import com.heveamobile.mapbystep.ui.common.MapStatisticsList
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
 import com.heveamobile.mapbystep.ui.common.SecondaryButton
 import mapbystep.composeapp.generated.resources.Res
+import mapbystep.composeapp.generated.resources.decrease_icon_description
+import mapbystep.composeapp.generated.resources.directions_autofill
+import mapbystep.composeapp.generated.resources.directions_current_map_points
+import mapbystep.composeapp.generated.resources.directions_explanation
+import mapbystep.composeapp.generated.resources.directions_purchase
+import mapbystep.composeapp.generated.resources.directions_reset
+import mapbystep.composeapp.generated.resources.directions_shop
+import mapbystep.composeapp.generated.resources.directions_sold_out
+import mapbystep.composeapp.generated.resources.directions_total_cost
 import mapbystep.composeapp.generated.resources.ic_map_points
+import mapbystep.composeapp.generated.resources.increase_icon_description
+import mapbystep.composeapp.generated.resources.map_points_icon_description
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -80,6 +92,37 @@ fun DirectionsContent(
     state: DirectionsState,
     onAction: (DirectionsAction) -> Unit,
 ) {
+    val explanation = stringResource(Res.string.directions_explanation)
+    val inlineContentId = stringResource(Res.string.map_points_icon_description)
+    val inlinedString = buildAnnotatedString {
+        val splitExplanation = explanation.split("[M]")
+        append(splitExplanation[0])
+        appendInlineContent(
+            inlineContentId,
+            "[M]",
+        )
+        append(splitExplanation[1])
+    }
+    val inlineContent = mapOf(
+        Pair(
+            inlineContentId,
+            InlineTextContent(
+                placeholder = Placeholder(
+                    width = 24.sp,
+                    height = 24.sp,
+                    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+                ),
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(Res.drawable.ic_map_points),
+                    contentDescription = stringResource(Res.string.map_points_icon_description),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+        ),
+    )
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -87,42 +130,13 @@ fun DirectionsContent(
             .consumeWindowInsets(LocalScaffoldPadding.current)
             .imePadding(),
     ) {
-        val inlineContentId = "inlineContentId"
-        val text = buildAnnotatedString {
-            append("Purchase directions with")
-            appendInlineContent(
-                inlineContentId,
-                "M",
-            )
-            append("Map Points to guarantee the rarity of your next destinations. Directions that you own will be used in order of highest to lowest rarity.")
-        }
-        val inlineContent = mapOf(
-            Pair(
-                inlineContentId,
-                InlineTextContent(
-                    placeholder = Placeholder(
-                        width = 24.sp,
-                        height = 24.sp,
-                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
-                    ),
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(Res.drawable.ic_map_points),
-                        contentDescription = "Map Point icon",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
-                },
-            ),
-        )
-
         item {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         }
         item {
             InfoCard(
                 modifier = Modifier.fillMaxWidth(),
-                annotatedText = text,
+                annotatedText = inlinedString,
                 inlineContent = inlineContent,
             )
         }
@@ -153,14 +167,14 @@ fun DirectionsContent(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1F),
-                                text = "Current map points:",
+                                text = stringResource(Res.string.directions_current_map_points),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                             Icon(
                                 modifier = Modifier.size(24.dp),
                                 painter = painterResource(Res.drawable.ic_map_points),
-                                contentDescription = "Map Point icon",
+                                contentDescription = stringResource(Res.string.map_points_icon_description),
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                             Text(
@@ -190,7 +204,7 @@ fun DirectionsContent(
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    title = "Directions Shop",
+                    title = stringResource(Res.string.directions_shop),
                     bottomContent = {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
@@ -203,14 +217,14 @@ fun DirectionsContent(
                             ) {
                                 Text(
                                     modifier = Modifier.weight(1F),
-                                    text = "Total cost:",
+                                    text = stringResource(Res.string.directions_total_cost),
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                                 Icon(
                                     modifier = Modifier.size(24.dp),
                                     painter = painterResource(Res.drawable.ic_map_points),
-                                    contentDescription = "Map Point icon",
+                                    contentDescription = stringResource(Res.string.map_points_icon_description),
                                     tint = MaterialTheme.colorScheme.onSurface,
                                 )
                                 Text(
@@ -228,17 +242,17 @@ fun DirectionsContent(
                                 horizontalArrangement = Arrangement.End,
                             ) {
                                 SecondaryButton(
-                                    label = "Autofill",
+                                    label = stringResource(Res.string.directions_autofill),
                                     onClick = { onAction(DirectionsAction.AutofillCart) },
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                                 SecondaryButton(
-                                    label = "Reset",
+                                    label = stringResource(Res.string.directions_reset),
                                     onClick = { onAction(DirectionsAction.ResetCart) },
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                                 PrimaryButton(
-                                    label = "Purchase",
+                                    label = stringResource(Res.string.directions_purchase),
                                     onClick = { onAction(DirectionsAction.Purchase) },
                                 )
                             }
@@ -300,7 +314,7 @@ private fun DirectionsShopRow(
         Icon(
             modifier = Modifier.size(24.dp),
             painter = painterResource(Res.drawable.ic_map_points),
-            contentDescription = "Map Point icon",
+            contentDescription = stringResource(Res.string.map_points_icon_description),
             tint = MaterialTheme.colorScheme.onSurface,
         )
         Text(
@@ -322,7 +336,7 @@ private fun DirectionsShopRow(
             )
             Text(
                 modifier = Modifier.alpha(if (amountInStock > 0) 0F else 1F),
-                text = "Sold out!",
+                text = stringResource(Res.string.directions_sold_out),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.error,
                 ),
@@ -419,7 +433,7 @@ private fun ShopControls(
             Icon(
                 modifier = Modifier.size(14.dp),
                 imageVector = Icons.Default.Remove,
-                contentDescription = "Subtract icon",
+                contentDescription = stringResource(Res.string.decrease_icon_description),
                 tint = if (minusEnabled) MaterialTheme.colorScheme.onSurface else OnDisabledContainer,
             )
         }
@@ -468,7 +482,7 @@ private fun ShopControls(
             Icon(
                 modifier = Modifier.size(14.dp),
                 imageVector = Icons.Default.Add,
-                contentDescription = "Plus icon",
+                contentDescription = stringResource(Res.string.increase_icon_description),
                 tint = if (plusEnabled) MaterialTheme.colorScheme.onSurface else OnDisabledContainer,
             )
         }
