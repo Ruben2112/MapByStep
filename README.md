@@ -38,11 +38,11 @@ destinations you already discovered before.
 
 | Rarity    | Map Points Awarded | Direction Price |
 |-----------|--------------------|-----------------|
-| Common    | 5                  | 500             |
-| Uncommon  | 20                 | 2000            |
-| Rare      | 50                 | 5000            |
-| Epic      | 100                | 10000           |
-| Legendary | 250                | 25000           |
+| Common    | 5                  | 50              |
+| Uncommon  | 20                 | 200             |
+| Rare      | 50                 | 500             |
+| Epic      | 100                | 1,000           |
+| Legendary | 250                | 2,500           |
 
 ### Leveling up
 
@@ -56,7 +56,7 @@ level compared to the distance of the previous level. For example:
 | 2     | 550                 | +50 (1x 10% of base)  |
 | 3     | 650                 | +100 (2x 10% of base) |
 | 4     | 800                 | +150 (3x 10% of base) |
-| 5     | 1000                | +200 (4x 10% of base) |
+| 5     | 1,000               | +200 (4x 10% of base) |
 | ...   | ...                 | ...                   |
 
 Your Map Points will be reset and all destinations will be reset to undiscovered. After leveling up
@@ -90,7 +90,7 @@ AI generated code has been thoroughly reviewed by me before manually implementin
 - Database: [Room](https://developer.android.com/kotlin/multiplatform/room)
 - Image loading: [Coil](https://github.com/coil-kt/coil)
 - Map (interactive and static image): [MapBox](https://www.mapbox.com/)
-- Chart: [Vico](https://github.com/patrykandpatrick/vico)
+- Charts: [Vico](https://github.com/patrykandpatrick/vico)
 - UI design (by
   me): [Figma](https://www.figma.com/design/xKbS1UpJltSdgTHozo4Vj3/MBS?m=auto&t=XchPLaMGu1iF9dlY-1)
 
