@@ -9,9 +9,9 @@ app and find out which destinations you have visited virtually.
 ### How to Play
 
 The app requires permission to read from Android Health Connect or Apple Health and will ask you to
-grant these permissions on the profile screen. After doing so, from that point on all steps
+grant these permissions on the Profile screen. After doing so, from that point on all steps
 registered to those platforms are automatically synced to the game when opening it. You can find
-statistics of your step data on the Profile page.
+statistics of your step data on the same Profile screen.
 
 ### Maps and Destinations
 
@@ -78,10 +78,9 @@ The app follows Clean Architecture and uses an MVI state management approach.
 ### Use of AI
 
 This project was mainly created as a way for me to learn about KMP, and I firmly believe writing
-code
-yourself is the best way to learn. That is why no AI agent was used during the development of this
-project. AI assistants were only used for brainstorming, reviewing, and code suggestions. All AI
-generated code has been thoroughly reviewed by me before manually implementing it myself.
+code yourself is the best way to learn. That is why no AI agent was used during the development of
+this project. AI assistants were only used for brainstorming, reviewing, and code suggestions. All
+AI generated code has been thoroughly reviewed by me before manually implementing it myself.
 
 ### Compose Multiplatform
 
