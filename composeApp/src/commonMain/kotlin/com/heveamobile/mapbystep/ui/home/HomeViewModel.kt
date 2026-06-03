@@ -61,7 +61,6 @@ class HomeViewModel(
                 val requiredSteps = (calculatedDistance * multiplier).toLong()
 
                 _state.update { state ->
-                    println(maps.firstOrNull())
                     state.copy(
                         requiredSteps = requiredSteps,
                     )

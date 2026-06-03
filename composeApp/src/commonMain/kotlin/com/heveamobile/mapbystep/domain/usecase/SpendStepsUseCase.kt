@@ -27,7 +27,7 @@ class SpendStepsUseCase(
             activeMap.calculatedDistance * userPreferencesRepository.distanceMultiplier
                 .first()
                 .toLong()
-        val totalPossibleVisits = if (costPerVisit == 0L) 10 else user.availableSteps
+        val totalPossibleVisits = if (costPerVisit == 0L) 1 else user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
         if (totalPossibleVisits <= 0) return emptyList()
@@ -75,9 +75,7 @@ class SpendStepsUseCase(
                     destination.mapPointsGained = mapPointsGained
                     totalMapPointsGained += mapPointsGained
                 }
-                println("destination.totalVisits = ${destination.totalVisits}")
                 val newVisitCount = ++destination.totalVisits
-                println("newVisitCount = $newVisitCount")
 
                 // We make a copy so we can mark only the first occurrence of the destination as new
                 val destinationCopy = destination.copy(
