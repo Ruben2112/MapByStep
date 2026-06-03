@@ -82,7 +82,7 @@ code yourself is the best way to learn. That is why no AI agent was used during 
 this project. AI assistants were only used for brainstorming, reviewing, and code suggestions. All
 AI generated code has been thoroughly reviewed by me before manually implementing it myself.
 
-## Tools & Libraries
+### Tools & Libraries
 
 - Android Health
   API: [Health Connect](https://developer.android.com/training/wearables/health-connect)
@@ -94,7 +94,7 @@ AI generated code has been thoroughly reviewed by me before manually implementin
 - UI design (by
   me): [Figma](https://www.figma.com/design/xKbS1UpJltSdgTHozo4Vj3/MBS?m=auto&t=XchPLaMGu1iF9dlY-1)
 
-## Data Sources
+### Data Sources
 
 - Countries of the World metadata: [REST Countries API](https://restcountries.com/)
 
@@ -143,7 +143,7 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
 
-## License
+# License
 
 This project is licensed under the PolyForm Strict License 1.0.0.
 You are free to view, learn from, and contribute to this code. However, you are strictly prohibited
