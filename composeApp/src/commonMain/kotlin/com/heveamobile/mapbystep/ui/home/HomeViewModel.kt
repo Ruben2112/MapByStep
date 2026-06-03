@@ -41,6 +41,7 @@ class HomeViewModel(
         _state.update { it.copy(isLoadingSteps = true) }
 
         viewModelScope.launch {
+            println("HENK: HomeViewModel init")
             getUserUseCase().collectLatest { user ->
                 _state.update {
                     it.copy(
@@ -104,6 +105,7 @@ class HomeViewModel(
             val hideUndiscovered = userPreferencesRepository.hideUndiscovered.first()
             val sortingOrder = userPreferencesRepository.gridSortingOrder.first()
 
+            println("HENK: HomeViewModel joined")
             getUserUseCase().first()
             getMapsWithProgressUseCase().first()
 

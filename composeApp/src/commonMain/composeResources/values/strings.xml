@@ -56,7 +56,7 @@
     <string name="historic_step_data_start_time">Start time:</string>
     <string name="personal_records_title">Personal Records</string>
     <string name="personal_records_subtitle">Current vs. Personal Best</string>
-    <string name="personal_current_vs_best_steps">%1$s/%2$s steps</string>
+    <string name="personal_current_vs_best_steps">%1$s / %2$s steps</string>
     <string name="personal_records_twenty_four_hours">24 hours:</string>
     <string name="personal_records_seven_days">Seven days:</string>
     <string name="personal_records_thirty_days">Thirty days:</string>

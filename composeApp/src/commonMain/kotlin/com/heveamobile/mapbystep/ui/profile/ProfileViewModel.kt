@@ -29,6 +29,7 @@ class ProfileViewModel(
             val permissionState = healthPermissionManager.checkPermissionState()
             _state.update { it.copy(healthPermissionState = permissionState) }
 
+            println("HENK: ProfileViewModel init")
             getUserUseCase().collectLatest { user ->
                 getDailyStepsChartDataUseCase().collectLatest { dailyStepData ->
                     _state.update {

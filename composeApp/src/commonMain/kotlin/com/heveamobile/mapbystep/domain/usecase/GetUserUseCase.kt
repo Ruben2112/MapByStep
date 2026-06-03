@@ -3,33 +3,34 @@ package com.heveamobile.mapbystep.domain.usecase
 import com.heveamobile.mapbystep.domain.model.User
 import com.heveamobile.mapbystep.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class GetUserUseCase(
     private val userRepository: UserRepository,
 ) {
-    operator fun invoke(): Flow<User?> {
-        return userRepository
-            .getUserWithStepDataFlow()
-            .onEach { user ->
-                // onEach is called on an empty list with a null value, so this makes sure there is always a user
-                if (user == null) {
-                    userRepository.createUser()
-                }
-            }
+    // Mutex ensures that only one coroutine can execute the creation logic at a time
+    private val mutex = Mutex()
+
+    suspend operator fun invoke(): Flow<User?> {
+        ensureUserExists()
+        return userRepository.getUserWithStepDataFlow()
     }
 
     suspend fun getOneShotUser(): User {
-        val user = userRepository
-            .getUserFlow()
-            .first()
+        ensureUserExists()
+        return userRepository.getUser()!!
+    }
 
-        if (user == null) {
-            userRepository.createUser()
-            return getOneShotUser()
-        } else {
-            return user
+    private suspend fun ensureUserExists() {
+        if (userRepository.getUser() == null) {
+            mutex.withLock {
+                // Double-check inside the lock to see if a previous coroutine created it
+                if (userRepository.getUser() == null) {
+                    userRepository.createUser()
+                }
+            }
         }
     }
+
 }

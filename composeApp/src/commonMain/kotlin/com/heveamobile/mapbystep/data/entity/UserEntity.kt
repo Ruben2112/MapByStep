@@ -6,7 +6,7 @@ import kotlin.time.Instant
 
 @Entity
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Long = 0L,
     val startTime: Instant,
     val lastSyncTime: Instant? = null,

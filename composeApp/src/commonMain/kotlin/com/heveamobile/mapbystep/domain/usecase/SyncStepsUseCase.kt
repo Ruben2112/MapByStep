@@ -12,6 +12,8 @@ class SyncStepsUseCase(
     private val updateUserRecordsUseCase: UpdateUserRecordsUseCase,
 ) {
     suspend operator fun invoke(): Result<Unit> = runCatching {
+
+        println("HENK: SyncStepsUseCase")
         val user = getUserUseCase.getOneShotUser()
         val currentTime = Clock.System.now()
         val startTime = user.lastSyncTime
