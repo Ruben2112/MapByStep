@@ -39,6 +39,7 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Scroll
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
@@ -47,6 +48,7 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesian
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.Position
 import com.patrykandpatrick.vico.compose.common.component.TextComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
@@ -207,7 +209,14 @@ private fun DailyStepsChart(dailyStepData: Map<Instant, Long>) {
     val verticalAxisValueFormatter = CartesianValueFormatter { _, y, _ ->
         formatAmount(
             y.toLong(),
-            FormatMode.Medium,
+            FormatMode.Long,
+        )
+    }
+
+    val dataValueFormatter = CartesianValueFormatter { _, value, _ ->
+        formatAmount(
+            value.toLong(),
+            FormatMode.Long,
         )
     }
 
@@ -228,19 +237,26 @@ private fun DailyStepsChart(dailyStepData: Map<Instant, Long>) {
             rememberColumnCartesianLayer(
                 columnProvider = ColumnProvider.series(
                     rememberLineComponent(
-                        fill = Fill(MaterialTheme.colorScheme.onSurface),
-                        thickness = 8.dp,
+                        fill = Fill(MaterialTheme.colorScheme.surfaceContainerHigh),
+                        thickness = 32.dp,
                         shape = MaterialTheme.shapes.small.copy(
                             bottomStart = CornerSize(0.dp),
                             bottomEnd = CornerSize(0.dp),
                         ),
                     ),
                 ),
-                columnCollectionSpacing = MaterialTheme.spacing.small,
                 dataLabel = rememberTextComponent(MaterialTheme.typography.bodySmall),
+                dataLabelPosition = Position.Vertical.Top,
+                dataLabelValueFormatter = dataValueFormatter,
+                columnCollectionSpacing = MaterialTheme.spacing.small,
             ),
             startAxis = VerticalAxis.rememberStart(
                 valueFormatter = verticalAxisValueFormatter,
+                guideline = rememberAxisGuidelineComponent(
+                    fill = Fill(
+                        color = MaterialTheme.colorScheme.background,
+                    ),
+                ).copy(),
                 label = TextComponent(MaterialTheme.typography.bodySmall),
             ),
             bottomAxis = HorizontalAxis.rememberBottom(
@@ -286,11 +302,11 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
                 value = stringResource(
                     Res.string.personal_current_vs_best_steps,
                     formatAmount(
-                        state.previousTwentyFourHours,
+                        state.previousSevenDays,
                         FormatMode.Long,
                     ),
                     formatAmount(
-                        state.twentyFourHourRecord,
+                        state.sevenDayRecord,
                         FormatMode.Long,
                     ),
                 ),
@@ -301,11 +317,11 @@ private fun PersonalRecordsDataCard(state: ProfileState) {
                 value = stringResource(
                     Res.string.personal_current_vs_best_steps,
                     formatAmount(
-                        state.previousTwentyFourHours,
+                        state.previousThirtyDays,
                         FormatMode.Long,
                     ),
                     formatAmount(
-                        state.twentyFourHourRecord,
+                        state.thirtyDayRecord,
                         FormatMode.Long,
                     ),
                 ),

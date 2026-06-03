@@ -8,21 +8,21 @@ import kotlinx.serialization.Serializable
 sealed interface Route : NavKey {
 
     @Serializable
-    data object Profile : Route, NavKey {
+    data object Profile : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.Profile
         }
     }
 
     @Serializable
-    data object Maps : Route, NavKey {
+    data object Maps : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.Maps
         }
     }
 
     @Serializable
-    data object Destinations : Route, NavKey {
+    data object Destinations : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.Destinations
         }
@@ -31,21 +31,21 @@ sealed interface Route : NavKey {
     @Serializable
     data class DestinationInfo(
         val destinationId: String?,
-    ) : Route, NavKey {
+    ) : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.DestinationInfo
         }
     }
 
     @Serializable
-    data object Directions : Route, NavKey {
+    data object Directions : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.Directions
         }
     }
 
     @Serializable
-    data object Settings : Route, NavKey {
+    data object Settings : Route {
         override fun toNavigationDrawerRoute(): NavigationDrawerRoute {
             return NavigationDrawerRoute.Settings
         }
