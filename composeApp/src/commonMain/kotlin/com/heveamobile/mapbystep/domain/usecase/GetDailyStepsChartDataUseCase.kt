@@ -22,7 +22,6 @@ class GetDailyStepsChartDataUseCase(
     )
 
     suspend operator fun invoke(): Flow<Map<Instant, Long>> {
-        println("HENK: GetDailyStepsChartDataUseCase")
         return getUserUseCase().map { user ->
             if (user != null) {
                 processStepData(user)
