@@ -91,6 +91,8 @@ AI generated code has been thoroughly reviewed by me before manually implementin
 - Image loading: [Coil](https://github.com/coil-kt/coil)
 - Map (interactive and static image): [MapBox](https://www.mapbox.com/)
 - Chart: [Vico](https://github.com/patrykandpatrick/vico)
+- UI design (by
+  me): [Figma](https://www.figma.com/design/xKbS1UpJltSdgTHozo4Vj3/MBS?m=auto&t=XchPLaMGu1iF9dlY-1)
 
 ## Data Sources
 
