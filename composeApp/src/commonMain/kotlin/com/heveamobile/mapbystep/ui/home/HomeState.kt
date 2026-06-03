@@ -16,8 +16,7 @@ data class HomeState(
 
 data class VisitedDestinationsState(
     val destinations: List<Destination> = emptyList(),
-    val isSingleCardLayout: Boolean = true,
-    val showInfo: Boolean = false,
+    val destinationShown: Destination? = null,
     val revealingAll: Boolean = false,
     val mapPointsGained: Int = 0,
     val showResultSummary: Boolean = false,
@@ -44,9 +43,7 @@ sealed interface HomeAction {
     data class RevealDestination(val destination: Destination) : HomeAction
     data object RevealAllDestinations : HomeAction
     data object CloseVisitedDestinations : HomeAction
-    data object CloseSingleCardLayout : HomeAction
-    data class OpenSingleCardLayout(val destination: Destination) : HomeAction
-    data object ToggleDestinationInfo : HomeAction
+    data class ToggleDestinationInfo(val destination: Destination?) : HomeAction
 
     data object ToggleDropdownMenu : HomeAction
     data object ToggleHideUndiscovered : HomeAction

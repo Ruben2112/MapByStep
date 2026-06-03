@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -41,16 +40,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.model.Destination
-import com.heveamobile.mapbystep.domain.model.Info
 import com.heveamobile.mapbystep.formatAmount
-import com.heveamobile.mapbystep.theme.OnTertiaryContainer
 import com.heveamobile.mapbystep.theme.color
 import com.heveamobile.mapbystep.theme.spacing
 import com.heveamobile.mapbystep.ui.common.Card
@@ -61,17 +56,13 @@ import kotlinx.coroutines.launch
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.close_screen_button
 import mapbystep.composeapp.generated.resources.ic_map_points
-import mapbystep.composeapp.generated.resources.ic_steps
 import mapbystep.composeapp.generated.resources.map_points_icon_description
-import mapbystep.composeapp.generated.resources.next_icon_description
 import mapbystep.composeapp.generated.resources.overlay_destinations_visited
 import mapbystep.composeapp.generated.resources.overlay_map_points_gained
 import mapbystep.composeapp.generated.resources.overlay_new_destinations
 import mapbystep.composeapp.generated.resources.overlay_reveal_all_button
-import mapbystep.composeapp.generated.resources.overlay_show_info_button
-import mapbystep.composeapp.generated.resources.overlay_tap_to_reveal_button
+import mapbystep.composeapp.generated.resources.overlay_reveal_button
 import mapbystep.composeapp.generated.resources.overlay_title
-import mapbystep.composeapp.generated.resources.previous_icon_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -88,23 +79,20 @@ fun VisitedDestinationsOverlay(
         initialPage = 0,
         pageCount = { destinations.size },
     )
-    val currentDestination = destinations.getOrNull(pagerState.currentPage)
-    val currentRarityColor =
-        if (state.isSingleCardLayout && currentDestination?.isRevealed == true) {
-            currentDestination.rarity.color.copy(alpha = 0.25F)
-        } else {
-            MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.75F)
-        }
+    val highestRarityDestination = revealedDestinations.maxByOrNull { it.rarity }
+    val highestRarityColor = if (highestRarityDestination?.isRevealed == true) {
+        highestRarityDestination.rarity.color.copy(alpha = 0.25F)
+    } else {
+        MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.75F)
+    }
 
-    val backgroundColor = remember { Animatable(currentRarityColor) }
+    val backgroundColor = remember { Animatable(highestRarityColor) }
 
     LaunchedEffect(
-        currentDestination,
-        revealedDestinations,
-        state.isSingleCardLayout,
+        highestRarityDestination,
     ) {
         backgroundColor.animateTo(
-            currentRarityColor,
+            highestRarityColor,
             tween(300),
         )
     }
@@ -121,19 +109,24 @@ fun VisitedDestinationsOverlay(
     ) {
         AnimatedContent(
             modifier = Modifier.fillMaxHeight(),
-            targetState = state.isSingleCardLayout,
+            targetState = state.destinationShown,
             transitionSpec = {
                 // Smooth fade when opening/closing the detail view
                 fadeIn(tween(300)) togetherWith fadeOut(tween(300))
             },
-        ) { isSingleCardLayout ->
-            if (isSingleCardLayout && currentDestination != null) {
-                SingleCardLayout(
-                    pagerState = pagerState,
-                    destinations = destinations,
-                    showInfo = state.showInfo,
-                    onAction = onAction,
-                )
+        ) { destinationShown ->
+            if (destinationShown != null) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CountryInfoCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.large),
+                        destination = destinationShown,
+                    )
+                }
             } else {
                 GridLayout(
                     pagerState = pagerState,
@@ -145,7 +138,7 @@ fun VisitedDestinationsOverlay(
             }
         }
 
-        val showRevealAllButton = !state.isSingleCardLayout && destinations.any { !it.isRevealed }
+        val showRevealAllButton = destinations.any { !it.isRevealed }
 
         AnimatedVisibility(
             visible = !showRevealAllButton,
@@ -162,10 +155,8 @@ fun VisitedDestinationsOverlay(
             ) {
                 FloatingActionButton(
                     onClick = {
-                        if (state.showInfo) {
-                            onAction(HomeAction.ToggleDestinationInfo)
-                        } else if (state.isSingleCardLayout) {
-                            onAction(HomeAction.CloseSingleCardLayout)
+                        if (state.destinationShown != null) {
+                            onAction(HomeAction.ToggleDestinationInfo(null))
                         } else {
                             onAction(HomeAction.CloseVisitedDestinations)
                         }
@@ -195,157 +186,10 @@ fun VisitedDestinationsOverlay(
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 PrimaryButton(
-                    label = stringResource(Res.string.overlay_reveal_all_button),
+                    label = stringResource(
+                        if (destinations.size > 1) Res.string.overlay_reveal_all_button else Res.string.overlay_reveal_button,
+                    ),
                     onClick = { onAction(HomeAction.RevealAllDestinations) },
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SingleCardLayout(
-    pagerState: PagerState,
-    destinations: List<Destination>,
-    showInfo: Boolean,
-    onAction: (HomeAction) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-
-    AnimatedVisibility(
-        visible = !showInfo,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-            ) {
-                HorizontalPager(
-                    state = pagerState,
-                    userScrollEnabled = !showInfo,
-                    beyondViewportPageCount = 1,
-                ) { index ->
-                    val destination = destinations[index]
-
-                    Box {
-                        DestinationCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    horizontal = MaterialTheme.spacing.extraLarge,
-                                ),
-                            destination = destination,
-                            isRevealed = destination.isRevealed,
-                            isNew = destination.isNew,
-                            mapPointsGained = destination.mapPointsGained,
-                            onClick = {
-                                if (!destination.isRevealed) {
-                                    onAction(HomeAction.RevealDestination(destination))
-                                } else {
-                                    onAction(HomeAction.ToggleDestinationInfo)
-                                }
-                            },
-                            isLarge = true,
-                        )
-                    }
-                }
-
-                // Navigation Overlay
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    FloatingActionButton(
-                        modifier = Modifier
-                            .rotate(90F)
-                            .graphicsLayer {
-                                rotationX = 180F
-                            }
-                            .alpha(if (pagerState.currentPage == 0) 0F else 1F),
-                        onClick = {
-                            if (pagerState.currentPage > 0) scope.launch {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage - 1,
-                                )
-                            }
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_steps),
-                            contentDescription = stringResource(Res.string.previous_icon_description),
-                            modifier = Modifier.size(MaterialTheme.spacing.large),
-                        )
-                    }
-                    FloatingActionButton(
-                        modifier = Modifier
-                            .rotate(90F)
-                            .alpha(if (pagerState.currentPage == destinations.size - 1) 0F else 1F),
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage + 1,
-                                )
-                            }
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_steps),
-                            contentDescription = stringResource(Res.string.next_icon_description),
-                            modifier = Modifier.size(MaterialTheme.spacing.large),
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            AnimatedContent(targetState = destinations[pagerState.currentPage].isRevealed) { isRevealed ->
-                Box(contentAlignment = Alignment.Center) {
-                    PrimaryButton(
-                        modifier = Modifier.alpha(
-                            if (isRevealed) 1F else 0F,
-                        ),
-                        label = stringResource(Res.string.overlay_show_info_button),
-                        onClick = {
-                            scope.launch {
-                                onAction(HomeAction.ToggleDestinationInfo)
-                            }
-                        },
-                    )
-                    Text(
-                        modifier = Modifier.alpha(
-                            if (!isRevealed) 1F else 0F,
-                        ),
-                        text = stringResource(Res.string.overlay_tap_to_reveal_button),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = OnTertiaryContainer,
-                        ),
-                    )
-                }
-            }
-        }
-    }
-    AnimatedVisibility(
-        visible = showInfo,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            val destination = destinations[pagerState.currentPage]
-            if (destination.info is Info.CountryInfo) {
-                CountryInfoCard(
-                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                    destination = destination,
-                    visitCountOverride = destination.totalVisits - destinations.count { it.id == destination.id && !it.isRevealed },
                 )
             }
         }
@@ -398,17 +242,26 @@ private fun GridLayout(
                     .height(MaterialTheme.spacing.medium),
             )
         }
-        items(destinations) { destination ->
+        items(
+            items = destinations,
+            span = {
+                GridItemSpan(
+                    if (destinations.size > 1) 1 else maxLineSpan,
+                )
+            },
+        ) { destination ->
             DestinationCard(
                 destination = destination,
                 isRevealed = destination.isRevealed,
+                isLarge = destinations.size == 1,
                 isNew = destination.isNew,
+                mapPointsGained = destination.mapPointsGained,
                 onClick = {
                     if (destination.isRevealed) {
                         scope.launch {
                             pagerState.scrollToPage(destinations.indexOf(destination))
                         }
-                        onAction(HomeAction.OpenSingleCardLayout(destination))
+                        onAction(HomeAction.ToggleDestinationInfo(destination))
 
                     } else {
                         onAction(HomeAction.RevealDestination(destination))

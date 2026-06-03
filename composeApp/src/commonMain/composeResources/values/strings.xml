@@ -39,6 +39,7 @@
     <string name="navigation_route_destination_info">Destination Info</string>
     <string name="navigation_route_settings">Settings</string>
     <string name="overlay_reveal_all_button">Reveal all</string>
+    <string name="overlay_reveal_button">Reveal</string>
     <string name="overlay_show_info_button">Show info</string>
     <string name="overlay_tap_to_reveal_button">Tap card to reveal</string>
     <string name="overlay_title">During your travels, you visited...</string>

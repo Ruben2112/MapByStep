@@ -33,8 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.heveamobile.mapbystep.FormatMode
 import com.heveamobile.mapbystep.domain.model.Destination
 import com.heveamobile.mapbystep.domain.model.Info
+import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.theme.Outline
 import com.heveamobile.mapbystep.theme.PrimaryContainer
 import com.heveamobile.mapbystep.theme.SurfaceContainer
@@ -147,9 +149,10 @@ private fun CardFront(
                             maxWidth,
                             maxHeight,
                         ) {
+                            val maxMapboxDimension = 1280
                             IntSize(
-                                width = with(density) { maxWidth.roundToPx() },
-                                height = with(density) { maxHeight.roundToPx() },
+                                width = with(density) { maxWidth.roundToPx() }.coerceAtMost(maxMapboxDimension),
+                                height = with(density) { maxHeight.roundToPx() }.coerceAtMost(maxMapboxDimension),
                             )
                         }
 
@@ -215,7 +218,7 @@ private fun CardFront(
                 }
             }
         }
-        if (mapPointsGained != null) {
+        if (isLarge && mapPointsGained != null) {
             Box(
                 modifier = Modifier
                     .aspectRatio(1F)
@@ -239,7 +242,10 @@ private fun CardFront(
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                         Text(
-                            text = mapPointsGained.toString(),
+                            text = formatAmount(
+                                mapPointsGained,
+                                formatMode = FormatMode.Long,
+                            ),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

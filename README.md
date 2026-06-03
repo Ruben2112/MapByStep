@@ -9,8 +9,8 @@ app and find out which destinations you have visited virtually.
 ### How to Play
 
 The app requires permission to read from Android Health Connect or Apple Health and will ask you to
-grant these permissions on the Profile screen. After doing so, from that point on all steps
-registered to those platforms are automatically synced to the game when opening it. You can find
+grant these permissions on the Profile screen. After doing so, all steps registered to those
+platforms from that point on are automatically synced to the game when opening it. You can find
 statistics of your step data on the same Profile screen.
 
 ### Maps and Destinations

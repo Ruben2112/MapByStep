@@ -120,7 +120,6 @@ class HomeViewModel(
     }
 
     fun onAction(action: HomeAction) {
-        println("Action: $action")
         when (action) {
             HomeAction.OpenNavigationDrawer -> {
                 _state.update { it.copy(isDrawerOpen = true) }
@@ -182,28 +181,6 @@ class HomeViewModel(
                             )
                         }
                     }
-                }
-            }
-
-            is HomeAction.CloseSingleCardLayout -> {
-                viewModelScope.launch {
-                    _state.update { state ->
-                        state.copy(
-                            visitedDestinationsState = state.visitedDestinationsState.copy(
-                                isSingleCardLayout = false,
-                            ),
-                        )
-                    }
-                }
-            }
-
-            is HomeAction.OpenSingleCardLayout -> viewModelScope.launch {
-                _state.update { state ->
-                    state.copy(
-                        visitedDestinationsState = state.visitedDestinationsState.copy(
-                            isSingleCardLayout = true,
-                        ),
-                    )
                 }
             }
 
@@ -292,11 +269,12 @@ class HomeViewModel(
             }
 
             is HomeAction.ToggleDestinationInfo -> {
+                val destinationShown = state.value.visitedDestinationsState.destinationShown
                 viewModelScope.launch {
                     _state.update { state ->
                         state.copy(
                             visitedDestinationsState = state.visitedDestinationsState.copy(
-                                showInfo = !state.visitedDestinationsState.showInfo,
+                                destinationShown = if (destinationShown == null) action.destination else null,
                             ),
                         )
                     }
