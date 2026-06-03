@@ -82,6 +82,20 @@ code yourself is the best way to learn. That is why no AI agent was used during 
 this project. AI assistants were only used for brainstorming, reviewing, and code suggestions. All
 AI generated code has been thoroughly reviewed by me before manually implementing it myself.
 
+## Tools & Libraries
+
+- Android Health
+  API: [Health Connect](https://developer.android.com/training/wearables/health-connect)
+- Dependency Injection: [Koin](https://insert-koin.io/)
+- Database: [Room](https://developer.android.com/kotlin/multiplatform/room)
+- Image loading: [Coil](https://github.com/coil-kt/coil)
+- Map (interactive and static image): [MapBox](https://www.mapbox.com/)
+- Chart: [Vico](https://github.com/patrykandpatrick/vico)
+
+## Data Sources
+
+- Countries of the World metadata: [REST Countries API](https://restcountries.com/)
+
 ### Compose Multiplatform
 
 This is a Compose Multiplatform project. While both Android and iOS are targeted, iOS is currently
@@ -126,3 +140,10 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## License
+
+This project is licensed under the PolyForm Strict License 1.0.0.
+You are free to view, learn from, and contribute to this code. However, you are strictly prohibited
+from using this software or its source code for any commercial purposes.
+See the [LICENSE](LICENSE.md) file for the full license text.
