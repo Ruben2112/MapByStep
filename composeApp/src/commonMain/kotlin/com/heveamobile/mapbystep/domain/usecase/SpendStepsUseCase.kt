@@ -27,7 +27,7 @@ class SpendStepsUseCase(
             activeMap.calculatedDistance * userPreferencesRepository.distanceMultiplier
                 .first()
                 .toLong()
-        val totalPossibleVisits = if (costPerVisit == 0L) 20 else user.availableSteps
+        val totalPossibleVisits = if (costPerVisit == 0L) 1 else user.availableSteps
             .floorDiv(costPerVisit)
             .toInt()
         if (totalPossibleVisits <= 0) return emptyList()
