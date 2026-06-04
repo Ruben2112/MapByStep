@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,8 +26,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.FloatingActionButton
@@ -35,8 +35,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -52,7 +54,6 @@ import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.CountryInfoCard
 import com.heveamobile.mapbystep.ui.common.DestinationCard
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
-import kotlinx.coroutines.launch
 import mapbystep.composeapp.generated.resources.Res
 import mapbystep.composeapp.generated.resources.close_screen_button
 import mapbystep.composeapp.generated.resources.ic_map_points
@@ -62,6 +63,7 @@ import mapbystep.composeapp.generated.resources.overlay_map_points_gained
 import mapbystep.composeapp.generated.resources.overlay_new_destinations
 import mapbystep.composeapp.generated.resources.overlay_reveal_all_button
 import mapbystep.composeapp.generated.resources.overlay_reveal_button
+import mapbystep.composeapp.generated.resources.overlay_skip_button
 import mapbystep.composeapp.generated.resources.overlay_title
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -75,10 +77,6 @@ fun VisitedDestinationsOverlay(
     val destinations = state.destinations
     val revealedDestinations = state.destinations.filter { it.isRevealed }
 
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        pageCount = { destinations.size },
-    )
     val highestRarityDestination = revealedDestinations.maxByOrNull { it.rarity }
     val highestRarityColor = if (highestRarityDestination?.isRevealed == true) {
         highestRarityDestination.rarity.color.copy(alpha = 0.25F)
@@ -128,13 +126,21 @@ fun VisitedDestinationsOverlay(
                     )
                 }
             } else {
-                GridLayout(
-                    pagerState = pagerState,
-                    destinations = destinations,
-                    onAction = onAction,
-                    showResultSummary = state.showResultSummary,
-                    mapPointsGained = state.mapPointsGained,
-                )
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    val density = LocalDensity.current
+                    val height = with(density) { maxHeight.roundToPx() }
+                    val width = with(density) { maxWidth.roundToPx() }
+
+                    GridLayout(
+                        state = state,
+                        destinations = destinations,
+                        onAction = onAction,
+                        showResultSummary = state.showResultSummary,
+                        mapPointsGained = state.mapPointsGained,
+                        screenHeight = height,
+                        screenWidth = width,
+                    )
+                }
             }
         }
 
@@ -185,11 +191,20 @@ fun VisitedDestinationsOverlay(
                     ),
                 contentAlignment = Alignment.BottomCenter,
             ) {
+                val buttonTextResId = if (!state.isRevealingAll) {
+                    if (destinations.size > 1) Res.string.overlay_reveal_all_button else Res.string.overlay_reveal_button
+                } else {
+                    Res.string.overlay_skip_button
+                }
                 PrimaryButton(
-                    label = stringResource(
-                        if (destinations.size > 1) Res.string.overlay_reveal_all_button else Res.string.overlay_reveal_button,
-                    ),
-                    onClick = { onAction(HomeAction.RevealAllDestinations) },
+                    label = stringResource(buttonTextResId),
+                    onClick = {
+                        if (!state.isRevealingAll) {
+                            onAction(HomeAction.RevealAllDestinations)
+                        } else {
+                            onAction(HomeAction.SkipRevealingAllDestinations)
+                        }
+                    },
                 )
             }
         }
@@ -198,15 +213,68 @@ fun VisitedDestinationsOverlay(
 
 @Composable
 private fun GridLayout(
-    pagerState: PagerState,
+    state: VisitedDestinationsState,
     destinations: List<Destination>,
     onAction: (HomeAction) -> Unit,
     showResultSummary: Boolean,
     mapPointsGained: Int,
+    screenHeight: Int,
+    screenWidth: Int,
 ) {
-    val scope = rememberCoroutineScope()
+    val gridState = rememberLazyGridState()
+
+    val density = LocalDensity.current
+    val smallSpacingPx = with(density) { MaterialTheme.spacing.small.toPx() }
+    val mediumSpacingPx = with(density) { MaterialTheme.spacing.medium.toPx() }
+    val largeSpacingPx = with(density) { MaterialTheme.spacing.large.toPx() }
+
+    // Auto scroll logic for revealing all destinations
+    var wasSummaryShown by remember { mutableStateOf(state.showResultSummary) }
+    LaunchedEffect(
+        destinations.filter { it.isRevealed },
+        state.isRevealingAll,
+        state.showResultSummary,
+    ) {
+        if (state.isRevealingAll) {
+            val lastRevealedIndex = destinations.indexOfLast { it.isRevealed }
+
+            if (lastRevealedIndex != -1) {
+                // Calculate size of the cards to determine how far we have to scroll
+                val horizontalPadding = mediumSpacingPx * 2
+                val gridContentWidth = screenWidth - horizontalPadding
+
+                val itemWidth = (gridContentWidth - (smallSpacingPx * 2)) / 3
+                val itemHeight = itemWidth * (7F / 5F)
+
+                /*
+                   Target Offset Logic:
+                   By default, index 0 is at the top (y=0).
+                   To put the item at the bottom:
+                   Offset = ScreenHeight - ItemHeight - BottomSafetyMargin
+                   We make it NEGATIVE because scrollOffset moves the 'viewport' start point.
+                */
+
+                // Prevent it being hidden behind close button
+                val bottomSafetyMargin = largeSpacingPx * 3
+
+                val calculatedOffset = -(screenHeight - itemHeight - bottomSafetyMargin).toInt()
+
+                gridState.animateScrollToItem(
+                    // +3 because the grid has Spacer, Card (Title), Spacer before the items
+                    index = lastRevealedIndex + 3,
+                    scrollOffset = calculatedOffset,
+                )
+            }
+        } else if (state.showResultSummary && !wasSummaryShown) {
+            gridState.animateScrollToItem(
+                index = gridState.layoutInfo.totalItemsCount - 1,
+            )
+        }
+        wasSummaryShown = state.showResultSummary
+    }
 
     LazyVerticalGrid(
+        state = gridState,
         modifier = Modifier
             .fillMaxSize()
             .padding(
@@ -258,9 +326,6 @@ private fun GridLayout(
                 mapPointsGained = destination.mapPointsGained,
                 onClick = {
                     if (destination.isRevealed) {
-                        scope.launch {
-                            pagerState.scrollToPage(destinations.indexOf(destination))
-                        }
                         onAction(HomeAction.ToggleDestinationInfo(destination))
 
                     } else {

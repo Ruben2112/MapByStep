@@ -20,7 +20,8 @@ destination you visit is an independent country on Earth. Trivia facts such as c
 population are provided for each destination, and the destination is displayed on an interactive
 map.
 
-Destinations have different rarity tiers, based on the population.
+Destinations have different rarity tiers, based on the population. For Countries of the World, these
+are the numbers:
 
 | Rarity    | Population Range         | Odds of Visiting |
 |-----------|--------------------------|------------------|
@@ -142,6 +143,22 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## Roadmap
+
+Because this is in the end just a passion project, it can take some time to get to these. Items are
+not in any particular order.
+
+- More maps
+- Exporting and importing progress
+- Database migrations
+- Visual improvements (especially for leveling up)
+- Unit tests
+- Analytics
+- Crash reporting
+- Play Store release
+- iOS implementation
+- Realtime step tracking
 
 # License
 

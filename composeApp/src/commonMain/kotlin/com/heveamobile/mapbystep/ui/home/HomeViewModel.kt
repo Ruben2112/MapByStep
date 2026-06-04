@@ -13,6 +13,7 @@ import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,8 @@ class HomeViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
+
+    private var revealAllJob: Job? = null
 
     init {
         _state.update { it.copy(isLoadingSteps = true) }
@@ -184,11 +187,11 @@ class HomeViewModel(
             }
 
             is HomeAction.RevealAllDestinations -> {
-                if (!state.value.visitedDestinationsState.revealingAll) {
-                    viewModelScope.launch {
+                if (!state.value.visitedDestinationsState.isRevealingAll) {
+                    revealAllJob = viewModelScope.launch {
                         _state.update { state ->
                             state.copy(
-                                visitedDestinationsState = state.visitedDestinationsState.copy(revealingAll = true),
+                                visitedDestinationsState = state.visitedDestinationsState.copy(isRevealingAll = true),
                             )
                         }
 
@@ -222,7 +225,7 @@ class HomeViewModel(
 
                         _state.update { state ->
                             state.copy(
-                                visitedDestinationsState = state.visitedDestinationsState.copy(revealingAll = false),
+                                visitedDestinationsState = state.visitedDestinationsState.copy(isRevealingAll = false),
                             )
                         }
                         delay(1000)
@@ -277,6 +280,23 @@ class HomeViewModel(
                             ),
                         )
                     }
+                }
+            }
+
+            is HomeAction.SkipRevealingAllDestinations -> {
+                revealAllJob?.cancel()
+                revealAllJob = null
+
+                _state.update { state ->
+                    state.copy(
+                        visitedDestinationsState = state.visitedDestinationsState.copy(
+                            destinations = state.visitedDestinationsState.destinations.map {
+                                it.copy(isRevealed = true)
+                            },
+                            isRevealingAll = false,
+                            showResultSummary = true,
+                        ),
+                    )
                 }
             }
         }

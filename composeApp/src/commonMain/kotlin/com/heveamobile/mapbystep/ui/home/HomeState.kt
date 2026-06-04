@@ -17,7 +17,7 @@ data class HomeState(
 data class VisitedDestinationsState(
     val destinations: List<Destination> = emptyList(),
     val destinationShown: Destination? = null,
-    val revealingAll: Boolean = false,
+    val isRevealingAll: Boolean = false,
     val mapPointsGained: Int = 0,
     val showResultSummary: Boolean = false,
 )
@@ -42,6 +42,7 @@ sealed interface HomeAction {
 
     data class RevealDestination(val destination: Destination) : HomeAction
     data object RevealAllDestinations : HomeAction
+    data object SkipRevealingAllDestinations : HomeAction
     data object CloseVisitedDestinations : HomeAction
     data class ToggleDestinationInfo(val destination: Destination?) : HomeAction
 
