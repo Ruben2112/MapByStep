@@ -22,7 +22,6 @@ fun KeyValueRow(
     value: String,
     valueStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     valueTitleCasingEnabled: Boolean = true,
-    valueLeadingIcon: @Composable (() -> Unit)? = null, // Add this
 ) {
     KeyValueRow(
         modifier = modifier,
@@ -45,7 +44,6 @@ fun KeyValueRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.weight(1F),

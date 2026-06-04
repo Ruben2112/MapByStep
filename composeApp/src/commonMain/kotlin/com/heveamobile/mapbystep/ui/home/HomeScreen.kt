@@ -361,7 +361,7 @@ fun HomeContent(
                 NavDisplay(
                     modifier = Modifier.padding(
                         top = paddingValues.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding(),
+//                        bottom = paddingValues.calculateBottomPadding(),
                     ),
                     backStack = backStack,
                     entryProvider = entryProvider,

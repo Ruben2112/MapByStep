@@ -1,10 +1,9 @@
 package com.heveamobile.mapbystep.ui.destinationinfo
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,8 +46,9 @@ fun DestinationInfoContent(
 ) {
     LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .padding(MaterialTheme.spacing.medium),
+            .fillMaxSize(),
+        contentPadding = PaddingValues(MaterialTheme.spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         if (state.maps.size > 1) {
             item {
@@ -60,10 +60,8 @@ fun DestinationInfoContent(
                     onItemSelected = { map -> onAction(DestinationInfoAction.SelectMap(map)) },
                 )
             }
-            item {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            }
         }
+
         if (state.destinations.isNotEmpty()) {
             item {
                 DropDownMenu(
@@ -83,10 +81,8 @@ fun DestinationInfoContent(
                     )
                 }
             }
-            item {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            }
         }
+
         if (state.selectedMap != null && state.selectedDestination != null && state.info != null) {
             item {
                 when (state.selectedMap.infoType) {

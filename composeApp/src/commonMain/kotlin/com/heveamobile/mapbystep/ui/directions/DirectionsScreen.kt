@@ -131,14 +131,11 @@ fun DirectionsContent(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.medium)
             .consumeWindowInsets(LocalScaffoldPadding.current)
             .imePadding(),
+        contentPadding = PaddingValues(MaterialTheme.spacing.medium),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
-        item {
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        }
         item {
             InfoCard(
                 modifier = Modifier.fillMaxWidth(),
