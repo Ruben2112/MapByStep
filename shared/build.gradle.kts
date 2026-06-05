@@ -105,7 +105,6 @@ kotlin {
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
 
-    // Room KSP dependencies for AGP 9+
     add(
         "kspAndroid",
         libs.androidx.room.compiler,

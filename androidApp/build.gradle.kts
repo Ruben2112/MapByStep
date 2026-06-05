@@ -34,8 +34,8 @@ android {
         targetSdk = libs.versions.android.targetSdk
             .get()
             .toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.0" // [MAJOR].[MINOR].[PATCH]
+        versionCode = 1000 // 000.001.000 (version name without separators and leading zeroes)
     }
     packaging {
         resources {
