@@ -1,9 +1,8 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -13,67 +12,87 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-    
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
     }
-    
+
+    android {
+        namespace = "com.gumamobile.mapbystep.shared"
+        compileSdk = libs.versions.android.compileSdk
+            .get()
+            .toInt()
+        minSdk = libs.versions.android.minSdk
+            .get()
+            .toInt()
+
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+    }
+
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.mapbox.maps)
-            implementation(libs.mapbox.maps.compose)
+        androidMain {
+            dependencies {
+                implementation(libs.compose.uiToolingPreview)
+                implementation(libs.mapbox.maps)
+                implementation(libs.mapbox.maps.compose)
+            }
         }
-        commonMain.dependencies {
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material3)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.kotlinx.serialization.core)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.datetime)
+        commonMain {
+            dependencies {
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.uiToolingPreview)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            implementation(libs.koin.compose.navigation)
-            implementation(libs.koin.compose.viewmodel)
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.datetime)
 
-            implementation(libs.jetbrains.navigation3.ui)
-            implementation(libs.jetbrains.lifecycle.viewmodel.nav3)
-            implementation(libs.jetbrains.lifecycle.viewmodel)
-            implementation(libs.jetbrains.material.icons)
+                implementation(libs.koin.compose.navigation)
+                implementation(libs.koin.compose.viewmodel)
 
-            implementation(libs.androidx.health.connect)
+                implementation(libs.jetbrains.navigation3.ui)
+                implementation(libs.jetbrains.lifecycle.viewmodel.nav3)
+                implementation(libs.jetbrains.lifecycle.viewmodel)
+                implementation(libs.jetbrains.material.icons)
 
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.sqlite.bundled)
+                implementation(libs.androidx.health.connect)
 
-            implementation(libs.androidx.datastore)
-            implementation(libs.androidx.datastore.preferences)
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.androidx.sqlite.bundled)
 
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network)
-            implementation(libs.coil.svg)
+                implementation(libs.androidx.datastore)
+                implementation(libs.androidx.datastore.preferences)
 
-            implementation(libs.vico.compose)
-            implementation(libs.vico.compose.m3)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.network)
+                implementation(libs.coil.svg)
+
+                implementation(libs.vico.compose)
+                implementation(libs.vico.compose.m3)
+            }
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
         }
     }
 
@@ -82,56 +101,23 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.heveamobile.mapbystep"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
 
 dependencies {
-    debugImplementation(libs.compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiTooling)
 
+    // Room KSP dependencies for AGP 9+
     add(
         "kspAndroid",
-        libs.androidx.room.compiler,
-    )
-    add(
-        "kspIosSimulatorArm64",
         libs.androidx.room.compiler,
     )
     add(
         "kspIosArm64",
         libs.androidx.room.compiler,
     )
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.heveamobile.mapbystep.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.heveamobile.mapbystep"
-            packageVersion = "1.0.0"
-        }
-    }
+    add(
+        "kspIosSimulatorArm64",
+        libs.androidx.room.compiler,
+    )
 }
 
 room {
