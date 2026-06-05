@@ -26,7 +26,7 @@ actual fun MapboxMap(
 ) {
     val mapViewportState = rememberMapViewportState()
 
-    /** valid access token is required in
+    /** A mapbox_access_token string resource containing a valid Mapbox access token is required in
      * androidApp/src/main/res/values/mapbox_access_token.xml.
      **/
     MapboxMap(

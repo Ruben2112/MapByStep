@@ -8,7 +8,6 @@ plugins {
 }
 
 kotlin {
-
     target {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)

@@ -104,7 +104,7 @@ AI generated code has been thoroughly reviewed by me before manually implementin
 This is a Compose Multiplatform project. While both Android and iOS are targeted, iOS is currently
 not implemented and only targeted for future implementation.
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform
+* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform
   applications.
   It contains several subfolders:
     - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
@@ -112,25 +112,23 @@ not implemented and only targeted for future implementation.
       folder name.
       For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
       the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-
+* [/androidApp](./androidApp/src) contains the Android application entry point.
 * [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose
-  Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
-  your project.
+  Multiplatform, you need this entry point for your iOS app. This is also where you should add
+  SwiftUI code for your project.
 
 ### Build and Run Android Application
 
 To build and run the development version of the Android app, use the run configuration from the run
-widget
-in your IDE’s toolbar or build it directly from the terminal:
+widget in your IDE’s toolbar or build it directly from the terminal:
 
 - on macOS/Linux
   ```shell
-  ./gradlew :composeApp:assembleDebug
+  ./gradlew :androidApp:assembleDebug
   ```
 - on Windows
   ```shell
-  .\gradlew.bat :composeApp:assembleDebug
+  .\gradlew.bat :androidApp:assembleDebug
   ```
 
 ### Build and Run iOS Application
