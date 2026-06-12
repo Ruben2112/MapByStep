@@ -14,6 +14,8 @@ import com.heveamobile.mapbystep.data.entity.MapEntity
 import com.heveamobile.mapbystep.data.entity.StepDataEntity
 import com.heveamobile.mapbystep.data.entity.UserEntity
 
+const val DATABASE_FILE_NAME = "map_by_step.db"
+
 @Database(
     entities = [
         StepDataEntity::class,

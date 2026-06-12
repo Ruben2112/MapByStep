@@ -2,22 +2,33 @@ package com.heveamobile.mapbystep.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heveamobile.mapbystep.domain.repository.FilePickerHandler
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
+import com.heveamobile.mapbystep.domain.usecase.ExportDatabaseUseCase
+import com.heveamobile.mapbystep.domain.usecase.ImportDatabaseUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
+    val filePickerHandler: FilePickerHandler,
+    private val exportDatabaseUseCase: ExportDatabaseUseCase,
+    private val importDatabaseUseCase: ImportDatabaseUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
     val state: StateFlow<SettingsState> = _state.asStateFlow()
+    private val _events = Channel<SettingsEvent>()
+    val events = _events.receiveAsFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,9 +43,48 @@ class SettingsViewModel(
             is SettingsAction.UpdateDistanceMultiplier -> {
                 viewModelScope.launch {
                     // Round to 1 decimal place to fix floating point precision errors
-                    val roundedValue = kotlin.math.round(action.distanceMultiplier * 10F) / 10.0
+                    val roundedValue = round(action.distanceMultiplier * 10F) / 10.0
                     _state.update { it.copy(distanceMultiplier = roundedValue) }
                     userPreferencesRepository.updateDistanceMultiplier(roundedValue)
+                }
+            }
+
+            is SettingsAction.ExportProgress -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val result = exportDatabaseUseCase()
+                    if (result.isSuccess) {
+                        _events.send(SettingsEvent.ExportSuccessful)
+                    } else {
+                        _events.send(SettingsEvent.ExportFailed)
+                    }
+                }
+            }
+
+            is SettingsAction.ImportProgress -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(showImportConfirmationAlert = true) }
+                }
+            }
+
+            is SettingsAction.CancelImport -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(showImportConfirmationAlert = false) }
+                }
+            }
+
+            is SettingsAction.ConfirmImport -> viewModelScope.launch(Dispatchers.IO) {
+                _state.update { it.copy(showImportConfirmationAlert = false) }
+                val result = importDatabaseUseCase()
+                if (result.isSuccess) {
+                    _events.send(SettingsEvent.ImportSuccessful)
+                } else {
+                    _events.send(SettingsEvent.ImportFailed)
+                }
+            }
+
+            SettingsAction.CloseImportSuccessfulDialog -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(showImportSuccessfulAlert = false) }
                 }
             }
         }

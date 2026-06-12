@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 fun PrimaryButton(
     modifier: Modifier = Modifier,
     label: String,
+    isDestructive: Boolean = false,
     onClick: () -> Unit,
 ) {
     OutlinedButton(
@@ -23,12 +24,18 @@ fun PrimaryButton(
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant,
+            color = if (isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant,
         ),
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = if (isDestructive) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            ),
         )
     }
 }

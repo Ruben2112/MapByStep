@@ -14,10 +14,12 @@ import com.heveamobile.mapbystep.domain.repository.MapRepository
 import com.heveamobile.mapbystep.domain.repository.StepDataRepository
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.repository.UserRepository
+import com.heveamobile.mapbystep.domain.usecase.ExportDatabaseUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetCountOfDirectionsInStockUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetDailyStepsChartDataUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
+import com.heveamobile.mapbystep.domain.usecase.ImportDatabaseUseCase
 import com.heveamobile.mapbystep.domain.usecase.PurchaseDirectionsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SpendStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
@@ -94,6 +96,8 @@ val useCaseModule = module {
     factoryOf(::GetCountOfDirectionsInStockUseCase)
     factoryOf(::PurchaseDirectionsUseCase)
     factoryOf(::GetDailyStepsChartDataUseCase)
+    factoryOf(::ExportDatabaseUseCase)
+    factoryOf(::ImportDatabaseUseCase)
 }
 
 val repositoryModule = module {
@@ -113,17 +117,19 @@ val repositoryModule = module {
 
 expect val targetModule: Module
 
+fun getKoinModules() = listOf(
+    navigationModule,
+    viewModelModule,
+    useCaseModule,
+    repositoryModule,
+    targetModule,
+)
+
 fun initializeKoin(
     config: (KoinApplication.() -> Unit)? = null,
 ) {
     startKoin {
         config?.invoke(this)
-        modules(
-            navigationModule,
-            viewModelModule,
-            useCaseModule,
-            repositoryModule,
-            targetModule,
-        )
+        modules(getKoinModules())
     }
 }
