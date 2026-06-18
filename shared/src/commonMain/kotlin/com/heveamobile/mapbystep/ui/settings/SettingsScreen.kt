@@ -50,7 +50,6 @@ import mapbystep.shared.generated.resources.settings_import
 import mapbystep.shared.generated.resources.settings_import_confirmation_dialog_body
 import mapbystep.shared.generated.resources.settings_import_failed
 import mapbystep.shared.generated.resources.settings_import_successful
-import mapbystep.shared.generated.resources.settings_import_successful_dialog_body
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -125,10 +124,6 @@ fun SettingsContent(
         ImportConfirmationDialog(onAction = onAction)
     }
 
-    AnimatedVisibility(visible = state.showImportSuccessfulAlert) {
-        ImportSuccessfulDialog(onAction = onAction)
-    }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -140,7 +135,7 @@ fun SettingsContent(
             state = state,
         )
 
-        ExportImportProgressCard(onAction = onAction)
+        ExportImportDataCard(onAction = onAction)
     }
 }
 
@@ -220,7 +215,7 @@ private fun DistanceMultiplierCard(
 }
 
 @Composable
-private fun ExportImportProgressCard(
+private fun ExportImportDataCard(
     onAction: (SettingsAction) -> Unit,
 ) {
     Card {
@@ -265,21 +260,6 @@ private fun ImportConfirmationDialog(onAction: (SettingsAction) -> Unit) {
         },
         onDismissRequest = {
             onAction(SettingsAction.CancelImport)
-        },
-    )
-}
-
-@Composable
-private fun ImportSuccessfulDialog(onAction: (SettingsAction) -> Unit) {
-    AlertDialog(
-        title = stringResource(Res.string.settings_import),
-        body = stringResource(Res.string.settings_import_successful_dialog_body),
-        primaryActionLabel = stringResource(Res.string.settings_import),
-        primaryAction = {
-            onAction(SettingsAction.CloseImportSuccessfulDialog)
-        },
-        onDismissRequest = {
-            onAction(SettingsAction.CloseImportSuccessfulDialog)
         },
     )
 }

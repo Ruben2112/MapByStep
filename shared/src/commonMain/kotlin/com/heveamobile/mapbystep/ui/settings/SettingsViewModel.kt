@@ -81,12 +81,6 @@ class SettingsViewModel(
                     _events.send(SettingsEvent.ImportFailed)
                 }
             }
-
-            SettingsAction.CloseImportSuccessfulDialog -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(showImportSuccessfulAlert = false) }
-                }
-            }
         }
     }
 }
