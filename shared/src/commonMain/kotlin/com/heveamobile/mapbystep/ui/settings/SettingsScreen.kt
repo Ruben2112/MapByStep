@@ -112,6 +112,11 @@ fun SettingsContent(
         valueRange = -1F..1F,
         steps = 19,
     )
+
+    LaunchedEffect(state.distanceMultiplier) {
+        sliderState.value = state.distanceMultiplier.toFloat() - 1F
+    }
+
     sliderState.onValueChangeFinished = {
         onAction(SettingsAction.UpdateDistanceMultiplier(sliderState.value + 1F))
     }

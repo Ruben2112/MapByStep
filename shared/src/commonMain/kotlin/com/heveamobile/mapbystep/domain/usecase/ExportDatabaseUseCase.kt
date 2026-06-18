@@ -6,6 +6,6 @@ class ExportDatabaseUseCase(
     private val fileRepository: FileRepository,
 ) {
     suspend operator fun invoke(): Result<Unit> {
-        return fileRepository.exportDatabaseFile()
+        return fileRepository.exportProgress()
     }
 }

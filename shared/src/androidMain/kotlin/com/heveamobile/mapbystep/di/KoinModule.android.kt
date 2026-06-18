@@ -24,6 +24,8 @@ import org.koin.dsl.onClose
 // We cache it here so it survives Koin module reloads during database import.
 private var dataStoreInstance: DataStore<Preferences>? = null
 
+const val PREFS_FILE_NAME = "user_prefs.preferences_pb"
+
 actual val targetModule = module {
     single { getDatabaseBuilder(get()).build() } onClose { it?.close() }
 
@@ -33,7 +35,7 @@ actual val targetModule = module {
         dataStoreInstance
             ?: PreferenceDataStoreFactory
                 .create(
-            produceFile = { androidContext().filesDir.resolve("user_prefs.preferences_pb") },
+                    produceFile = { androidContext().filesDir.resolve(PREFS_FILE_NAME) },
                 )
                 .also { dataStoreInstance = it }
     }

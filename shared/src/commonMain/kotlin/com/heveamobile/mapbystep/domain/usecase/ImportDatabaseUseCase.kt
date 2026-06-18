@@ -6,6 +6,6 @@ class ImportDatabaseUseCase(
     private val fileRepository: FileRepository,
 ) {
     suspend operator fun invoke(): Result<Unit> {
-        return fileRepository.importDatabaseFile()
+        return fileRepository.importProgress()
     }
 }
