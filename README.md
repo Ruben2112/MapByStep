@@ -66,9 +66,16 @@ if you have not discovered them yet for the new level.
 
 ### Settings
 
+#### Distance Multiplier
+
 If you want to be able to complete a map quicker or slower, you can change the distance multiplier.
 This changes how many steps are required to visit a destination. Feel free to set this to whatever
 suits your lifestyle and your body's ability best.
+
+#### Export/Import data
+
+Backup and restore your progress and user preference to a file. Allows for transferring data to a
+different device as well.
 
 ## Technical Information
 
@@ -148,7 +155,7 @@ Because this is in the end just a passion project, it can take some time to get 
 not in any particular order.
 
 - More maps
-- Exporting and importing progress
+- Optional daily reminder notification
 - Database migrations
 - Visual improvements (especially for leveling up)
 - Unit tests
