@@ -45,7 +45,7 @@ fun Card(
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 )
                 if (subtitle != null) {

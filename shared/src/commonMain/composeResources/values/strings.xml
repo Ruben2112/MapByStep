@@ -7,10 +7,11 @@
     <string name="rarity_rare">Rare</string>
     <string name="rarity_epic">Epic</string>
     <string name="rarity_legendary">Legendary</string>
-    <string name="cancel">Cancel</string>
-    <string name="continue">Continue</string>
-    <string name="save">Save</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_continue">Continue</string>
+    <string name="label_save">Save</string>
     <string name="map_points_alternate_text">[M]</string>
+    <string name="permissions_not_granted_error">Missing required permissions</string>
 
     <!-- Content descriptions -->
     <string name="error_card_icon_description">Error icon</string>
@@ -54,9 +55,10 @@
 
     <!-- ProfileScreen -->
     <string name="profile_loading_step_data">Loading step data...</string>
-    <string name="profile_error_permissions_not_granted">Missing required permissions</string>
     <string name="profile_error_action_request_permissions">Grant permissions</string>
     <string name="profile_error_health_connect_not_installed">Health Connect application not installed</string>
+    <string name="profile_health_permission_request_title">Missing permissions</string>
+    <string name="profile_health_permission_request_rationale">Access to your Health Connect data is required to access your step data. Please grant the required permissions in the system settings of the application.</string>
     <string name="historic_step_data_title">Historic Step Data</string>
     <string name="historic_step_data_total_steps">Total steps:</string>
     <string name="historic_step_data_start_time">Start time:</string>
@@ -93,6 +95,9 @@
 
     <!-- SettingsScreen -->
     <string name="settings_daily_reminder_explanation">Set a daily reminder to check out the destinations you visited during the day!</string>
+    <string name="settings_error_notifications_not_granted">Missing required notification permissions</string>
+    <string name="settings_notification_permission_request_title">Missing permissions</string>
+    <string name="settings_notification_permission_request_rationale">Permission to send notifications is required to give you daily reminders. Please grant the required permissions in the system settings of the application.</string>
     <string name="settings_daily_reminder_enable_daily_reminder">Enable daily reminder:</string>
     <string name="settings_daily_reminder_reminder_time">Reminder time:</string>
     <string name="settings_daily_reminder_change_time">Change time</string>

@@ -10,10 +10,14 @@ interface UserPreferencesRepository {
     val isReminderEnabled: Flow<Boolean>
     val reminderTime: Flow<LocalTime>
     val distanceMultiplier: Flow<Double>
+    val hasRequestedNotificationPermission: Flow<Boolean>
+    val hasRequestedHealthPermission: Flow<Boolean>
 
     suspend fun updateGridSortingOrder(sortingOrder: SortingOrder)
     suspend fun updateHideUndiscovered(hideUndiscovered: Boolean)
     suspend fun updateIsReminderEnabled(isEnabled: Boolean)
     suspend fun updateReminderTime(time: LocalTime)
     suspend fun updateDistanceMultiplier(distanceMultiplier: Double)
+    suspend fun updateHasRequestedNotificationPermission(hasRequested: Boolean)
+    suspend fun updateHasRequestedHealthPermission(hasRequested: Boolean)
 }

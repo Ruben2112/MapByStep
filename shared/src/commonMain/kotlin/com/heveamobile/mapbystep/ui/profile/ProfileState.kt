@@ -1,6 +1,6 @@
 package com.heveamobile.mapbystep.ui.profile
 
-import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
+import com.heveamobile.mapbystep.ui.common.PermissionStatus
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -18,9 +18,15 @@ data class ProfileState(
     val thirtyDayRecord: Long = 0L,
     val dailyStepData: Map<Instant, Long> = emptyMap(),
 
-    val healthPermissionState: HealthPermissionStatus = HealthPermissionStatus.Loading,
+    val healthPermissionState: PermissionStatus = PermissionStatus.Loading,
+    val hasRequestedHealthPermission: Boolean = false,
+    val showHealthSettingsDialog: Boolean = false,
 )
 
 sealed interface ProfileAction {
     data object UpdatePermissionState : ProfileAction
+    data class UpdateHasRequestedHealthPermission(val hasRequested: Boolean) : ProfileAction
+    data object ShowHealthSettingsDialog : ProfileAction
+    data object DismissHealthSettingsDialog : ProfileAction
+    data object OpenAppSettings : ProfileAction
 }

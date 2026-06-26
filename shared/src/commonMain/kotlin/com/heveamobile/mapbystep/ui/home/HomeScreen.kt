@@ -242,7 +242,7 @@ fun HomeContent(
                                 text = stringResource(
                                     (backStack.last() as Route).toNavigationDrawerRoute().routeName,
                                 ),
-                                style = MaterialTheme.typography.titleMedium,
+                                style = MaterialTheme.typography.titleLarge,
                             )
                         },
                         navigationIcon = {

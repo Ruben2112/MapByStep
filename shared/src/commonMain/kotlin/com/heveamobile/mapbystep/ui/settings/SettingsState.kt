@@ -1,5 +1,6 @@
 package com.heveamobile.mapbystep.ui.settings
 
+import com.heveamobile.mapbystep.ui.common.PermissionStatus
 import kotlinx.datetime.LocalTime
 
 data class SettingsState(
@@ -13,6 +14,9 @@ data class SettingsState(
     ),
     val showTimePickerAlertDialog: Boolean = false,
     val showImportConfirmationAlert: Boolean = false,
+    val showNotificationSettingsDialog: Boolean = false,
+    val hasRequestedNotificationPermission: Boolean = false,
+    val notificationPermissionStatus: PermissionStatus = PermissionStatus.Loading,
 )
 
 sealed interface SettingsAction {
@@ -24,6 +28,11 @@ sealed interface SettingsAction {
     data class UpdateReminderIsEnabled(val isEnabled: Boolean) : SettingsAction
     data object ToggleTimePickerAlertDialog : SettingsAction
     data class UpdateReminderTime(val time: LocalTime) : SettingsAction
+    data object UpdateNotificationPermissionStatus : SettingsAction
+    data object OpenAppSettings : SettingsAction
+    data object ShowNotificationSettingsDialog : SettingsAction
+    data object DismissNotificationSettingsDialog : SettingsAction
+    data class UpdateHasRequestedNotificationPermission(val hasRequested: Boolean) : SettingsAction
 }
 
 sealed interface SettingsEvent {

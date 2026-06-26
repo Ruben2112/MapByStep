@@ -9,12 +9,12 @@ import com.heveamobile.mapbystep.data.source.android.HealthConnectManager
 import com.heveamobile.mapbystep.data.source.local.AppDatabase
 import com.heveamobile.mapbystep.data.source.local.getDatabaseBuilder
 import com.heveamobile.mapbystep.data.source.remote.HealthDataSource
+import com.heveamobile.mapbystep.domain.manager.AndroidPermissionManager
 import com.heveamobile.mapbystep.domain.manager.DailyReminderManager
-import com.heveamobile.mapbystep.domain.manager.HealthPermissionManager
+import com.heveamobile.mapbystep.domain.manager.PermissionManager
 import com.heveamobile.mapbystep.domain.repository.FilePickerHandler
 import com.heveamobile.mapbystep.domain.repository.FileRepository
 import com.heveamobile.mapbystep.platform.manager.AndroidDailyReminderManager
-import com.heveamobile.mapbystep.platform.manager.AndroidHealthPermissionManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
@@ -50,7 +50,7 @@ actual val targetModule = module {
     singleOf(::AndroidFilePickerHandler) { bind<FilePickerHandler>() }
     singleOf(::AndroidFileRepositoryImpl) { bind<FileRepository>() }
 
-    singleOf(::AndroidHealthPermissionManager) { bind<HealthPermissionManager>() }
+    singleOf(::AndroidPermissionManager) { bind<PermissionManager>() }
     singleOf(::AndroidDailyReminderManager) { bind<DailyReminderManager>() }
     singleOf(::HealthConnectManager) { bind<HealthDataSource>() }
 }

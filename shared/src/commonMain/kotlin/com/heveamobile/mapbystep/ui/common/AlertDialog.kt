@@ -48,7 +48,7 @@ fun AlertDialog(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = title,
-                    style = MaterialTheme.typography.titleMedium.copy(if (isPrimaryActionDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary),
+                    style = MaterialTheme.typography.titleMedium.copy(if (isPrimaryActionDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface),
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),

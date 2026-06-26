@@ -3,6 +3,8 @@ package com.heveamobile.mapbystep.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heveamobile.mapbystep.domain.manager.DailyReminderManager
+import com.heveamobile.mapbystep.domain.manager.PermissionManager
+import com.heveamobile.mapbystep.domain.manager.PermissionType
 import com.heveamobile.mapbystep.domain.repository.FilePickerHandler
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.ExportDatabaseUseCase
@@ -26,6 +28,7 @@ class SettingsViewModel(
     private val exportDatabaseUseCase: ExportDatabaseUseCase,
     private val importDatabaseUseCase: ImportDatabaseUseCase,
     private val dailyReminderManager: DailyReminderManager,
+    val permissionManager: PermissionManager,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
@@ -37,17 +40,23 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
+            val notificationPermissionStatus =
+                permissionManager.checkPermissionStatus(PermissionType.Notifications)
+            _state.update { it.copy(notificationPermissionStatus = notificationPermissionStatus) }
+
             combine(
                 userPreferencesRepository.distanceMultiplier,
                 userPreferencesRepository.isReminderEnabled,
                 userPreferencesRepository.reminderTime,
-            ) { distanceMultiplier, reminderIsEnabled, reminderTime ->
+                userPreferencesRepository.hasRequestedNotificationPermission,
+            ) { distanceMultiplier, reminderIsEnabled, reminderTime, hasRequestedNotificationPermission ->
                 _state.update {
                     it.copy(
                         isLoading = false,
                         distanceMultiplier = distanceMultiplier,
                         reminderIsEnabled = reminderIsEnabled,
                         reminderTime = reminderTime,
+                        hasRequestedNotificationPermission = hasRequestedNotificationPermission,
                     )
                 }
             }.collect()
@@ -121,6 +130,33 @@ class SettingsViewModel(
             is SettingsAction.ToggleTimePickerAlertDialog -> {
                 viewModelScope.launch {
                     _state.update { it.copy(showTimePickerAlertDialog = !it.showTimePickerAlertDialog) }
+                }
+            }
+
+            is SettingsAction.UpdateNotificationPermissionStatus -> {
+                viewModelScope.launch {
+                    val status =
+                        permissionManager.checkPermissionStatus(PermissionType.Notifications)
+                    _state.update { it.copy(notificationPermissionStatus = status) }
+                }
+            }
+
+            is SettingsAction.OpenAppSettings -> {
+                permissionManager.openAppSettings()
+                _state.update { it.copy(showNotificationSettingsDialog = false) }
+            }
+
+            is SettingsAction.ShowNotificationSettingsDialog -> {
+                _state.update { it.copy(showNotificationSettingsDialog = true) }
+            }
+
+            is SettingsAction.DismissNotificationSettingsDialog -> {
+                _state.update { it.copy(showNotificationSettingsDialog = false) }
+            }
+
+            is SettingsAction.UpdateHasRequestedNotificationPermission -> {
+                viewModelScope.launch {
+                    userPreferencesRepository.updateHasRequestedNotificationPermission(action.hasRequested)
                 }
             }
         }

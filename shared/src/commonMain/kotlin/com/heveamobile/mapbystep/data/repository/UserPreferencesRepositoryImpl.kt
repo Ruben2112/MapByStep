@@ -21,6 +21,10 @@ class UserPreferencesRepositoryImpl(
         val IS_REMINDER_ENABLED = booleanPreferencesKey("is_reminder_enabled")
         val REMINDER_TIME = stringPreferencesKey("reminder_time")
         val DISTANCE_MULTIPLIER = doublePreferencesKey("distance_multiplier")
+        val HAS_REQUESTED_NOTIFICATION_PERMISSION =
+            booleanPreferencesKey("has_requested_notification_permission")
+        val HAS_REQUESTED_HEALTH_PERMISSION =
+            booleanPreferencesKey("has_requested_health_permission")
     }
 
     override val gridSortingOrder: Flow<SortingOrder> = dataStore.data.map { prefs ->
@@ -56,6 +60,15 @@ class UserPreferencesRepositoryImpl(
             ?: 1.0
     }
 
+    override val hasRequestedNotificationPermission: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.HAS_REQUESTED_NOTIFICATION_PERMISSION]
+            ?: false
+    }
+
+    override val hasRequestedHealthPermission: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.HAS_REQUESTED_HEALTH_PERMISSION]
+            ?: false
+    }
 
     override suspend fun updateGridSortingOrder(sortingOrder: SortingOrder) {
         dataStore.edit { it[Keys.GRID_SORTING_ORDER] = sortingOrder.name }
@@ -75,5 +88,13 @@ class UserPreferencesRepositoryImpl(
 
     override suspend fun updateDistanceMultiplier(distanceMultiplier: Double) {
         dataStore.edit { it[Keys.DISTANCE_MULTIPLIER] = distanceMultiplier }
+    }
+
+    override suspend fun updateHasRequestedNotificationPermission(hasRequested: Boolean) {
+        dataStore.edit { it[Keys.HAS_REQUESTED_NOTIFICATION_PERMISSION] = hasRequested }
+    }
+
+    override suspend fun updateHasRequestedHealthPermission(hasRequested: Boolean) {
+        dataStore.edit { it[Keys.HAS_REQUESTED_HEALTH_PERMISSION] = hasRequested }
     }
 }

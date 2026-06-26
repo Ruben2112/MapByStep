@@ -56,7 +56,7 @@ fun CountryInfoCard(
             Text(
                 modifier = Modifier.padding(MaterialTheme.spacing.medium),
                 text = destination.name,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = MaterialTheme.typography.titleLarge.copy(
                     color = destination.rarity.color,
                 ),
             )
@@ -153,7 +153,7 @@ fun CountryInfoCard(
                         Text(
                             text = visitCountOverride?.toString()
                                 ?: destination.totalVisits.toString(),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     }
                     Text(

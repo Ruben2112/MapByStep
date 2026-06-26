@@ -24,17 +24,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
-import com.heveamobile.mapbystep.domain.manager.rememberHealthPermissionLauncher
+import com.heveamobile.mapbystep.domain.manager.PermissionType
+import com.heveamobile.mapbystep.domain.manager.rememberPermissionLauncher
 import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.formatDate
 import com.heveamobile.mapbystep.formatDateTime
 import com.heveamobile.mapbystep.theme.spacing
+import com.heveamobile.mapbystep.ui.common.AlertDialog
 import com.heveamobile.mapbystep.ui.common.Card
 import com.heveamobile.mapbystep.ui.common.ErrorCard
-import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
 import com.heveamobile.mapbystep.ui.common.KeyValueRow
+import com.heveamobile.mapbystep.ui.common.PermissionStatus
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Scroll
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
@@ -56,6 +61,9 @@ import mapbystep.shared.generated.resources.Res
 import mapbystep.shared.generated.resources.historic_step_data_start_time
 import mapbystep.shared.generated.resources.historic_step_data_title
 import mapbystep.shared.generated.resources.historic_step_data_total_steps
+import mapbystep.shared.generated.resources.label_cancel
+import mapbystep.shared.generated.resources.label_continue
+import mapbystep.shared.generated.resources.permissions_not_granted_error
 import mapbystep.shared.generated.resources.personal_current_vs_best_steps
 import mapbystep.shared.generated.resources.personal_records_seven_days
 import mapbystep.shared.generated.resources.personal_records_subtitle
@@ -64,7 +72,8 @@ import mapbystep.shared.generated.resources.personal_records_title
 import mapbystep.shared.generated.resources.personal_records_twenty_four_hours
 import mapbystep.shared.generated.resources.profile_error_action_request_permissions
 import mapbystep.shared.generated.resources.profile_error_health_connect_not_installed
-import mapbystep.shared.generated.resources.profile_error_permissions_not_granted
+import mapbystep.shared.generated.resources.profile_health_permission_request_rationale
+import mapbystep.shared.generated.resources.profile_health_permission_request_title
 import mapbystep.shared.generated.resources.profile_loading_step_data
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -76,12 +85,23 @@ fun ProfileScreen(
 ) {
     val viewModel = koinViewModel<ProfileViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val permissionManager = viewModel.healthPermissionManager
 
-    val launcher = rememberHealthPermissionLauncher(
-        manager = permissionManager,
-        onResult = {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onAction(ProfileAction.UpdatePermissionState)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+    }
+
+    val launcher = rememberPermissionLauncher(
+        manager = viewModel.permissionManager,
+        type = PermissionType.Health,
+        onResult = { _ ->
             viewModel.onAction(ProfileAction.UpdatePermissionState)
+            viewModel.onAction(ProfileAction.UpdateHasRequestedHealthPermission(true))
         },
     )
 
@@ -89,7 +109,13 @@ fun ProfileScreen(
         modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
-        onPermissionRequest = { launcher() },
+        onPermissionRequest = {
+            if (state.healthPermissionState == PermissionStatus.NotGranted && state.hasRequestedHealthPermission) {
+                viewModel.onAction(ProfileAction.ShowHealthSettingsDialog)
+            } else {
+                launcher()
+            }
+        },
     )
 }
 
@@ -100,6 +126,10 @@ fun ProfileContent(
     onAction: (ProfileAction) -> Unit,
     onPermissionRequest: () -> Unit,
 ) {
+    AnimatedVisibility(visible = state.showHealthSettingsDialog) {
+        HealthSettingsDialog(onAction = onAction)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -129,18 +159,18 @@ fun ProfileContent(
         }
         AnimatedContent(targetState = state.healthPermissionState) { permissionState ->
             when (permissionState) {
-                HealthPermissionStatus.Loading -> {}
-                HealthPermissionStatus.Granted -> {}
-                HealthPermissionStatus.NotGranted -> Column(modifier = Modifier.fillMaxWidth()) {
+                PermissionStatus.Loading -> {}
+                PermissionStatus.Granted -> {}
+                PermissionStatus.NotGranted, PermissionStatus.RationaleRequired -> Column(modifier = Modifier.fillMaxWidth()) {
                     ErrorCard(
-                        errorMessage = stringResource(Res.string.profile_error_permissions_not_granted),
+                        errorMessage = stringResource(Res.string.permissions_not_granted_error),
                         actionLabel = stringResource(Res.string.profile_error_action_request_permissions),
                         onAction = onPermissionRequest,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
 
-                HealthPermissionStatus.NotInstalled -> Column(modifier = Modifier.fillMaxWidth()) {
+                PermissionStatus.NotInstalled -> Column(modifier = Modifier.fillMaxWidth()) {
                     ErrorCard(errorMessage = stringResource(Res.string.profile_error_health_connect_not_installed))
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
@@ -150,6 +180,25 @@ fun ProfileContent(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         PersonalRecordsDataCard(state = state)
     }
+}
+
+@Composable
+private fun HealthSettingsDialog(onAction: (ProfileAction) -> Unit) {
+    AlertDialog(
+        title = stringResource(Res.string.profile_health_permission_request_title),
+        body = stringResource(Res.string.profile_health_permission_request_rationale),
+        primaryActionLabel = stringResource(Res.string.label_continue),
+        primaryAction = {
+            onAction(ProfileAction.OpenAppSettings)
+        },
+        secondaryActionLabel = stringResource(Res.string.label_cancel),
+        secondaryAction = {
+            onAction(ProfileAction.DismissHealthSettingsDialog)
+        },
+        onDismissRequest = {
+            onAction(ProfileAction.DismissHealthSettingsDialog)
+        },
+    )
 }
 
 @Composable

@@ -2,14 +2,15 @@ package com.heveamobile.mapbystep.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heveamobile.mapbystep.domain.manager.HealthPermissionManager
+import com.heveamobile.mapbystep.domain.manager.PermissionManager
+import com.heveamobile.mapbystep.domain.manager.PermissionType
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.GetMapsWithProgressUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SpendStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase
 import com.heveamobile.mapbystep.domain.usecase.UpsertInitialMapDataUseCase
-import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
+import com.heveamobile.mapbystep.ui.common.PermissionStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
-    private val healthPermissionManager: HealthPermissionManager,
+    private val permissionManager: PermissionManager,
     private val getUserUseCase: GetUserUseCase,
     private val syncStepsUseCase: SyncStepsUseCase,
     private val upsertInitialMapDataUseCase: UpsertInitialMapDataUseCase,
@@ -89,7 +90,7 @@ class HomeViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             val syncStepsJob = launch {
-                if (healthPermissionManager.checkPermissionState() == HealthPermissionStatus.Granted) {
+                if (permissionManager.checkPermissionStatus(PermissionType.Health) == PermissionStatus.Granted) {
                     syncStepsUseCase()
                 }
             }

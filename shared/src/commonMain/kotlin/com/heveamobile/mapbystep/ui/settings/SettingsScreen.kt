@@ -1,6 +1,11 @@
 package com.heveamobile.mapbystep.ui.settings
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,8 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
+import com.heveamobile.mapbystep.domain.manager.rememberPermissionLauncher
 import com.heveamobile.mapbystep.formatTime
 import com.heveamobile.mapbystep.theme.sliderColors
 import com.heveamobile.mapbystep.theme.spacing
@@ -39,22 +48,28 @@ import com.heveamobile.mapbystep.theme.switchColors
 import com.heveamobile.mapbystep.theme.timePickerColors
 import com.heveamobile.mapbystep.ui.common.AlertDialog
 import com.heveamobile.mapbystep.ui.common.Card
+import com.heveamobile.mapbystep.ui.common.ErrorCard
 import com.heveamobile.mapbystep.ui.common.FilePickerHandlerEffect
 import com.heveamobile.mapbystep.ui.common.InfoCard
+import com.heveamobile.mapbystep.ui.common.PermissionStatus
 import com.heveamobile.mapbystep.ui.common.PrimaryButton
 import com.heveamobile.mapbystep.ui.common.SecondaryButton
 import com.heveamobile.mapbystep.ui.home.LocalSnackbarHostState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.LocalTime
 import mapbystep.shared.generated.resources.Res
-import mapbystep.shared.generated.resources.cancel
-import mapbystep.shared.generated.resources.save
+import mapbystep.shared.generated.resources.label_cancel
+import mapbystep.shared.generated.resources.label_continue
+import mapbystep.shared.generated.resources.label_save
+import mapbystep.shared.generated.resources.permissions_not_granted_error
+import mapbystep.shared.generated.resources.profile_error_action_request_permissions
 import mapbystep.shared.generated.resources.settings_daily_reminder_change_time
 import mapbystep.shared.generated.resources.settings_daily_reminder_enable_daily_reminder
 import mapbystep.shared.generated.resources.settings_daily_reminder_explanation
 import mapbystep.shared.generated.resources.settings_daily_reminder_reminder_time
 import mapbystep.shared.generated.resources.settings_distance_multiplier
 import mapbystep.shared.generated.resources.settings_distance_multiplier_explanation
+import mapbystep.shared.generated.resources.settings_error_notifications_not_granted
 import mapbystep.shared.generated.resources.settings_export
 import mapbystep.shared.generated.resources.settings_export_failed
 import mapbystep.shared.generated.resources.settings_export_import_explanation
@@ -63,6 +78,8 @@ import mapbystep.shared.generated.resources.settings_import
 import mapbystep.shared.generated.resources.settings_import_confirmation_dialog_body
 import mapbystep.shared.generated.resources.settings_import_failed
 import mapbystep.shared.generated.resources.settings_import_successful
+import mapbystep.shared.generated.resources.settings_notification_permission_request_rationale
+import mapbystep.shared.generated.resources.settings_notification_permission_request_title
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -75,6 +92,16 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = LocalSnackbarHostState.current
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onAction(SettingsAction.UpdateNotificationPermissionStatus)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -101,10 +128,26 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
 
     FilePickerHandlerEffect(viewModel.filePickerHandler)
 
+    val launcher = rememberPermissionLauncher(
+        manager = viewModel.permissionManager,
+        type = com.heveamobile.mapbystep.domain.manager.PermissionType.Notifications,
+        onResult = { _ ->
+            viewModel.onAction(SettingsAction.UpdateNotificationPermissionStatus)
+            viewModel.onAction(SettingsAction.UpdateHasRequestedNotificationPermission(true))
+        },
+    )
+
     SettingsContent(
         modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
+        onPermissionRequest = {
+            if (state.notificationPermissionStatus == PermissionStatus.NotGranted && state.hasRequestedNotificationPermission) {
+                viewModel.onAction(SettingsAction.ShowNotificationSettingsDialog)
+            } else {
+                launcher()
+            }
+        },
     )
 }
 
@@ -118,6 +161,7 @@ private fun SettingsContent(
     modifier: Modifier = Modifier,
     state: SettingsState,
     onAction: (SettingsAction) -> Unit,
+    onPermissionRequest: () -> Unit,
 ) {
 
     AnimatedVisibility(visible = state.showImportConfirmationAlert) {
@@ -131,6 +175,10 @@ private fun SettingsContent(
         )
     }
 
+    AnimatedVisibility(visible = state.showNotificationSettingsDialog) {
+        NotificationSettingsDialog(onAction = onAction)
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -140,7 +188,9 @@ private fun SettingsContent(
         ReminderCard(
             reminderIsEnabled = state.reminderIsEnabled,
             reminderTime = state.reminderTime,
+            notificationPermissionStatus = state.notificationPermissionStatus,
             onAction = onAction,
+            onPermissionRequest = onPermissionRequest,
         )
         DistanceMultiplierCard(
             distanceMultiplier = state.distanceMultiplier,
@@ -154,7 +204,9 @@ private fun SettingsContent(
 private fun ReminderCard(
     reminderIsEnabled: Boolean,
     reminderTime: LocalTime,
+    notificationPermissionStatus: PermissionStatus,
     onAction: (SettingsAction) -> Unit,
+    onPermissionRequest: () -> Unit,
 ) {
     Card {
         Column(
@@ -167,54 +219,98 @@ private fun ReminderCard(
                     .padding(top = MaterialTheme.spacing.medium),
                 text = stringResource(Res.string.settings_daily_reminder_explanation),
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
-            ) {
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(Res.string.settings_daily_reminder_enable_daily_reminder),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Switch(
-                    checked = reminderIsEnabled,
-                    onCheckedChange = { onAction(SettingsAction.UpdateReminderIsEnabled(it)) },
-                    colors = switchColors(),
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-                    .padding(bottom = MaterialTheme.spacing.medium),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
-            ) {
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(Res.string.settings_daily_reminder_reminder_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Text(
-                    text = formatTime(
-                        localTime = reminderTime,
-                        formatMode = FormatMode.Short,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
 
-            PrimaryButton(
-                modifier = Modifier.padding(
-                    bottom = MaterialTheme.spacing.medium,
-                    end = MaterialTheme.spacing.medium,
-                ),
-                label = stringResource(Res.string.settings_daily_reminder_change_time),
-            ) {
-                onAction(SettingsAction.ToggleTimePickerAlertDialog)
+            AnimatedContent(
+                targetState = notificationPermissionStatus,
+                transitionSpec = {
+                    fadeIn(
+                        animationSpec = tween(
+                            220,
+                            delayMillis = 90,
+                        ),
+                    ) togetherWith fadeOut(animationSpec = tween(90))
+                },
+                label = "NotificationPermissionStatus",
+            ) { status ->
+                when (status) {
+                    PermissionStatus.Granted -> {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                            horizontalAlignment = Alignment.End,
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1F),
+                                    text = stringResource(Res.string.settings_daily_reminder_enable_daily_reminder),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                                Switch(
+                                    checked = reminderIsEnabled,
+                                    onCheckedChange = { onAction(SettingsAction.UpdateReminderIsEnabled(it)) },
+                                    colors = switchColors(),
+                                )
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                                    .padding(bottom = MaterialTheme.spacing.medium),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1F),
+                                    text = stringResource(Res.string.settings_daily_reminder_reminder_time),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                                Text(
+                                    text = formatTime(
+                                        localTime = reminderTime,
+                                        formatMode = FormatMode.Short,
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+
+                            PrimaryButton(
+                                modifier = Modifier.padding(
+                                    bottom = MaterialTheme.spacing.medium,
+                                    end = MaterialTheme.spacing.medium,
+                                ),
+                                label = stringResource(Res.string.settings_daily_reminder_change_time),
+                            ) {
+                                onAction(SettingsAction.ToggleTimePickerAlertDialog)
+                            }
+                        }
+                    }
+
+                    PermissionStatus.NotGranted, PermissionStatus.RationaleRequired -> {
+                        ErrorCard(
+                            modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.medium)
+                                .padding(bottom = MaterialTheme.spacing.medium),
+                            errorMessage = stringResource(
+                                if (status == PermissionStatus.RationaleRequired) {
+                                    Res.string.permissions_not_granted_error
+                                } else {
+                                    Res.string.settings_error_notifications_not_granted
+                                },
+                            ),
+                            actionLabel = stringResource(Res.string.profile_error_action_request_permissions),
+                            onAction = onPermissionRequest,
+                        )
+                    }
+
+                    else -> {
+                        // Other states are not interesting here
+                    }
+                }
             }
         }
     }
@@ -235,7 +331,7 @@ fun TimePickerDialog(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         onDismissRequest = { onAction(SettingsAction.ToggleTimePickerAlertDialog) },
         confirmButton = {
-            PrimaryButton(label = stringResource(Res.string.save)) {
+            PrimaryButton(label = stringResource(Res.string.label_save)) {
                 onAction(
                     SettingsAction.UpdateReminderTime(
                         LocalTime(
@@ -248,7 +344,7 @@ fun TimePickerDialog(
             }
         },
         dismissButton = {
-            SecondaryButton(label = stringResource(Res.string.cancel)) {
+            SecondaryButton(label = stringResource(Res.string.label_cancel)) {
                 onAction(SettingsAction.ToggleTimePickerAlertDialog)
             }
         },
@@ -391,12 +487,31 @@ private fun ImportConfirmationDialog(onAction: (SettingsAction) -> Unit) {
             onAction(SettingsAction.ConfirmImport)
         },
         isPrimaryActionDestructive = true,
-        secondaryActionLabel = stringResource(Res.string.cancel),
+        secondaryActionLabel = stringResource(Res.string.label_cancel),
         secondaryAction = {
             onAction(SettingsAction.CancelImport)
         },
         onDismissRequest = {
             onAction(SettingsAction.CancelImport)
+        },
+    )
+}
+
+@Composable
+private fun NotificationSettingsDialog(onAction: (SettingsAction) -> Unit) {
+    AlertDialog(
+        title = stringResource(Res.string.settings_notification_permission_request_title),
+        body = stringResource(Res.string.settings_notification_permission_request_rationale),
+        primaryActionLabel = stringResource(Res.string.label_continue),
+        primaryAction = {
+            onAction(SettingsAction.OpenAppSettings)
+        },
+        secondaryActionLabel = stringResource(Res.string.label_cancel),
+        secondaryAction = {
+            onAction(SettingsAction.DismissNotificationSettingsDialog)
+        },
+        onDismissRequest = {
+            onAction(SettingsAction.DismissNotificationSettingsDialog)
         },
     )
 }

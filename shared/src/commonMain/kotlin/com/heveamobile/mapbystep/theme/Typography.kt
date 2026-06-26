@@ -20,9 +20,14 @@ val Tomorrow
 
 val Typography: Typography
     @Composable get() = Typography(
-        titleMedium = TextStyle(
+        titleLarge = TextStyle(
             fontFamily = Tomorrow,
             fontSize = 24.sp,
+            color = OnSurface,
+        ),
+        titleMedium = TextStyle(
+            fontFamily = Tomorrow,
+            fontSize = 18.sp,
             color = OnSurface,
         ),
         titleSmall = TextStyle(
