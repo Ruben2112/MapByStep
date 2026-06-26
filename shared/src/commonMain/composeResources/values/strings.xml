@@ -9,6 +9,8 @@
     <string name="rarity_legendary">Legendary</string>
     <string name="cancel">Cancel</string>
     <string name="continue">Continue</string>
+    <string name="save">Save</string>
+    <string name="map_points_alternate_text">[M]</string>
 
     <!-- Content descriptions -->
     <string name="error_card_icon_description">Error icon</string>
@@ -80,7 +82,7 @@
     <!-- DestinationInfoScreen -->
 
     <!-- DirectionsScreen -->
-    <string name="directions_explanation">Purchase directions with [M] Map Points to guarantee the rarity of your next destinations. Directions that you own will be used in order of highest to lowest rarity.</string>
+    <string name="directions_explanation">Purchase directions with %1$s Map Points to guarantee that your next destination is an undiscovered destination of a specific rarity. Directions that you own will be consumed in order of highest to lowest rarity.</string>
     <string name="directions_current_map_points">Current map points:</string>
     <string name="directions_shop">Directions Shop</string>
     <string name="directions_total_cost">Total cost:</string>
@@ -90,6 +92,10 @@
     <string name="directions_sold_out">Sold out!</string>
 
     <!-- SettingsScreen -->
+    <string name="settings_daily_reminder_explanation">Set a daily reminder to check out the destinations you visited during the day!</string>
+    <string name="settings_daily_reminder_enable_daily_reminder">Enable daily reminder:</string>
+    <string name="settings_daily_reminder_reminder_time">Reminder time:</string>
+    <string name="settings_daily_reminder_change_time">Change time</string>
     <string name="settings_distance_multiplier_explanation">Adjust how many steps are required to reach each destination. This allows you to play the game at your own pace with respect to your body's ability. Setting the multiplier to 0.0 allows you to visit a single destination whenever you want.</string>
     <string name="settings_distance_multiplier">Distance multiplier:</string>
     <string name="settings_export_import_explanation">Save your progress and user preferences by exporting it to a file. Move that file somewhere safe to prevent loss of progress. Restore your data by importing it again. You can also transfer your progress to a different device this way.</string>

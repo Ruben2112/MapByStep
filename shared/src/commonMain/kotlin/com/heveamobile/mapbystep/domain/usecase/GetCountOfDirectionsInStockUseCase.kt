@@ -24,6 +24,9 @@ class GetCountOfDirectionsInStockUseCase {
         }
         val owned = map.directions.count { it == rarity }
 
+        // total = amount of destinations in map
+        // visited = amount of destinations that were already visited
+        // owned = amount of directions the user already owns
         return (total - visited - owned).coerceAtLeast(0)
     }
 }

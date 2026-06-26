@@ -1,5 +1,14 @@
 package com.heveamobile.mapbystep.theme
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.TimePickerColors
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.heveamobile.mapbystep.domain.model.Rarity
 
@@ -53,6 +62,54 @@ val Rarity.color: Color
         Rarity.Epic -> RarityEpic
         Rarity.Legendary -> RarityLegendary
     }
+
+@Composable
+fun switchColors(): SwitchColors {
+    return SwitchDefaults
+        .colors()
+        .copy(
+            uncheckedBorderColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            uncheckedThumbColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            uncheckedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+            checkedBorderColor = MaterialTheme.colorScheme.onSurface,
+            checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+            checkedTrackColor = MaterialTheme.colorScheme.onSurface,
+        )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun timePickerColors(): TimePickerColors {
+    return TimePickerDefaults
+        .colors()
+        .copy(
+            clockDialColor = MaterialTheme.colorScheme.secondaryContainer,
+            selectorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            clockDialSelectedContentColor = MaterialTheme.colorScheme.onSurface,
+            clockDialUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
+            periodSelectorBorderColor = MaterialTheme.colorScheme.outline,
+            periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.background,
+            periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onSurface,
+            periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
+            timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.background,
+            timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onSurface,
+            timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
+        )
+}
+
+@Composable
+fun sliderColors(): SliderColors {
+    return SliderDefaults
+        .colors()
+        .copy(
+            activeTrackColor = MaterialTheme.colorScheme.onSurface,
+            inactiveTrackColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            activeTickColor = Color.Transparent,
+            inactiveTickColor = Color.Transparent,
+        )
+}
 
 fun Color.toHex(): String {
     val r = (red * 255)

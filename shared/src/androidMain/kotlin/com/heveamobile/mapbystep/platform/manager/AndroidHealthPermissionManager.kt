@@ -1,10 +1,11 @@
-package com.heveamobile.mapbystep.domain
+package com.heveamobile.mapbystep.platform.manager
 
 import android.content.Context
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.StepsRecord
+import com.heveamobile.mapbystep.domain.manager.HealthPermissionManager
 import com.heveamobile.mapbystep.ui.common.HealthPermissionStatus
 
 class AndroidHealthPermissionManager(private val context: Context) : HealthPermissionManager {

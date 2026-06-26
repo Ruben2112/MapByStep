@@ -10,6 +10,7 @@ import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.ui.home.SortingOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalTime
 
 class UserPreferencesRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
@@ -17,6 +18,8 @@ class UserPreferencesRepositoryImpl(
     private object Keys {
         val GRID_SORTING_ORDER = stringPreferencesKey("grid_sorting_order")
         val HIDE_UNDISCOVERED = booleanPreferencesKey("hide_undiscovered")
+        val IS_REMINDER_ENABLED = booleanPreferencesKey("is_reminder_enabled")
+        val REMINDER_TIME = stringPreferencesKey("reminder_time")
         val DISTANCE_MULTIPLIER = doublePreferencesKey("distance_multiplier")
     }
 
@@ -31,10 +34,28 @@ class UserPreferencesRepositoryImpl(
         prefs[Keys.HIDE_UNDISCOVERED]
             ?: false
     }
+
+    override val isReminderEnabled: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.IS_REMINDER_ENABLED]
+            ?: false
+    }
+    override val reminderTime: Flow<LocalTime> = dataStore.data.map { prefs ->
+        val reminderTime = prefs[Keys.REMINDER_TIME]
+        if (reminderTime == null) {
+            LocalTime(
+                hour = 21,
+                minute = 0,
+            )
+        } else {
+            LocalTime.parse(reminderTime)
+        }
+    }
+
     override val distanceMultiplier: Flow<Double> = dataStore.data.map { prefs ->
         prefs[Keys.DISTANCE_MULTIPLIER]
             ?: 1.0
     }
+
 
     override suspend fun updateGridSortingOrder(sortingOrder: SortingOrder) {
         dataStore.edit { it[Keys.GRID_SORTING_ORDER] = sortingOrder.name }
@@ -42,6 +63,14 @@ class UserPreferencesRepositoryImpl(
 
     override suspend fun updateHideUndiscovered(hideUndiscovered: Boolean) {
         dataStore.edit { it[Keys.HIDE_UNDISCOVERED] = hideUndiscovered }
+    }
+
+    override suspend fun updateIsReminderEnabled(isEnabled: Boolean) {
+        dataStore.edit { it[Keys.IS_REMINDER_ENABLED] = isEnabled }
+    }
+
+    override suspend fun updateReminderTime(time: LocalTime) {
+        dataStore.edit { it[Keys.REMINDER_TIME] = time.toString() }
     }
 
     override suspend fun updateDistanceMultiplier(distanceMultiplier: Double) {

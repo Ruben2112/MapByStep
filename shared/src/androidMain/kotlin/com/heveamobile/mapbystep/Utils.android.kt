@@ -1,12 +1,16 @@
 package com.heveamobile.mapbystep
 
 import android.text.format.DateFormat.getBestDateTimePattern
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.toJavaLocalTime
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.sql.Date
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
@@ -93,6 +97,25 @@ actual fun formatTime(
         )
         .format(date)
 
+}
+
+actual fun formatTime(
+    localTime: LocalTime,
+    formatMode: FormatMode,
+): String {
+    val format = when (formatMode) {
+        FormatMode.Short -> FormatStyle.SHORT
+        FormatMode.Medium -> FormatStyle.MEDIUM
+        FormatMode.Long -> FormatStyle.MEDIUM // LONG requires TimeZone which LocalTime doesn't have
+    }
+
+    val formatter = DateTimeFormatter
+        .ofLocalizedTime(format)
+        .withLocale(Locale.getDefault())
+
+    return localTime
+        .toJavaLocalTime()
+        .format(formatter)
 }
 
 actual fun formatPopulation(

@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.heveamobile.mapbystep.FormatMode
-import com.heveamobile.mapbystep.domain.rememberHealthPermissionLauncher
+import com.heveamobile.mapbystep.domain.manager.rememberHealthPermissionLauncher
 import com.heveamobile.mapbystep.formatAmount
 import com.heveamobile.mapbystep.formatDate
 import com.heveamobile.mapbystep.formatDateTime

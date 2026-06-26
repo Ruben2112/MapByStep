@@ -36,7 +36,7 @@ fun AlertDialog(
         Card(
             colors = CardDefaults
                 .cardColors()
-                .copy(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer),
         ) {
             Column(
                 modifier = Modifier

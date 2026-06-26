@@ -1,7 +1,8 @@
-package com.heveamobile.mapbystep.domain
+package com.heveamobile.mapbystep.domain.manager
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
+import com.heveamobile.mapbystep.platform.manager.AndroidHealthPermissionManager
 
 @Composable
 actual fun rememberHealthPermissionLauncher(

@@ -2,6 +2,7 @@ package com.heveamobile.mapbystep.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heveamobile.mapbystep.domain.manager.DailyReminderManager
 import com.heveamobile.mapbystep.domain.repository.FilePickerHandler
 import com.heveamobile.mapbystep.domain.repository.UserPreferencesRepository
 import com.heveamobile.mapbystep.domain.usecase.ExportDatabaseUseCase
@@ -12,7 +13,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,18 +25,32 @@ class SettingsViewModel(
     val filePickerHandler: FilePickerHandler,
     private val exportDatabaseUseCase: ExportDatabaseUseCase,
     private val importDatabaseUseCase: ImportDatabaseUseCase,
+    private val dailyReminderManager: DailyReminderManager,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
     val state: StateFlow<SettingsState> = _state.asStateFlow()
+
     private val _events = Channel<SettingsEvent>()
     val events = _events.receiveAsFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            userPreferencesRepository.distanceMultiplier.collectLatest { multiplier ->
-                _state.update { it.copy(distanceMultiplier = multiplier) }
-            }
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            combine(
+                userPreferencesRepository.distanceMultiplier,
+                userPreferencesRepository.isReminderEnabled,
+                userPreferencesRepository.reminderTime,
+            ) { distanceMultiplier, reminderIsEnabled, reminderTime ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        distanceMultiplier = distanceMultiplier,
+                        reminderIsEnabled = reminderIsEnabled,
+                        reminderTime = reminderTime,
+                    )
+                }
+            }.collect()
         }
     }
 
@@ -79,6 +95,32 @@ class SettingsViewModel(
                     _events.send(SettingsEvent.ImportSuccessful)
                 } else {
                     _events.send(SettingsEvent.ImportFailed)
+                }
+            }
+
+            is SettingsAction.UpdateReminderIsEnabled -> {
+                viewModelScope.launch {
+                    userPreferencesRepository.updateIsReminderEnabled(action.isEnabled)
+                    if (action.isEnabled) {
+                        dailyReminderManager.scheduleDailyReminderNotification(state.value.reminderTime)
+                    } else {
+                        dailyReminderManager.cancelDailyReminderNotification()
+                    }
+                }
+            }
+
+            is SettingsAction.UpdateReminderTime -> {
+                viewModelScope.launch {
+                    userPreferencesRepository.updateReminderTime(action.time)
+                    if (state.value.reminderIsEnabled) {
+                        dailyReminderManager.scheduleDailyReminderNotification(action.time)
+                    }
+                }
+            }
+
+            is SettingsAction.ToggleTimePickerAlertDialog -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(showTimePickerAlertDialog = !it.showTimePickerAlertDialog) }
                 }
             }
         }

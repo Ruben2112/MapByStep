@@ -5,6 +5,9 @@ import kotlin.time.Clock
 import kotlin.time.Instant
 
 data class ProfileState(
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+
     val totalSteps: Long = 0L,
     val startTime: Instant = Clock.System.now(),
     val previousTwentyFourHours: Long = 0L,
@@ -14,9 +17,6 @@ data class ProfileState(
     val previousThirtyDays: Long = 0L,
     val thirtyDayRecord: Long = 0L,
     val dailyStepData: Map<Instant, Long> = emptyMap(),
-
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null,
 
     val healthPermissionState: HealthPermissionStatus = HealthPermissionStatus.Loading,
 )

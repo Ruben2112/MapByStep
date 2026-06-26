@@ -70,6 +70,7 @@ import mapbystep.shared.generated.resources.directions_sold_out
 import mapbystep.shared.generated.resources.directions_total_cost
 import mapbystep.shared.generated.resources.ic_map_points
 import mapbystep.shared.generated.resources.increase_icon_description
+import mapbystep.shared.generated.resources.map_points_alternate_text
 import mapbystep.shared.generated.resources.map_points_icon_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -97,14 +98,18 @@ fun DirectionsContent(
     val density = LocalDensity.current
     val mapPointsIconSize = with(density) { MaterialTheme.typography.bodyMedium.lineHeight.toDp() }
 
-    val explanation = stringResource(Res.string.directions_explanation)
+    val explanation = stringResource(
+        Res.string.directions_explanation,
+        stringResource(Res.string.map_points_alternate_text),
+    )
     val inlineContentId = stringResource(Res.string.map_points_icon_description)
     val inlinedString = buildAnnotatedString {
-        val splitExplanation = explanation.split("[M]")
+        val splitExplanation =
+            explanation.split(stringResource(Res.string.map_points_alternate_text))
         append(splitExplanation[0])
         appendInlineContent(
             inlineContentId,
-            "[M]",
+            stringResource(Res.string.map_points_alternate_text),
         )
         append(splitExplanation[1])
     }

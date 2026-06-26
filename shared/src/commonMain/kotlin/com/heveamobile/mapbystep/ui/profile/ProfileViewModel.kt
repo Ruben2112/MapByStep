@@ -2,7 +2,7 @@ package com.heveamobile.mapbystep.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heveamobile.mapbystep.domain.HealthPermissionManager
+import com.heveamobile.mapbystep.domain.manager.HealthPermissionManager
 import com.heveamobile.mapbystep.domain.usecase.GetDailyStepsChartDataUseCase
 import com.heveamobile.mapbystep.domain.usecase.GetUserUseCase
 import com.heveamobile.mapbystep.domain.usecase.SyncStepsUseCase

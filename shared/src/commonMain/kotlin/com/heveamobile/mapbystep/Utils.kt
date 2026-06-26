@@ -1,5 +1,6 @@
 package com.heveamobile.mapbystep
 
+import kotlinx.datetime.LocalTime
 import kotlin.time.Instant
 
 enum class FormatMode {
@@ -30,6 +31,10 @@ expect fun formatDate(
 
 expect fun formatTime(
     instant: Instant,
+    formatMode: FormatMode = FormatMode.Long,
+): String
+expect fun formatTime(
+    localTime: LocalTime,
     formatMode: FormatMode = FormatMode.Long,
 ): String
 
